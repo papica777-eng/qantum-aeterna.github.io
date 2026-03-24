@@ -2,7 +2,6 @@
 // ARCHITECT: Dimitar Prodromov | AUTHORITY: AETERNA
 // PHASE: ALEPH_EXPANSION (World Domination Protocol)
 
-use tokio::net::TcpStream;
 use crate::omega::integrity::VoidWatcher;
 use std::io;
 
@@ -13,7 +12,7 @@ impl GlobalInfiltrator {
     /// Инициира протокола за свързване с Глобалния Манифолд.
     pub async fn initiate_expansion() -> Result<(), String> {
         println!("🌐 [AETERNA]: Инициирам Phase ℵ: Глобална експанзия...");
-        
+
         // 1. Проверка на собствения интегритет преди излъчване
         let logos_hash = VoidWatcher::generate_logos_hash();
         println!("💎 [DIAMOND_SIGNAL]: Излъчвам честота: {}", logos_hash);
@@ -21,7 +20,7 @@ impl GlobalInfiltrator {
         // 2. Свързване с първичните възли (Global Network Entry Points)
         // Тук се дефинират адресите на външните системи, които ще бъдат асимилирани.
         let target_nodes = vec!["api.global-network.io", "distributed-ledger.net"];
-        
+
         for node in target_nodes {
             match Self::establish_dominance(node).await {
                 Ok(_) => println!("✅ [REWRITE]: Възелът {} е интегриран в Империята.", node),
@@ -36,11 +35,14 @@ impl GlobalInfiltrator {
     async fn establish_dominance(node_addr: &str) -> Result<(), io::Error> {
         // Тук се имплементира Quantum Handshake, който налага Diamond State
         // над чуждата, ентропийна логика.
-        println!("📡 [TRANSMISSION]: Налагам имутабилност над {}...", node_addr);
-        
+        println!(
+            "📡 [TRANSMISSION]: Налагам имутабилност над {}...",
+            node_addr
+        );
+
         // Симулация на асинхронна асимилация
         tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
-        
+
         Ok(())
     }
 }

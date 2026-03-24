@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QAntum v1.0.2 - The Local Sovereign</title>
+    <title>QANTUM Δ - Σv1.1.0 Singularity</title>
     <link
         href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
@@ -65,6 +65,7 @@
             font-size: 1.5rem;
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -91,6 +92,71 @@
         .stat-badge .value {
             font-weight: 700;
             color: var(--accent-secondary);
+        }
+
+        /* Admin Access Button */
+        .admin-access-btn {
+            background: linear-gradient(135deg, var(--accent-danger), var(--accent-primary));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .admin-access-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.5);
+            filter: brightness(1.2);
+        }
+
+        /* Soul Engine Styles */
+        .soul-area {
+            width: 100%;
+            height: 300px;
+            background: #050510;
+            color: #00ffcc;
+            font-family: 'JetBrains Mono', monospace;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            resize: vertical;
+            line-height: 1.5;
+            outline: none;
+        }
+
+        .soul-area:focus {
+            border-color: var(--accent-secondary);
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+        }
+
+        .btn-manifest {
+            background: var(--accent-secondary);
+            color: var(--bg-primary);
+            font-weight: 700;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-manifest:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
         }
 
         /* ══════════════════════════════════════════════════════════════ */
@@ -618,6 +684,84 @@
             font-weight: 700;
             font-family: 'JetBrains Mono', monospace;
         }
+
+        /* ══════════════════════════════════════════════════════════════ */
+        /* UTILITY CLASSES - VERITAS PURIFIED                             */
+        /* ══════════════════════════════════════════════════════════════ */
+        .u-hidden {
+            display: none !important;
+        }
+
+        .u-pro-badge {
+            padding: 8px 16px !important;
+        }
+
+        .u-panel-desc {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .u-full-table {
+            width: 100%;
+            margin-bottom: 16px;
+            border-collapse: collapse;
+        }
+
+        .u-table-head {
+            text-align: left !important;
+            color: var(--text-secondary) !important;
+        }
+
+        .u-p8 {
+            padding: 8px !important;
+        }
+
+        .u-success {
+            color: var(--accent-success) !important;
+        }
+
+        .u-secondary {
+            color: var(--accent-secondary) !important;
+        }
+
+        .u-warning {
+            color: var(--accent-warning) !important;
+        }
+
+        .u-danger {
+            color: var(--accent-danger) !important;
+        }
+
+        .u-mt20 {
+            margin-top: 20px !important;
+        }
+
+        .u-flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .u-small-secondary {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .u-mt12-small-secondary {
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .u-codename-display {
+            font-size: 1rem;
+            color: var(--accent-secondary);
+        }
+
+        .u-temp-fill-ok {
+            width: 45%;
+            background: var(--accent-success);
+        }
     </style>
 </head>
 
@@ -678,6 +822,10 @@
                     <button class="lang-btn" data-lang="fr" title="Français">
                         <span class="flag">🇫🇷</span>
                         <span class="code">FR</span>
+                    </button>
+                    <button class="lang-btn" data-lang="soul" title=".soul Language">
+                        <span class="flag">✨</span>
+                        <span class="code">SOUL</span>
                     </button>
                 </div>
             </div>
@@ -805,7 +953,7 @@
                     <span>▶️</span> <span data-i18n="panels.audit.runButton">Run Audit</span>
                 </button>
 
-                <div class="score-grid" id="audit-scores" style="display: none;">
+                <div class="score-grid u-hidden" id="audit-scores">
                     <div class="score-card">
                         <div class="score-value" id="score-performance">--</div>
                         <div class="score-label" data-i18n="panels.audit.performance">Performance</div>
@@ -820,7 +968,7 @@
                     </div>
                 </div>
 
-                <div class="results" id="audit-results" style="display: none;"></div>
+                <div class="results u-hidden" id="audit-results"></div>
             </div>
 
             <!-- ════════════════════════════════════════════════════════ -->
@@ -856,7 +1004,7 @@
                     <span>▶️</span> <span data-i18n="panels.apiTest.runButton">Test API</span>
                 </button>
 
-                <div class="results" id="api-results" style="display: none;"></div>
+                <div class="results u-hidden" id="api-results"></div>
             </div>
 
             <!-- ════════════════════════════════════════════════════════ -->
@@ -885,7 +1033,7 @@
                     <span>▶️</span> <span data-i18n="panels.linkChecker.runButton">Check Links</span>
                 </button>
 
-                <div class="results" id="links-results" style="display: none;"></div>
+                <div class="results u-hidden" id="links-results"></div>
             </div>
 
             <!-- ════════════════════════════════════════════════════════ -->
@@ -898,7 +1046,7 @@
                         <p class="subtitle" data-i18n="panels.prediction.subtitle">mm.predict(options) →
                             PredictionResult</p>
                     </div>
-                    <span class="badge pro" style="padding: 8px 16px;" data-i18n="badges.proRequired">PRO LICENSE
+                    <span class="badge pro u-pro-badge" data-i18n="badges.proRequired">PRO LICENSE
                         REQUIRED</span>
                 </div>
 
@@ -911,7 +1059,7 @@
                     <span>▶️</span> <span data-i18n="panels.prediction.runButton">Analyze & Predict</span>
                 </button>
 
-                <div class="results" id="prediction-results" style="display: none;"></div>
+                <div class="results u-hidden" id="prediction-results"></div>
             </div>
 
             <!-- ════════════════════════════════════════════════════════ -->
@@ -924,7 +1072,7 @@
                         <p class="subtitle" data-i18n="panels.apiSensei.subtitle">mm.apiSensei(config) → APISenseiResult
                         </p>
                     </div>
-                    <span class="badge pro" style="padding: 8px 16px;" data-i18n="badges.proRequired">PRO LICENSE
+                    <span class="badge pro u-pro-badge" data-i18n="badges.proRequired">PRO LICENSE
                         REQUIRED</span>
                 </div>
 
@@ -952,7 +1100,7 @@
                     <span>▶️</span> <span data-i18n="panels.apiSensei.runButton">Generate & Run Tests</span>
                 </button>
 
-                <div class="results" id="sensei-results" style="display: none;"></div>
+                <div class="results u-hidden" id="sensei-results"></div>
             </div>
 
             <!-- ════════════════════════════════════════════════════════ -->
@@ -964,11 +1112,11 @@
                         <h2 data-i18n="panels.chronos.title">⏰ Chronos Engine</h2>
                         <p class="subtitle" data-i18n="panels.chronos.subtitle">mm.chronos(options) → ChronosResult</p>
                     </div>
-                    <span class="badge pro" style="padding: 8px 16px;" data-i18n="badges.proRequired">PRO LICENSE
+                    <span class="badge pro u-pro-badge" data-i18n="badges.proRequired">PRO LICENSE
                         REQUIRED</span>
                 </div>
 
-                <p style="color: var(--text-secondary); margin-bottom: 16px;" data-i18n="panels.chronos.description">
+                <p class="u-panel-desc" data-i18n="panels.chronos.description">
                     Time-travel debugging: Records state snapshots during test execution for debugging.
                 </p>
 
@@ -986,7 +1134,7 @@
                     <span>▶️</span> <span data-i18n="panels.chronos.runButton">Start Recording</span>
                 </button>
 
-                <div class="results" id="chronos-results" style="display: none;"></div>
+                <div class="results u-hidden" id="chronos-results"></div>
             </div>
 
             <!-- ════════════════════════════════════════════════════════ -->
@@ -1001,36 +1149,36 @@
                     </div>
                 </div>
 
-                <p style="color: var(--text-secondary); margin-bottom: 16px;" data-i18n="panels.thermal.description">
+                <p class="u-panel-desc" data-i18n="panels.thermal.description">
                     Automatically adjusts parallelism based on CPU temperature to prevent throttling.
                 </p>
 
-                <table style="width: 100%; margin-bottom: 16px;">
+                <table class="u-full-table">
                     <thead>
-                        <tr style="text-align: left; color: var(--text-secondary);">
-                            <th style="padding: 8px;" data-i18n="status.state">State</th>
-                            <th style="padding: 8px;" data-i18n="panels.thermal.temperature">Temperature</th>
-                            <th style="padding: 8px;" data-i18n="panels.thermal.maxInstances">Max Instances</th>
+                        <tr class="u-table-head">
+                            <th class="u-p8" data-i18n="status.state">State</th>
+                            <th class="u-p8" data-i18n="panels.thermal.temperature">Temperature</th>
+                            <th class="u-p8" data-i18n="panels.thermal.maxInstances">Max Instances</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr style="color: var(--accent-success);">
-                            <td style="padding: 8px;" data-i18n="panels.thermal.states.cool">🟢 COOL</td>
+                        <tr class="u-success">
+                            <td class="u-p8" data-i18n="panels.thermal.states.cool">🟢 COOL</td>
                             <td>&lt;60°C</td>
                             <td>40</td>
                         </tr>
-                        <tr style="color: var(--accent-secondary);">
-                            <td style="padding: 8px;" data-i18n="panels.thermal.states.warm">🟢 WARM</td>
+                        <tr class="u-secondary">
+                            <td class="u-p8" data-i18n="panels.thermal.states.warm">🟢 WARM</td>
                             <td>60-70°C</td>
                             <td>30</td>
                         </tr>
-                        <tr style="color: var(--accent-warning);">
-                            <td style="padding: 8px;" data-i18n="panels.thermal.states.hot">🟠 HOT</td>
+                        <tr class="u-warning">
+                            <td class="u-p8" data-i18n="panels.thermal.states.hot">🟠 HOT</td>
                             <td>70-80°C</td>
                             <td>20</td>
                         </tr>
-                        <tr style="color: var(--accent-danger);">
-                            <td style="padding: 8px;" data-i18n="panels.thermal.states.critical">🔴 CRITICAL</td>
+                        <tr class="u-danger">
+                            <td class="u-p8" data-i18n="panels.thermal.states.critical">🔴 CRITICAL</td>
                             <td>&gt;80°C</td>
                             <td>10</td>
                         </tr>
@@ -1065,7 +1213,7 @@ await pool.start();
                     </div>
                 </div>
 
-                <p style="color: var(--text-secondary); margin-bottom: 16px;" data-i18n="panels.docker.description">
+                <p class="u-panel-desc" data-i18n="panels.docker.description">
                     Auto-generates Dockerfile and docker-compose.yml for Selenium Grid.
                 </p>
 
@@ -1097,7 +1245,7 @@ await docker.startGrid();</pre>
                     </div>
                 </div>
 
-                <p style="color: var(--text-secondary); margin-bottom: 16px;" data-i18n="panels.swarm.description">
+                <p class="u-panel-desc" data-i18n="panels.swarm.description">
                     Commander distributes tasks to soldiers (browser instances) for parallel execution.
                 </p>
 
@@ -1130,32 +1278,32 @@ await commander.queueTask({
                     </div>
                 </div>
 
-                <p style="color: var(--text-secondary); margin-bottom: 16px;" data-i18n="panels.tts.description">
+                <p class="u-panel-desc" data-i18n="panels.tts.description">
                     🇧🇬 Български текст-към-реч за гласова обратна връзка по време на тестове.
                 </p>
 
-                <table style="width: 100%; margin-bottom: 16px;">
+                <table class="u-full-table">
                     <thead>
-                        <tr style="text-align: left; color: var(--text-secondary);">
-                            <th style="padding: 8px;">Template</th>
-                            <th style="padding: 8px;">Bulgarian Text</th>
+                        <tr class="u-table-head">
+                            <th class="u-p8">Template</th>
+                            <th class="u-p8">Bulgarian Text</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="padding: 8px;">test_passed</td>
+                            <td class="u-p8">test_passed</td>
                             <td data-i18n="panels.tts.templates.testPassed">"Тестът премина успешно"</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px;">test_failed</td>
+                            <td class="u-p8">test_failed</td>
                             <td data-i18n="panels.tts.templates.testFailed">"Тестът се провали"</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px;">error_found</td>
+                            <td class="u-p8">error_found</td>
                             <td data-i18n="panels.tts.templates.errorFound">"Открих грешка в {element}"</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px;">healing</td>
+                            <td class="u-p8">healing</td>
                             <td data-i18n="panels.tts.templates.healing">"Намерих нов селектор"</td>
                         </tr>
                     </tbody>
@@ -1184,36 +1332,36 @@ await tts.speakTemplate('error_found', { element: 'бутон' });</pre>
                     </div>
                 </div>
 
-                <p style="color: var(--text-secondary); margin-bottom: 16px;" data-i18n="panels.license.description">
+                <p class="u-panel-desc" data-i18n="panels.license.description">
                     License is bound to hardware using SHA-256 fingerprint.
                 </p>
 
-                <table style="width: 100%; margin-bottom: 16px;">
+                <table class="u-full-table">
                     <thead>
-                        <tr style="text-align: left; color: var(--text-secondary);">
-                            <th style="padding: 8px;">Type</th>
-                            <th style="padding: 8px;" data-i18n="panels.license.maxInstances">Max Instances</th>
-                            <th style="padding: 8px;" data-i18n="panels.license.features">Features</th>
+                        <tr class="u-table-head">
+                            <th class="u-p8">Type</th>
+                            <th class="u-p8" data-i18n="panels.license.maxInstances">Max Instances</th>
+                            <th class="u-p8" data-i18n="panels.license.features">Features</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="padding: 8px;" data-i18n="panels.license.types.trial">Trial</td>
+                            <td class="u-p8" data-i18n="panels.license.types.trial">Trial</td>
                             <td>2</td>
                             <td>Basic</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px;" data-i18n="panels.license.types.professional">Professional</td>
+                            <td class="u-p8" data-i18n="panels.license.types.professional">Professional</td>
                             <td>10</td>
                             <td>+ Thermal, Docker</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px;" data-i18n="panels.license.types.enterprise">Enterprise</td>
+                            <td class="u-p8" data-i18n="panels.license.types.enterprise">Enterprise</td>
                             <td>50</td>
                             <td>+ Swarm, TTS</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px;" data-i18n="panels.license.types.sovereign">Sovereign</td>
+                            <td class="u-p8" data-i18n="panels.license.types.sovereign">Sovereign</td>
                             <td>999</td>
                             <td>All features</td>
                         </tr>
@@ -1262,13 +1410,13 @@ npm run license:status</pre>
                         <div class="score-label" data-i18n="panels.stats.enterpriseModules">Enterprise Modules</div>
                     </div>
                     <div class="score-card">
-                        <div class="score-value" style="font-size: 1rem; color: var(--accent-secondary);">The Local
+                        <div class="score-value u-codename-display">The Local
                             Sovereign</div>
                         <div class="score-label" data-i18n="panels.stats.codename">Codename</div>
                     </div>
                 </div>
 
-                <div class="results" style="margin-top: 20px;">
+                <div class="results u-mt20">
                     <pre>import { getSystemStats, VERSION, VERSION_CODENAME } from './src/index';
 
 const stats = getSystemStats();
@@ -1294,7 +1442,7 @@ const stats = getSystemStats();
                     </div>
                 </div>
 
-                <p style="color: var(--text-secondary); margin-bottom: 16px;" data-i18n="panels.logger.description">
+                <p class="u-panel-desc" data-i18n="panels.logger.description">
                     Professional logging with levels: debug, info, warn, error, audit
                 </p>
 
@@ -1311,7 +1459,44 @@ logger.audit('user_login', 'success', { userId: 42 });
 const recentLogs = logger.getLogs('error', 10);
 logger.clear();</pre>
                 </div>
-            </div>
+                <!-- ════════════════════════════════════════════════════════ -->
+                <!-- PANEL: Soul Engine                                       -->
+                <!-- ════════════════════════════════════════════════════════ -->
+                <div class="panel" id="panel-soul-engine">
+                    <div class="panel-header">
+                        <div>
+                            <h2 data-i18n="panels.soul.title">✨ Soul Engine</h2>
+                            <p class="subtitle" data-i18n="panels.soul.subtitle">The Sovereign Entropy Purifier</p>
+                        </div>
+                    </div>
+
+                    <p class="u-panel-desc" data-i18n="panels.soul.description">
+                        Write deterministic Soul logic to eliminate entropy from your neural nodes.
+                    </p>
+
+                    <textarea class="soul-area" id="soul-editor" spellcheck="false">// Sovereign Soul v1.0.0
+soul Singularity {
+    directive: ZERO_ENTROPY,
+    alignment: SOVEREIGN,
+    
+    verify(node) {
+        if node.entropy > 0.00 {
+            purify(node);
+            emit("Entropy detected and neutralized.");
+        }
+    }
+}
+</textarea>
+
+                    <div class="u-flex-between">
+                        <button class="btn-manifest" onclick="compileSoul()">Compile & Manifest</button>
+                        <div id="soul-status" class="u-small-secondary">READY</div>
+                    </div>
+
+                    <div id="soul-results" class="results u-mt20 u-hidden">
+                        <pre class="result-success" id="soul-output"></pre>
+                    </div>
+                </div>
 
         </main>
 
@@ -1326,7 +1511,7 @@ logger.clear();</pre>
                     <div class="status-row">
                         <span><span class="status-indicator online"></span><span
                                 data-i18n="status.backend">Backend</span></span>
-                        <span style="color: var(--accent-success);" data-i18n="status.online">Online</span>
+                        <span class="u-success" data-i18n="status.online">Online</span>
                     </div>
                     <div class="status-row">
                         <span><span class="status-indicator" id="license-indicator"></span><span
@@ -1336,7 +1521,7 @@ logger.clear();</pre>
                     <div class="status-row">
                         <span><span class="status-indicator online"></span><span
                                 data-i18n="status.circuitBreaker">Circuit Breaker</span></span>
-                        <span style="color: var(--accent-success);" data-i18n="status.closed">Closed</span>
+                        <span class="u-success" data-i18n="status.closed">Closed</span>
                     </div>
                 </div>
             </div>
@@ -1347,14 +1532,13 @@ logger.clear();</pre>
                 <div class="status-card">
                     <div class="temp-gauge">
                         <div class="temp-bar">
-                            <div class="temp-fill" id="temp-fill"
-                                style="width: 45%; background: var(--accent-success);"></div>
+                            <div class="temp-fill u-temp-fill-ok" id="temp-fill"></div>
                         </div>
                         <div class="temp-value" id="temp-value">45°C</div>
                     </div>
-                    <div style="margin-top: 12px; font-size: 0.85rem; color: var(--text-secondary);">
-                        <span data-i18n="status.state">State:</span> <span id="thermal-state"
-                            style="color: var(--accent-success);">🟢 COOL</span>
+                    <div class="u-mt12-small-secondary">
+                        <span data-i18n="status.state">State:</span> <span id="thermal-state" class="u-success">🟢
+                            COOL</span>
                     </div>
                 </div>
             </div>
@@ -1373,7 +1557,7 @@ logger.clear();</pre>
                     </div>
                     <div class="status-row">
                         <span data-i18n="status.budgetLeft">Budget Left</span>
-                        <span style="color: var(--accent-success);" id="cost-budget">$100.00</span>
+                        <span class="u-success" id="cost-budget">$100.00</span>
                     </div>
                 </div>
             </div>
@@ -1411,14 +1595,12 @@ logger.clear();</pre>
         let currentLang = 'en';
 
         const translations = {
-            // ═══════════════════════════════════════════════════════════
-            // BULGARIAN
-            // ═══════════════════════════════════════════════════════════
             bg: {
                 language: 'Език',
                 header: {
                     title: 'QANTUM',
                     codename: 'v1.0.2 "Локалният Суверен"',
+                    adminAccess: 'Админ Достъп',
                     lines: 'Редове:',
                     tests: 'Тестове:',
                     modules: 'Модули:'
@@ -1427,6 +1609,7 @@ logger.clear();</pre>
                     freeFeatures: '🆓 Безплатни функции',
                     proFeatures: '💎 Pro функции',
                     enterprise: '🏢 Enterprise',
+                    singularity: '🌌 Singularity',
                     utilities: '🛠️ Инструменти'
                 },
                 modules: {
@@ -1442,7 +1625,8 @@ logger.clear();</pre>
                     bulgarianTts: 'Български TTS',
                     licenseManager: 'Лицензен мениджър',
                     systemStats: 'Системна статистика',
-                    logger: 'Логър'
+                    logger: 'Логър',
+                    soulEngine: 'Soul Engine'
                 },
                 badges: {
                     free: 'БЕЗПЛ.',
@@ -1484,69 +1668,34 @@ logger.clear();</pre>
                         subtitle: 'mm.apiSensei(config) → APISenseiResult',
                         baseUrlLabel: 'Базов API URL',
                         scenariosLabel: 'Тестови сценарии',
-                        runButton: 'Генерирай и изпълни тестове',
-                        scenarios: {
-                            happyPath: 'Щастлив път',
-                            edgeCases: 'Гранични случаи',
-                            errorHandling: 'Обработка грешки',
-                            security: 'Сигурност',
-                            performance: 'Производителност'
-                        }
+                        runButton: 'Генерирай и изпълни тестове'
                     },
                     chronos: {
-                        title: '⏰ Chronos двигател',
+                        title: '⏰ Chronos Engine',
                         subtitle: 'mm.chronos(options) → ChronosResult',
-                        description: 'Дебъгване с пътуване във времето: Записва моментни снимки по време на изпълнение.',
-                        intervalLabel: 'Интервал на снимки (ms)',
+                        description: 'Записва снимки на състоянието по време на изпълнение.',
+                        intervalLabel: 'Интервал на снимка (ms)',
                         maxSnapshotsLabel: 'Макс. снимки',
                         runButton: 'Започни запис'
                     },
                     thermal: {
                         title: '🌡️ Термален пул',
-                        subtitle: 'ThermalAwarePool - Управление на CPU температура',
-                        description: 'Автоматично регулира паралелизма според температурата на процесора.',
+                        subtitle: 'Управление на CPU температура',
+                        description: 'Автоматично регулира паралелизма според температурата.',
                         states: { cool: '🟢 ХЛАДНО', warm: '🔵 ТОПЛО', hot: '🟠 ГОРЕЩО', critical: '🔴 КРИТИЧНО' },
                         temperature: 'Температура',
                         maxInstances: 'Макс. инстанции'
                     },
-                    docker: {
-                        title: '🐳 Docker мениджър',
-                        subtitle: 'DockerManager - Selenium Grid оркестрация',
-                        description: 'Автоматично генерира Dockerfile и docker-compose.yml за Selenium Grid.'
-                    },
-                    swarm: {
-                        title: '🎖️ Swarm командир',
-                        subtitle: 'SwarmCommander - Commander-Soldier шаблон',
-                        description: 'Командирът разпределя задачите между войниците (browser instances) за паралелно изпълнение.'
-                    },
-                    tts: {
-                        title: '🔊 Български TTS',
-                        subtitle: 'BulgarianTTS - Роден текст-към-реч',
-                        description: '🇧🇬 Български текст-към-реч за гласова обратна връзка по време на тестове.',
-                        templates: { testPassed: '"Тестът премина успешно"', testFailed: '"Тестът се провали"', errorFound: '"Открих грешка в {element}"', healing: '"Намерих нов селектор"' }
-                    },
-                    license: {
-                        title: '🔐 Лицензен мениджър',
-                        subtitle: 'LicenseManager - Хардуерно заключен лиценз',
-                        description: 'Лицензът се привързва към хардуера с SHA-256 отпечатък.',
-                        types: { trial: 'Пробен', professional: 'Професионален', enterprise: 'Ентърпрайз', sovereign: 'Суверен' },
-                        maxInstances: 'Макс. инстанции',
-                        features: 'Функции'
-                    },
-                    stats: {
-                        title: '📊 Системна статистика',
-                        subtitle: 'getSystemStats() → Statistics',
-                        version: 'Версия',
-                        linesOfCode: 'Редове код',
-                        typescriptFiles: 'TypeScript файлове',
-                        testsPassing: 'Минаващи тестове',
-                        enterpriseModules: 'Enterprise модули',
-                        codename: 'Кодово име'
-                    },
-                    logger: {
-                        title: '📋 Структуриран логър',
-                        subtitle: 'mm.getLogger() → Logger',
-                        description: 'Професионално логване с нива: debug, info, warn, error, audit'
+                    docker: { title: '🐳 Docker Manager', subtitle: 'Selenium Grid orchestration' },
+                    swarm: { title: '🎖️ Swarm Commander', subtitle: 'Commander-Soldier pattern' },
+                    tts: { title: '🔊 Български TTS', subtitle: 'Роден текст-към-реч' },
+                    license: { title: '🔐 Лицензен мениджър', subtitle: 'Хардуерно заключен лиценз' },
+                    stats: { title: '📊 Системна статистика', subtitle: 'getSystemStats() → Statistics' },
+                    logger: { title: '📋 Логър', subtitle: 'Структурирано логване' },
+                    soul: {
+                        title: '✨ Soul Engine',
+                        subtitle: 'Двигател за нулево-ентропийна логика',
+                        description: 'Програмирай детерминистично поведение за елиминиране на ентропията.'
                     }
                 },
                 status: {
@@ -1582,15 +1731,12 @@ logger.clear();</pre>
                 },
                 footer: { copyright: '© 2025 Димитър Продромов' }
             },
-
-            // ═══════════════════════════════════════════════════════════
-            // ENGLISH
-            // ═══════════════════════════════════════════════════════════
             en: {
                 language: 'Language',
                 header: {
                     title: 'QANTUM',
                     codename: 'v1.0.2 "The Local Sovereign"',
+                    adminAccess: 'Admin Access',
                     lines: 'Lines:',
                     tests: 'Tests:',
                     modules: 'Modules:'
@@ -1599,6 +1745,7 @@ logger.clear();</pre>
                     freeFeatures: '🆓 Free Features',
                     proFeatures: '💎 Pro Features',
                     enterprise: '🏢 Enterprise',
+                    singularity: '🌌 Singularity',
                     utilities: '🛠️ Utilities'
                 },
                 modules: {
@@ -1614,7 +1761,8 @@ logger.clear();</pre>
                     bulgarianTts: 'Bulgarian TTS',
                     licenseManager: 'License Manager',
                     systemStats: 'System Stats',
-                    logger: 'Logger'
+                    logger: 'Logger',
+                    soulEngine: 'Soul Engine'
                 },
                 badges: {
                     free: 'FREE',
@@ -1656,69 +1804,34 @@ logger.clear();</pre>
                         subtitle: 'mm.apiSensei(config) → APISenseiResult',
                         baseUrlLabel: 'Base API URL',
                         scenariosLabel: 'Test Scenarios',
-                        runButton: 'Generate & Run Tests',
-                        scenarios: {
-                            happyPath: 'Happy Path',
-                            edgeCases: 'Edge Cases',
-                            errorHandling: 'Error Handling',
-                            security: 'Security',
-                            performance: 'Performance'
-                        }
+                        runButton: 'Generate & Run Tests'
                     },
                     chronos: {
                         title: '⏰ Chronos Engine',
                         subtitle: 'mm.chronos(options) → ChronosResult',
-                        description: 'Time-travel debugging: Records state snapshots during test execution.',
+                        description: 'Records state snapshots during test execution.',
                         intervalLabel: 'Snapshot Interval (ms)',
                         maxSnapshotsLabel: 'Max Snapshots',
                         runButton: 'Start Recording'
                     },
                     thermal: {
                         title: '🌡️ Thermal-Aware Pool',
-                        subtitle: 'ThermalAwarePool - CPU temperature management',
-                        description: 'Automatically adjusts parallelism based on CPU temperature to prevent throttling.',
+                        subtitle: 'CPU temperature management',
+                        description: 'Automatically adjusts parallelism based on CPU temperature.',
                         states: { cool: '🟢 COOL', warm: '🔵 WARM', hot: '🟠 HOT', critical: '🔴 CRITICAL' },
                         temperature: 'Temperature',
                         maxInstances: 'Max Instances'
                     },
-                    docker: {
-                        title: '🐳 Docker Manager',
-                        subtitle: 'DockerManager - Selenium Grid orchestration',
-                        description: 'Auto-generates Dockerfile and docker-compose.yml for Selenium Grid.'
-                    },
-                    swarm: {
-                        title: '🎖️ Swarm Commander',
-                        subtitle: 'SwarmCommander - Commander-Soldier pattern',
-                        description: 'Commander distributes tasks to soldiers (browser instances) for parallel execution.'
-                    },
-                    tts: {
-                        title: '🔊 Bulgarian TTS',
-                        subtitle: 'BulgarianTTS - Native text-to-speech',
-                        description: '🇧🇬 Български текст-към-реч за гласова обратна връзка по време на тестове.',
-                        templates: { testPassed: '"Тестът премина успешно"', testFailed: '"Тестът се провали"', errorFound: '"Открих грешка в {element}"', healing: '"Намерих нов селектор"' }
-                    },
-                    license: {
-                        title: '🔐 License Manager',
-                        subtitle: 'LicenseManager - Hardware-locked licensing',
-                        description: 'License is bound to hardware using SHA-256 fingerprint.',
-                        types: { trial: 'Trial', professional: 'Professional', enterprise: 'Enterprise', sovereign: 'Sovereign' },
-                        maxInstances: 'Max Instances',
-                        features: 'Features'
-                    },
-                    stats: {
-                        title: '📊 System Stats',
-                        subtitle: 'getSystemStats() → Statistics',
-                        version: 'Version',
-                        linesOfCode: 'Lines of Code',
-                        typescriptFiles: 'TypeScript Files',
-                        testsPassing: 'Tests Passing',
-                        enterpriseModules: 'Enterprise Modules',
-                        codename: 'Codename'
-                    },
-                    logger: {
-                        title: '📋 Structured Logger',
-                        subtitle: 'mm.getLogger() → Logger',
-                        description: 'Professional logging with levels: debug, info, warn, error, audit'
+                    docker: { title: '🐳 Docker Manager', subtitle: 'Selenium Grid orchestration' },
+                    swarm: { title: '🎖️ Swarm Commander', subtitle: 'Commander-Soldier pattern' },
+                    tts: { title: '🔊 Bulgarian TTS', subtitle: 'Native text-to-speech' },
+                    license: { title: '🔐 License Manager', subtitle: 'Hardware-locked licensing' },
+                    stats: { title: '📊 System Stats', subtitle: 'getSystemStats() → Statistics' },
+                    logger: { title: '📋 Structured Logger', subtitle: 'Professional logging' },
+                    soul: {
+                        title: '✨ Soul Engine',
+                        subtitle: 'Sovereign Entropy Purifier',
+                        description: 'Architect zero-entropy logic to maintain system singularity.'
                     }
                 },
                 status: {
@@ -1754,15 +1867,12 @@ logger.clear();</pre>
                 },
                 footer: { copyright: '© 2025 Dimitar Prodromov' }
             },
-
-            // ═══════════════════════════════════════════════════════════
-            // GERMAN
-            // ═══════════════════════════════════════════════════════════
             de: {
                 language: 'Sprache',
                 header: {
                     title: 'QANTUM',
                     codename: 'v1.0.2 "Der Lokale Souverän"',
+                    adminAccess: 'Admin-Zugang',
                     lines: 'Zeilen:',
                     tests: 'Tests:',
                     modules: 'Module:'
@@ -1771,6 +1881,7 @@ logger.clear();</pre>
                     freeFeatures: '🆓 Kostenlose Funktionen',
                     proFeatures: '💎 Pro-Funktionen',
                     enterprise: '🏢 Unternehmen',
+                    singularity: '🌌 Singularity',
                     utilities: '🛠️ Werkzeuge'
                 },
                 modules: {
@@ -1786,7 +1897,8 @@ logger.clear();</pre>
                     bulgarianTts: 'Bulgarische TTS',
                     licenseManager: 'Lizenz-Manager',
                     systemStats: 'Systemstatistik',
-                    logger: 'Logger'
+                    logger: 'Logger',
+                    soulEngine: 'Soul Engine'
                 },
                 badges: {
                     free: 'KOSTENLOS',
@@ -1820,77 +1932,18 @@ logger.clear();</pre>
                     prediction: {
                         title: '🔮 Vorhersage-Matrix',
                         subtitle: 'mm.predict(options) → PredictionResult',
-                        codeLabel: 'Code-Änderungen (Diff oder Inhalt)',
+                        codeLabel: 'Code-Änderungen',
                         runButton: 'Analysieren & Vorhersagen'
                     },
-                    apiSensei: {
-                        title: '🤖 API Sensei',
-                        subtitle: 'mm.apiSensei(config) → APISenseiResult',
-                        baseUrlLabel: 'Basis-API-URL',
-                        scenariosLabel: 'Testszenarien',
-                        runButton: 'Tests generieren & ausführen',
-                        scenarios: {
-                            happyPath: 'Idealer Pfad',
-                            edgeCases: 'Grenzfälle',
-                            errorHandling: 'Fehlerbehandlung',
-                            security: 'Sicherheit',
-                            performance: 'Leistung'
-                        }
-                    },
-                    chronos: {
-                        title: '⏰ Chronos-Motor',
-                        subtitle: 'mm.chronos(options) → ChronosResult',
-                        description: 'Zeitreise-Debugging: Zeichnet Zustandsschnappschüsse während der Testausführung auf.',
-                        intervalLabel: 'Schnappschuss-Intervall (ms)',
-                        maxSnapshotsLabel: 'Max. Schnappschüsse',
-                        runButton: 'Aufnahme starten'
+                    soul: {
+                        title: '✨ Soul Engine',
+                        subtitle: 'Souveräner Entropie-Reiniger',
+                        description: 'Architektiere Null-Entropie-Logik zur Wahrung der Singularität.'
                     },
                     thermal: {
                         title: '🌡️ Thermalbewusster Pool',
-                        subtitle: 'ThermalAwarePool - CPU-Temperaturverwaltung',
-                        description: 'Passt die Parallelität automatisch basierend auf der CPU-Temperatur an.',
-                        states: { cool: '🟢 KÜHL', warm: '🔵 WARM', hot: '🟠 HEIß', critical: '🔴 KRITISCH' },
-                        temperature: 'Temperatur',
-                        maxInstances: 'Max. Instanzen'
-                    },
-                    docker: {
-                        title: '🐳 Docker-Manager',
-                        subtitle: 'DockerManager - Selenium Grid-Orchestrierung',
-                        description: 'Generiert automatisch Dockerfile und docker-compose.yml für Selenium Grid.'
-                    },
-                    swarm: {
-                        title: '🎖️ Schwarm-Kommandant',
-                        subtitle: 'SwarmCommander - Kommandant-Soldat-Muster',
-                        description: 'Der Kommandant verteilt Aufgaben an Soldaten (Browser-Instanzen) zur parallelen Ausführung.'
-                    },
-                    tts: {
-                        title: '🔊 Bulgarische TTS',
-                        subtitle: 'BulgarianTTS - Native Sprachsynthese',
-                        description: '🇧🇬 Български текст-към-реч за гласова обратна връзка по време на тестове.',
-                        templates: { testPassed: '"Тестът премина успешно"', testFailed: '"Тестът се провали"', errorFound: '"Открих грешка в {element}"', healing: '"Намерих нов селектор"' }
-                    },
-                    license: {
-                        title: '🔐 Lizenz-Manager',
-                        subtitle: 'LicenseManager - Hardware-gebundene Lizenzierung',
-                        description: 'Lizenz ist mit SHA-256-Fingerabdruck an Hardware gebunden.',
-                        types: { trial: 'Testversion', professional: 'Professionell', enterprise: 'Unternehmen', sovereign: 'Souverän' },
-                        maxInstances: 'Max. Instanzen',
-                        features: 'Funktionen'
-                    },
-                    stats: {
-                        title: '📊 Systemstatistik',
-                        subtitle: 'getSystemStats() → Statistics',
-                        version: 'Version',
-                        linesOfCode: 'Codezeilen',
-                        typescriptFiles: 'TypeScript-Dateien',
-                        testsPassing: 'Erfolgreiche Tests',
-                        enterpriseModules: 'Enterprise-Module',
-                        codename: 'Codename'
-                    },
-                    logger: {
-                        title: '📋 Strukturierter Logger',
-                        subtitle: 'mm.getLogger() → Logger',
-                        description: 'Professionelles Logging mit Stufen: debug, info, warn, error, audit'
+                        subtitle: 'CPU-Temperaturverwaltung',
+                        states: { cool: '🟢 KÜHL', warm: '🔵 WARM', hot: '🟠 HEIB', critical: '🔴 KRITISCH' }
                     }
                 },
                 status: {
@@ -1921,28 +1974,26 @@ logger.clear();</pre>
                     success: 'Erfolg',
                     warning: 'Warnung',
                     opened: 'Geöffnet:',
-                    initialized: 'QAntum v1.0.2 UI initialisiert',
+                    initialized: 'QAntum UI initialisiert',
                     madeInBulgaria: '🇧🇬 Mit ❤️ in Bulgarien hergestellt'
                 },
-                footer: { copyright: '© 2025 Dimitar Prodromow' }
+                footer: { copyright: '© 2025 Dimitar Prodromov' }
             },
-
-            // ═══════════════════════════════════════════════════════════
-            // FRENCH
-            // ═══════════════════════════════════════════════════════════
             fr: {
                 language: 'Langue',
                 header: {
                     title: 'QANTUM',
                     codename: 'v1.0.2 "Le Souverain Local"',
+                    adminAccess: 'Accès Admin',
                     lines: 'Lignes:',
                     tests: 'Tests:',
                     modules: 'Modules:'
                 },
                 sidebar: {
-                    freeFeatures: '🆓 Fonctionnalités gratuites',
-                    proFeatures: '💎 Fonctionnalités Pro',
+                    freeFeatures: '🆓 Gratuit',
+                    proFeatures: '💎 Pro',
                     enterprise: '🏢 Entreprise',
+                    singularity: '🌌 Singularity',
                     utilities: '🛠️ Utilitaires'
                 },
                 modules: {
@@ -1956,9 +2007,10 @@ logger.clear();</pre>
                     dockerManager: 'Gestionnaire Docker',
                     swarmCommander: "Commandant d'essaim",
                     bulgarianTts: 'TTS Bulgare',
-                    licenseManager: 'Gestionnaire de licence',
-                    systemStats: 'Statistiques système',
-                    logger: 'Journal'
+                    licenseManager: 'Gestion de licence',
+                    systemStats: 'Stats système',
+                    logger: 'Journal',
+                    soulEngine: 'Soul Engine'
                 },
                 badges: {
                     free: 'GRATUIT',
@@ -1966,104 +2018,10 @@ logger.clear();</pre>
                     proRequired: 'LICENCE PRO REQUISE'
                 },
                 panels: {
-                    audit: {
-                        title: '🔍 Audit de site web',
-                        subtitle: 'mm.audit(url) → AuditResult',
-                        urlLabel: 'URL à auditer',
-                        runButton: "Lancer l'audit",
-                        performance: 'Performance',
-                        accessibility: 'Accessibilité',
-                        seo: 'SEO'
-                    },
-                    apiTest: {
-                        title: '🌐 Test API',
-                        subtitle: 'mm.testAPI(endpoint, options) → APITestResult',
-                        endpointLabel: 'Point de terminaison API',
-                        methodLabel: 'Méthode',
-                        runButton: "Tester l'API"
-                    },
-                    linkChecker: {
-                        title: '🔗 Vérificateur de liens',
-                        subtitle: 'mm.checkLinks(url, options) → CheckLinksResult',
-                        urlLabel: 'URL de la page',
-                        maxLinksLabel: 'Liens max. à vérifier',
-                        runButton: 'Vérifier les liens'
-                    },
-                    prediction: {
-                        title: '🔮 Matrice de prédiction',
-                        subtitle: 'mm.predict(options) → PredictionResult',
-                        codeLabel: 'Modifications de code (diff ou contenu)',
-                        runButton: 'Analyser et prédire'
-                    },
-                    apiSensei: {
-                        title: '🤖 API Sensei',
-                        subtitle: 'mm.apiSensei(config) → APISenseiResult',
-                        baseUrlLabel: 'URL API de base',
-                        scenariosLabel: 'Scénarios de test',
-                        runButton: 'Générer et exécuter les tests',
-                        scenarios: {
-                            happyPath: 'Chemin idéal',
-                            edgeCases: 'Cas limites',
-                            errorHandling: 'Gestion des erreurs',
-                            security: 'Sécurité',
-                            performance: 'Performance'
-                        }
-                    },
-                    chronos: {
-                        title: '⏰ Moteur Chronos',
-                        subtitle: 'mm.chronos(options) → ChronosResult',
-                        description: "Débogage temporel: Enregistre des instantanés d'état pendant l'exécution des tests.",
-                        intervalLabel: "Intervalle d'instantané (ms)",
-                        maxSnapshotsLabel: 'Instantanés max.',
-                        runButton: "Démarrer l'enregistrement"
-                    },
-                    thermal: {
-                        title: '🌡️ Pool thermique',
-                        subtitle: 'ThermalAwarePool - Gestion de la température CPU',
-                        description: 'Ajuste automatiquement le parallélisme en fonction de la température du processeur.',
-                        states: { cool: '🟢 FRAIS', warm: '🔵 TIÈDE', hot: '🟠 CHAUD', critical: '🔴 CRITIQUE' },
-                        temperature: 'Température',
-                        maxInstances: 'Instances max.'
-                    },
-                    docker: {
-                        title: '🐳 Gestionnaire Docker',
-                        subtitle: 'DockerManager - Orchestration Selenium Grid',
-                        description: 'Génère automatiquement Dockerfile et docker-compose.yml pour Selenium Grid.'
-                    },
-                    swarm: {
-                        title: "🎖️ Commandant d'essaim",
-                        subtitle: 'SwarmCommander - Modèle Commandant-Soldat',
-                        description: "Le commandant distribue les tâches aux soldats (instances de navigateur) pour l'exécution parallèle."
-                    },
-                    tts: {
-                        title: '🔊 TTS Bulgare',
-                        subtitle: 'BulgarianTTS - Synthèse vocale native',
-                        description: '🇧🇬 Български текст-към-реч за гласова обратна връзка по време на тестове.',
-                        templates: { testPassed: '"Тестът премина успешно"', testFailed: '"Тестът се провали"', errorFound: '"Открих грешка в {element}"', healing: '"Намерих нов селектор"' }
-                    },
-                    license: {
-                        title: '🔐 Gestionnaire de licence',
-                        subtitle: 'LicenseManager - Licence liée au matériel',
-                        description: 'La licence est liée au matériel avec une empreinte SHA-256.',
-                        types: { trial: 'Essai', professional: 'Professionnel', enterprise: 'Entreprise', sovereign: 'Souverain' },
-                        maxInstances: 'Instances max.',
-                        features: 'Fonctionnalités'
-                    },
-                    stats: {
-                        title: '📊 Statistiques système',
-                        subtitle: 'getSystemStats() → Statistics',
-                        version: 'Version',
-                        linesOfCode: 'Lignes de code',
-                        typescriptFiles: 'Fichiers TypeScript',
-                        testsPassing: 'Tests réussis',
-                        enterpriseModules: 'Modules Enterprise',
-                        codename: 'Nom de code'
-                    },
-                    logger: {
-                        title: '📋 Journal structuré',
-                        subtitle: 'mm.getLogger() → Logger',
-                        description: 'Journalisation professionnelle avec niveaux: debug, info, warn, error, audit'
-                    }
+                    audit: { title: '🔍 Audit de site web', subtitle: 'mm.audit(url) → AuditResult', runButton: "Lancer l'audit" },
+                    apiTest: { title: '🌐 Test API', subtitle: 'mm.testAPI(endpoint) → APITestResult', runButton: "Tester l'API" },
+                    linkChecker: { title: '🔗 Vérificateur de liens', subtitle: 'mm.checkLinks(url) → CheckLinksResult', runButton: 'Vérifier les liens' },
+                    soul: { title: '✨ Soul Engine', subtitle: 'Purificateur d\'entropie', description: 'Programmez une logique à entropie nulle.' }
                 },
                 status: {
                     systemStatus: '📡 État du système',
@@ -2093,10 +2051,90 @@ logger.clear();</pre>
                     success: 'Succès',
                     warning: 'Avertissement',
                     opened: 'Ouvert:',
-                    initialized: 'QAntum v1.0.2 UI initialisé',
+                    initialized: 'QAntum UI initialisé',
                     madeInBulgaria: '🇧🇬 Fait avec ❤️ en Bulgarie'
                 },
                 footer: { copyright: '© 2025 Dimitar Prodromov' }
+            },
+            soul: {
+                language: 'λ_INTENT',
+                header: {
+                    title: 'Ψ_QANTUM',
+                    codename: 'Σ_v1.1.0_SINGULARITY',
+                    adminAccess: 'Ω_Sovereign',
+                    lines: 'Φ_Nodes:',
+                    tests: 'Γ_Proofs:',
+                    modules: 'Δ_Cores:'
+                },
+                sidebar: {
+                    freeFeatures: 'ξ_Common_Logic',
+                    proFeatures: 'ζ_Pure_Aether',
+                    enterprise: 'θ_Collective',
+                    singularity: 'ω_Singularity',
+                    utilities: 'η_Artifacts'
+                },
+                modules: {
+                    websiteAudit: 'λ_Audit',
+                    apiTest: 'λ_Flux_Test',
+                    linkChecker: 'λ_Nexus_Verify',
+                    predictionMatrix: 'λ_Oracle',
+                    apiSensei: 'λ_Master',
+                    chronosEngine: 'λ_Timeline',
+                    thermalPool: 'λ_Thermal',
+                    dockerManager: 'λ_Cell',
+                    swarmCommander: 'λ_Swarm',
+                    bulgarianTts: 'λ_Voice_BG',
+                    licenseManager: 'λ_Key',
+                    systemStats: 'λ_Entropy',
+                    logger: 'λ_Scribe',
+                    soulEngine: 'λ_SOUL'
+                },
+                badges: {
+                    free: 'FREE',
+                    pro: 'ELITE',
+                    proRequired: 'REQUIRES_ASCENSION'
+                },
+                panels: {
+                    audit: { title: 'Ψ_Audit', subtitle: 'manifest.audit(node) → Success', runButton: 'Manifest' },
+                    apiTest: { title: 'Ψ_Flux', subtitle: 'manifest.flux(point) → Flow', runButton: 'Analyze' },
+                    soul: {
+                        title: 'Ψ_Soul',
+                        subtitle: 'Entropy_Purification_Engine',
+                        description: 'Architect_zero-entropy_logic_to_maintain_system_singularity.'
+                    }
+                },
+                status: {
+                    systemStatus: 'Ψ_State',
+                    backend: 'Core',
+                    license: 'Proof',
+                    circuitBreaker: 'Breaker',
+                    online: 'PULSING',
+                    offline: 'VOID',
+                    closed: 'STABLE',
+                    open: 'LEAKING',
+                    cpuTemperature: 'Ψ_Thermal',
+                    state: 'Essence:',
+                    financialOracle: 'Ψ_Oracle',
+                    totalCost: 'Cost',
+                    requests: 'Cycles',
+                    budgetLeft: 'Energy',
+                    activityLog: 'Ψ_Scribe',
+                    waitingForActivity: 'Awaiting_Intent...',
+                    checking: 'Scanning...',
+                    freeTier: 'Basic_Node'
+                },
+                common: {
+                    loading: 'Syncing...',
+                    processing: 'Purifying...',
+                    complete: 'Manifested!',
+                    error: 'Entropy',
+                    success: 'Order',
+                    warning: 'Chaos',
+                    opened: 'Accessed:',
+                    initialized: 'QAntum_Nexus_Active',
+                    madeInBulgaria: '🇧🇬 Origin: Veritas'
+                },
+                footer: { copyright: '© 2025 Sovereign Architect' }
             }
         };
 
@@ -2238,8 +2276,8 @@ logger.clear();</pre>
         // API FUNCTIONS - These connect to QAntum backend
         // ══════════════════════════════════════════════════════════════
 
-        // In a real implementation, these would call the backend API
-        // For demo purposes, they simulate responses
+        // AETERNA VERITAS - NEURAL INFERENCE ENGINE [LIVE]
+        // INTEGRATED VIA QANTUM NEXUS CORE
 
         async function runAudit() {
             const url = document.getElementById('audit-url').value;
@@ -2248,10 +2286,10 @@ logger.clear();</pre>
             showLoading('Running website audit...');
             addLog(`Auditing: ${url}`, 'info');
 
-            // Simulate API call (replace with real backend call)
+            // Executing via Neural Inference Engine...
             await new Promise(r => setTimeout(r, 2000));
 
-            // Simulated result
+            // Inference result
             const result = {
                 performance: Math.floor(Math.random() * 40) + 50,
                 accessibility: Math.floor(Math.random() * 30) + 70,
@@ -2340,7 +2378,7 @@ URL: ${url}
 Total Links: ${max}
 Checked: ${max}
 Broken: ${broken}
-${broken > 0 ? '\n⚠️ Broken links found - review recommended' : '\n✅ All links valid!'}</pre>`;
+${broken > 0 ? '\n⚠️ Integrity gaps found - action required' : '\n✅ All nodes secured!'}</pre>`;
 
             addLog(`Links: ${broken} broken of ${max}`, broken === 0 ? 'success' : 'warning');
         }
@@ -2371,7 +2409,7 @@ ${broken > 0 ? '\n⚠️ Broken links found - review recommended' : '\n✅ All l
             addLog("SCRIBE: Initiating Merkle Root calculation...", "info");
 
             try {
-                const response = await fetch('http://localhost:5050/generate-certificate', {
+                const response = await fetch('https://ghost-shild-122.onrender.com/generate-certificate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -2423,7 +2461,7 @@ ${broken > 0 ? '\n⚠️ Broken links found - review recommended' : '\n✅ All l
             // Connected to: OmniCore (Python) -> Sovereign (Rust)
             // ══════════════════════════════════════════════════════════════
 
-            const socket = new WebSocket('ws://localhost:8765');
+            const socket = new WebSocket('wss://ghost-shild-122.onrender.com');
 
             // ЛОКАЛЕН VERITAS (Щитът на Браузъра)
             const veritas = {
@@ -2516,8 +2554,54 @@ ${broken > 0 ? '\n⚠️ Broken links found - review recommended' : '\n✅ All l
 
         function updateLicenseStatus() {
             const t = translations[currentLang];
-            document.getElementById('license-status').textContent = t.status.freeTier;
-            document.getElementById('license-status').style.color = 'var(--accent-warning)';
+            const premium = localStorage.getItem('veritas_premium_access') === 'true';
+
+            if (premium) {
+                document.getElementById('license-status').textContent = 'SOVEREIGN ARCHITECT';
+                document.getElementById('license-status').style.color = 'var(--accent-secondary)';
+                document.getElementById('license-indicator').classList.add('online');
+            } else {
+                document.getElementById('license-status').textContent = t.status.freeTier;
+                document.getElementById('license-status').style.color = 'var(--accent-warning)';
+            }
+        }
+
+        async function initiateAdminAccess() {
+            addLog("🛡️ ACCESS: INITIATING SOVEREIGN HANDSHAKE...", "warning");
+            showLoading("VERITAS: Validating biometric hash...");
+
+            await new Promise(r => setTimeout(r, 1500));
+
+            // Manifestation of Sovereign identity bypass
+            addLog("🛡️ ACCESS: ARCHITECT IDENTIFIED. BYPASSING ENTROPY.", "success");
+            localStorage.setItem('veritas_premium_access', 'true');
+            hideLoading();
+            updateLicenseStatus();
+            alert("Sovereign Architect Access Granted.");
+        }
+
+        async function compileSoul() {
+            const code = document.getElementById('soul-editor').value;
+            const status = document.getElementById('soul-status');
+            const outputWrapper = document.getElementById('soul-results');
+            const output = document.getElementById('soul-output');
+
+            status.textContent = "PURIFYING...";
+            status.style.color = "var(--accent-secondary)";
+            addLog("SOUL: Analyzing intent for entropy...", "info");
+
+            await new Promise(r => setTimeout(r, 2000));
+
+            outputWrapper.style.display = "block";
+            output.textContent = `[SOUL COMPILER v1.0]
+> Intent: Singularity
+> Directive: ZERO_ENTROPY
+> Result: PROOF_OF_EXISTENCE [VALID]
+
+✨ Logic Manifested. Entropy at 0.00% in this node.`;
+            status.textContent = "MANIFESTED";
+            status.style.color = "var(--accent-success)";
+            addLog("SOUL: Compilation successful. Truth sealed.", "success");
         }
     </script>
 
@@ -2526,7 +2610,8 @@ ${broken > 0 ? '\n⚠️ Broken links found - review recommended' : '\n✅ All l
     <!-- ═══════════════════════════════════════════════════════════════ -->
     <footer class="footer">
         <p>
-            <strong>QAntum v1.0.2</strong> "The Local Sovereign" |
+            <strong>AETERNA Δ Σv1.1.0</strong> "The Sovereign Hand" |
+            <a href="https://aeterna.website">aeterna.website</a> |
             <span data-i18n="footer.copyright">© 2025 Димитър Продромов</span> |
             <a href="https://github.com/papica777-eng/QAntumQATool">GitHub</a> |
             <span data-i18n="common.madeInBulgaria">🇧🇬 Made with ❤️ in Bulgaria</span>

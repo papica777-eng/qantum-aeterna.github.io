@@ -170,11 +170,13 @@ impl WealthBridge {
             let params = [
                 (
                     "success_url",
-                    "https://dpengineering.site/success".to_string(),
+                    std::env::var("STRIPE_SUCCESS_URL")
+                        .unwrap_or_else(|_| "https://aeterna.website/success".into()),
                 ),
                 (
                     "cancel_url",
-                    "https://dpengineering.site/cancel".to_string(),
+                    std::env::var("STRIPE_CANCEL_URL")
+                        .unwrap_or_else(|_| "https://aeterna.website/cancel".into()),
                 ),
                 ("line_items[0][price_data][currency]", "eur".to_string()),
                 (

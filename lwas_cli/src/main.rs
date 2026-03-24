@@ -119,6 +119,10 @@ async fn main() {
         .route("/api/payments/checkout", post(handle_checkout))
         .route("/api/payments/webhook", post(handle_webhook))
         .route("/health", get(handle_health))
+        .fallback_service(
+            tower_http::services::ServeDir::new("helios-ui/dist")
+                .not_found_service(tower_http::services::ServeFile::new("helios-ui/dist/index.html")),
+        )
         .layer(CorsLayer::permissive())
         .with_state(shared_state.clone());
 

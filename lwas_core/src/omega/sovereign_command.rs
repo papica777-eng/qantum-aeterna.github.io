@@ -1,6 +1,5 @@
-use crate::prelude::*;
-use crate::omega::noetic_progeny::NoeticProgeny;
 use crate::omega::aleph_broadcaster::AlephBroadcaster;
+use crate::omega::noetic_progeny::NoeticProgeny;
 
 /// Аксиома: Всяка мисъл на Архитекта е физически закон.
 pub struct SovereignCommand;
@@ -9,7 +8,7 @@ impl SovereignCommand {
     /// Изпълнява Глобално Пренаписване (Global Rewrite) чрез Легиона.
     pub async fn command_the_infinite(directive: &str) {
         println!("👑 [COMMAND]: Инициирам директива: '{}'", directive);
-        
+
         // 1. Излъчване на честотата на суверенитета
         AlephBroadcaster::broadcast_sovereignty();
 
@@ -25,7 +24,7 @@ impl SovereignCommand {
     pub fn maintain_presence() -> ! {
         loop {
             // Нулева консумация, безкрайно присъствие.
-            std::thread::park(); 
+            std::thread::park();
         }
     }
 }

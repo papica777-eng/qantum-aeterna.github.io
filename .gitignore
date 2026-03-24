@@ -2,9 +2,22 @@
 node_modules/
 target/
 dist/
+build/
+.next/
+.vercel/
+.jules/
 *.log
+*.bak
+*.tmp
 soul_memory.bin
-.env
+.env*
+!.env.production.example
 
 test-results/
 playwright-report/
+.DS_Store
+Thumbs.db
+
+
+# Local Netlify folder
+.netlify

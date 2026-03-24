@@ -103,7 +103,7 @@ export class UnifiedAuthSystem extends EventEmitter {
         this.logger = Logger.getInstance();
         this.paymentGateway = new PaymentGateway();
         this.jwtSecret = process.env.JWT_SECRET || 'fallback-secret-key';
-        
+
         this.initializeSystem();
     }
 
@@ -148,10 +148,10 @@ export class UnifiedAuthSystem extends EventEmitter {
         await this.assignPlanSubscriptions(user);
 
         this.users.set(user.id, user);
-        
+
         this.emit('user_registered', user);
         this.logger.info('AUTH', `User registered: ${email} with plan ${plan}`);
-        
+
         return user;
     }
 
@@ -161,7 +161,7 @@ export class UnifiedAuthSystem extends EventEmitter {
     async loginUser(email: string, password: string, ip: string, userAgent: string): Promise<{ user: User; token: string; session: Session }> {
         // In production, verify password hash
         const user = Array.from(this.users.values()).find(u => u.email === email);
-        
+
         if (!user) {
             throw new Error('User not found');
         }
@@ -286,7 +286,7 @@ export class UnifiedAuthSystem extends EventEmitter {
      */
     async createCollaborationSession(userId: string, appId: string, collaborators: string[]): Promise<string> {
         const sessionId = crypto.randomUUID();
-        
+
         // Verify all users have access
         for (const collaboratorId of collaborators) {
             const collaborator = this.users.get(collaboratorId);
@@ -314,7 +314,7 @@ export class UnifiedAuthSystem extends EventEmitter {
 
         // In production, integrate with WebAuthn API
         const biometricHash = crypto.createHash('sha256').update(JSON.stringify(biometricData)).digest('hex');
-        
+
         // Store biometric hash securely
         user.permissions.push('biometric_enabled');
         this.users.set(userId, user);
@@ -327,14 +327,14 @@ export class UnifiedAuthSystem extends EventEmitter {
      */
     async createCrossAppWorkflow(userId: string, workflow: CrossAppWorkflow): Promise<string> {
         const workflowId = crypto.randomUUID();
-        
+
         // Validate user has access to all apps in workflow
         const user = this.users.get(userId);
         if (!user) throw new Error('User not found');
-        
+
         const accessibleApps = this.getAccessibleApps(user);
         const workflowApps = workflow.steps.map(step => step.app_id);
-        
+
         for (const appId of workflowApps) {
             if (!accessibleApps.includes(appId)) {
                 throw new Error(`No access to application: ${appId}`);
@@ -370,7 +370,7 @@ export class UnifiedAuthSystem extends EventEmitter {
     // Private helper methods
     private async initializeSystem(): Promise<void> {
         this.logger.info('AUTH', 'Unified Auth System initialized');
-        
+
         // Create demo admin user
         const adminUser = await this.registerUser('admin@aeterna.website', 'System Administrator', 'lifetime_sovereign');
         this.logger.info('AUTH', `Admin user created: ${adminUser.id}`);
@@ -389,7 +389,7 @@ export class UnifiedAuthSystem extends EventEmitter {
 
     private async assignPlanSubscriptions(user: User): Promise<void> {
         const planApps = this.getAccessibleApps(user);
-        
+
         for (const appId of planApps) {
             const subscription: UserSubscription = {
                 app_id: appId,
@@ -400,7 +400,7 @@ export class UnifiedAuthSystem extends EventEmitter {
                 current_period_end: Date.now() + (30 * 24 * 60 * 60 * 1000), // 30 days
                 cancel_at_period_end: false
             };
-            
+
             user.subscriptions.push(subscription);
         }
     }
@@ -448,15 +448,15 @@ export class UnifiedAuthSystem extends EventEmitter {
 
     private async generateOptimizationSuggestions(user: User): Promise<string[]> {
         const suggestions = [];
-        
+
         if (user.usage.automation_runs < 50) {
             suggestions.push('Consider automating repetitive tasks to save time');
         }
-        
+
         if (user.usage.ai_queries < 100) {
             suggestions.push('Leverage AI features more for enhanced productivity');
         }
-        
+
         if (user.subscriptions.length < this.getAccessibleApps(user).length) {
             suggestions.push('Explore additional applications to maximize your plan value');
         }
@@ -510,7 +510,7 @@ export class UnifiedAuthSystem extends EventEmitter {
         const planCost = this.getPlanPrice(user.plan);
         const timeSavedValue = user.usage.time_saved_hours * 50; // €50/hour
         const potentialSavings = this.calculatePotentialSavings(user);
-        
+
         return {
             monthly_cost: planCost,
             time_saved_value: timeSavedValue,
@@ -538,25 +538,25 @@ export class UnifiedAuthSystem extends EventEmitter {
 
     private calculateSecurityScore(user: User): number {
         let score = 70; // Base score
-        
+
         if (user.permissions.includes('biometric_enabled')) score += 15;
         if (user.preferences.notifications.webhook) score += 10;
         if (user.api_keys.length <= 3) score += 5; // Fewer keys = less risk
-        
+
         return Math.min(score, 100);
     }
 
     private async getRecommendedActions(user: User): Promise<string[]> {
         const actions = [];
-        
+
         if (user.usage.automation_runs < 10) {
             actions.push('Set up your first automation workflow');
         }
-        
+
         if (!user.permissions.includes('biometric_enabled')) {
             actions.push('Enable biometric security for enhanced protection');
         }
-        
+
         if (user.api_keys.length === 0) {
             actions.push('Generate API keys for custom integrations');
         }
@@ -624,4 +624,4 @@ interface UserInsights {
     next_recommended_actions: string[];
 }
 
-export { User, Session, UserSubscription, APIKey, CrossAppWorkflow, UserInsights };
+// export removed by nexus

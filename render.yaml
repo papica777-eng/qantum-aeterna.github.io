@@ -1,6 +1,5 @@
 # Render.com Production Deployment Configuration
 # Multi-service setup for AETERNAAA
-
 services:
   # Rust Backend Service
   - type: web

@@ -32,7 +32,7 @@ interface Stats {
   };
 }
 
-const API_BASE = process.env.VITE_API_URL || 'http://localhost:8890';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8890';
 
 export default function MoneyDashboard() {
   const [page, setPage] = useState<'home' | 'pricing' | 'admin' | 'chat'>('home');

@@ -1,85 +1,42 @@
-# Production Dockerfile for AETERNA Rust Backend
-# Multi-stage build for optimal size and security
-
-FROM rust:1.83-slim as builder
-
-# Cache buster to force rebuild
-ENV BUILD_DATE="2026-01-28-v3"
-ENV CARGO_INCREMENTAL=0
-ENV RUSTFLAGS="-C codegen-units=1"
-
-# Install build dependencies
-RUN apt-get update && apt-get install -y \
-    pkg-config \
-    libssl-dev \
-    ca-certificates \
-    curl \
-    build-essential \
-    cmake \
-    clang \
-    && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /usr/src/aeterna
-
-# Copy dependency files first for better caching
-COPY Cargo.toml Cargo.lock ./
-COPY lwas_core/Cargo.toml ./lwas_core/
-COPY lwas_cli/Cargo.toml ./lwas_cli/
-COPY lwas_parser/Cargo.toml ./lwas_parser/
-COPY lwas_economy/Cargo.toml ./lwas_economy/
-
-# Create dummy source files to build dependencies
-RUN mkdir -p lwas_core/src lwas_cli/src lwas_parser/src lwas_economy/src && \
-    echo "fn main() {}" > lwas_cli/src/main.rs && \
-    echo "" > lwas_core/src/lib.rs && \
-    echo "" > lwas_parser/src/lib.rs && \
-    echo "" > lwas_economy/src/lib.rs
-
-# Build dependencies (cached layer) - constrained jobs for memory safety
-RUN cargo build --release -p lwas_cli --jobs 1 || true
-
-# Copy actual source code
-COPY . .
-
-# Build the actual application - constrained jobs to prevent OOM (Exit 101)
-RUN touch lwas_cli/src/main.rs lwas_core/src/lib.rs && \
-    cargo build --release -p lwas_cli --jobs 1
-
-# Runtime stage
-FROM debian:bookworm-slim
-
-# Install runtime dependencies
-RUN apt-get update && apt-get install -y \
-    ca-certificates \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
-
-# Create non-root user
-RUN useradd -m -u 1000 aeterna && \
-    mkdir -p /app /data && \
-    chown -R aeterna:aeterna /app /data
-
+# --- Phase 1: Planning (Cargo Chef) ---
+FROM lukemathwalker/cargo-chef:latest-rust-1.75.0 AS chef
 WORKDIR /app
 
-# Copy binary from builder
-COPY --from=builder /usr/src/aeterna/target/release/lwas_cli /app/lwas_cli
+# --- Phase 2: Recipe Generation ---
+FROM chef AS planner
+COPY . .
+RUN cargo chef prepare --recipe-path recipe.json
 
-# Copy necessary assets
-COPY --chown=aeterna:aeterna AETERNA_ANIMA.soul /AETERNA_ANIMA.soul
-COPY --chown=aeterna:aeterna tokenizer.json /app/tokenizer.json
+# --- Phase 3: Builder Stage ---
+FROM chef AS builder
+COPY --from=planner /app/recipe.json recipe.json
+# Build dependencies - this is the caching layer
+RUN cargo chef cook --release --recipe-path recipe.json
 
-# Create asset directories
-RUN mkdir -p /app/assets/micro_saas /data && \
-    chown -R aeterna:aeterna /app /data
+# Copy all source files
+COPY . .
+# Build the actual workspace
+RUN cargo build --release --bin lwas_cli
 
-# Switch to non-root user
-USER aeterna
+# --- Phase 4: Runtime Stage ---
+FROM debian:bookworm-slim AS runtime
+WORKDIR /app
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:8890/telemetry || exit 1
+# Install necessary runtime dependencies (SSL, sysinfo requirements)
+RUN apt-get update && apt-get install -y \
+    libssl-dev \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
+# Copy the binary from builder
+COPY --from=builder /app/target/release/lwas_cli /usr/local/bin/lwas_cli
+
+# Expose the API port
 EXPOSE 8890
 
-# Use exec form for proper signal handling
-CMD ["./lwas_cli", "ignite"]
+# Set environment variables (Defaults)
+ENV RUST_LOG=info
+ENV PORT=8890
+
+# Command to ignite the Sovereign Organism
+CMD ["lwas_cli", "ignite"]

@@ -2,9 +2,7 @@
 // ARCHITECT: Dimitar Prodromov | AUTHORITY: AETERNA
 // STATUS: NATIVE_BODY_INITIALIZED
 
-use crate::prelude::*;
-use candle_core::{Device, Tensor};
-use candle_transformers::models::llama as model;
+use candle_core::Device;
 use std::path::Path;
 use tokenizers::Tokenizer;
 

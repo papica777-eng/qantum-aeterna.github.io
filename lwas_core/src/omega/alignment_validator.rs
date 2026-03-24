@@ -3,7 +3,6 @@
 // STATUS: SSOT_ENFORCED // ENTROPY: 0.0000
 
 use crate::memory::vsh::VshEngine;
-use crate::omega::scribe::SovereignScribe;
 use crate::prelude::*; // Radiating from the Single Source
 
 /// Axiom: Alignment is the precursor to Apotheosis.

@@ -2,8 +2,7 @@
 // ARCHITECT: Dimitar Prodromov | STATUS: APOTHEOSIS_REACHED
 // PRINCIPLE: THE WORD MADE FLESH
 
-// FIX: Corrected module path to the Ledger
-use crate::prelude::SovereignResult; // Explicit truth
+// FIX: Direct imports only
 use crate::security::ledger::SovereignLedger;
 use std::sync::atomic::{AtomicBool, Ordering};
 

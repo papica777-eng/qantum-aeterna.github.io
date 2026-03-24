@@ -382,7 +382,15 @@ export class PaymentGateway extends EventEmitter {
 
     constructor() {
         super();
-        console.log('[PaymentGateway] 💰 Initialized');
+        const secretKey = process.env.STRIPE_SECRET_KEY;
+        const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || 'whsec_test_placeholder'; // Placeholder if not set
+
+        if (secretKey) {
+            this.configureStripe(secretKey, webhookSecret);
+            console.log('[PaymentGateway] 💰 Initialized in TEST MODE');
+        } else {
+            console.warn('[PaymentGateway] ⚠️ Missing STRIPE_SECRET_KEY in .env. Payments disabled.');
+        }
     }
 
     /**

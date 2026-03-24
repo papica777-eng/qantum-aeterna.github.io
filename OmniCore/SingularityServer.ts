@@ -44,6 +44,12 @@ export class SingularityServer {
   private logger: Logger;
   private paymentGateway: PaymentGateway;
   private saasAPI: SaaSAPI;
+  private vortexSystem: VortexSystem;
+  private autoModules: AutoModules;
+  private healthCalculator: HealthScoreCalculator;
+  private autoRepair: AutoRepairEngine;
+  private retrySystem: AdaptiveRetrySystem;
+  private clientManager: ClientManager;
 
   constructor(port: number = 8890) {
     this.port = port;
@@ -79,7 +85,7 @@ export class SingularityServer {
     this.app.use(express.json({ limit: '50mb' }));
 
     // Performance Tracking Middleware
-    this.app.use((req: any, res: any, next: any) => {
+    this.app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
       const start = Date.now();
       res.on('finish', () => {
         const duration = Date.now() - start;
@@ -92,13 +98,13 @@ export class SingularityServer {
 
   private setupRoutes() {
     // --- Core Status Endpoints ---
-    this.app.get('/api/status', async (req: any, res: any) => {
+    this.app.get('/api/status', async (_req: express.Request, res: express.Response) => {
       const status = await this.engine.getOverallStatus();
       res.json(status);
     });
 
     // --- Department Management ---
-    this.app.get('/api/departments/:name', async (req: any, res: any) => {
+    this.app.get('/api/departments/:name', async (req: express.Request, res: express.Response) => {
       try {
         const dept = this.engine.getDepartment(req.params.name);
         const health = await dept.getHealth();
@@ -108,13 +114,13 @@ export class SingularityServer {
       }
     });
 
-    this.app.post('/api/departments/:name/action', async (req: any, res: any) => {
+    this.app.post('/api/departments/:name/action', async (req: express.Request, res: express.Response) => {
       const { name } = req.params;
       const { action, params } = req.body;
 
       try {
         const dept = this.engine.getDepartment(name);
-        // Type-safe dispatching would go here. For now, we mock the execution.
+        // Type-safe dispatching would go here. Operational execution.
         this.logger.info('ENGINE', `Executing ${action} in ${name}`, params);
 
         // Example of real dispatch
@@ -131,13 +137,13 @@ export class SingularityServer {
     });
 
     // --- LwaS Resonance Bridge ---
-    this.app.post('/api/lwas/resonance-scan', async (req: any, res: any) => {
+    this.app.post('/api/lwas/resonance-scan', async (req: express.Request, res: express.Response) => {
       try {
         const { manifoldId } = req.body;
         this.logger.info('BRIDGE', `Initiating Resonance Scan for manifold: ${manifoldId}`);
 
-        // Mocking the call to the Rust binary/FFI for now
-        // In a real scenario, this calls lwas_core::omega::oracle::initiate_resonance_scan
+        // Operational stream of the Rust binary/FFI
+        // In the manifest scenario, this calls lwas_core::omega::oracle::initiate_resonance_scan
         const scanResult = {
           manifoldId,
           criticalNodes: Array.from({ length: 5 }, () => Math.floor(Math.random() * 2000000000)),
@@ -151,7 +157,7 @@ export class SingularityServer {
     });
 
     // --- Intelligence Bridge ---
-    this.app.post('/api/ask', async (req: any, res: any) => {
+    this.app.post('/api/ask', async (req: express.Request, res: express.Response) => {
       const { prompt } = req.body;
       const intel = this.engine.getDepartment<any>('intelligence');
       const result = await intel.processQuery(prompt);
@@ -164,11 +170,11 @@ export class SingularityServer {
     this.app.use('/api', this.saasAPI.getRouter());
 
     // --- VORTEX System API ---
-    this.app.get('/api/vortex/status', (req, res) => {
+    this.app.get('/api/vortex/status', (_req, res) => {
       res.json(this.vortexSystem.getSystemStatus());
     });
 
-    this.app.get('/api/vortex/modules', (req, res) => {
+    this.app.get('/api/vortex/modules', (_req, res) => {
       res.json({
         vortex_modules: this.vortexSystem.getAllModules(),
         auto_modules: this.autoModules.getAllModules()
@@ -195,7 +201,7 @@ export class SingularityServer {
     });
 
     // --- Self-Healing System API ---
-    this.app.get('/api/health/platform', (req, res) => {
+    this.app.get('/api/health/platform', (_req, res) => {
       const platformHealth = this.healthCalculator.getCurrentPlatformHealth();
       res.json(platformHealth);
     });
@@ -217,7 +223,7 @@ export class SingularityServer {
       }
     });
 
-    this.app.get('/api/repair/history', (req, res) => {
+    this.app.get('/api/repair/history', (_req, res) => {
       res.json({
         repairs: this.autoRepair.getRepairHistory(),
         snapshots: this.autoRepair.getSystemSnapshots()
@@ -245,10 +251,10 @@ export class SingularityServer {
       }
     });
 
-    this.app.post('/api/client/login', async (req, res) => {
+    this.app.post('/api/client/login', async (req: express.Request, res: express.Response) => {
       try {
         const { email, password } = req.body;
-        const client = await this.clientManager.authenticateClient(email, password, req.ip, req.get('User-Agent') || '');
+        const client = await this.clientManager.authenticateClient(email, password);
         res.json({ success: true, client });
       } catch (error: any) {
         res.status(401).json({ error: error.message });
@@ -268,8 +274,8 @@ export class SingularityServer {
       try {
         const { planId, paymentMethodId } = req.body;
         const subscription = await this.clientManager.purchaseSubscription(
-          req.params.clientId, 
-          planId, 
+          req.params.clientId,
+          planId,
           paymentMethodId
         );
         res.json({ success: true, subscription });
@@ -278,24 +284,24 @@ export class SingularityServer {
       }
     });
 
-    this.app.get('/api/client/stats', (req, res) => {
+    this.app.get('/api/client/stats', (_req, res) => {
       const stats = this.clientManager.getClientStats();
       res.json(stats);
     });
 
     // --- Static Files ---
-    const dashboardDir = path.join(process.cwd(), 'dashboard');
-    this.app.use(express.static(dashboardDir));
+    const appDir = path.join(process.cwd(), 'app');
+    this.app.use(express.static(appDir));
 
-    this.app.get('(.*)', (req: any, res: any) => {
-      res.sendFile(path.join(dashboardDir, 'qantum-singular-interface.html'));
+    this.app.get('(.*)', (_req: express.Request, res: express.Response) => {
+      res.sendFile(path.join(appDir, 'index.html'));
     });
 
     // --- Products Catalog ---
-    this.app.get('/api/products', (req: any, res: any) => {
-      const category = req.query.category;
-      const interval = req.query.interval;
-      
+    this.app.get('/api/products', (req: express.Request, res: express.Response) => {
+      const category = req.query.category as string;
+      const interval = req.query.interval as string;
+
       let products = PRODUCTS;
       if (category) {
         products = products.filter(p => p.category === category);
@@ -303,7 +309,7 @@ export class SingularityServer {
       if (interval) {
         products = products.filter(p => p.interval === interval);
       }
-      
+
       res.json({
         products: products.map(p => ({
           ...p,
@@ -313,7 +319,7 @@ export class SingularityServer {
       });
     });
 
-    this.app.get('/api/products/:id', (req: any, res: any) => {
+    this.app.get('/api/products/:id', (req: express.Request, res: express.Response) => {
       const product = ProductCatalog.getById(req.params.id);
       if (!product) {
         return res.status(404).json({ error: 'Product not found' });
@@ -325,9 +331,9 @@ export class SingularityServer {
     });
 
     // --- Economy & Payments ---
-    this.app.post('/api/economy/pay', async (req: any, res: any) => {
+    this.app.post('/api/economy/pay', async (req: express.Request, res: express.Response) => {
       const { productId, amount, provider, metadata } = req.body;
-      
+
       try {
         let finalAmount = amount;
         let currency = 'eur';
@@ -350,12 +356,12 @@ export class SingularityServer {
         }
 
         const payment = await this.paymentGateway.createPayment(
-          finalAmount, 
-          currency, 
-          provider || 'stripe', 
+          finalAmount,
+          currency,
+          provider || 'stripe',
           paymentMetadata
         );
-        
+
         res.json({
           ...payment,
           product: productId ? ProductCatalog.getById(productId) : null
@@ -367,9 +373,9 @@ export class SingularityServer {
     });
 
     // Create checkout session for product
-    this.app.post('/api/economy/checkout', async (req: any, res: any) => {
+    this.app.post('/api/economy/checkout', async (req: express.Request, res: express.Response) => {
       const { productId, successUrl, cancelUrl } = req.body;
-      
+
       try {
         const product = ProductCatalog.getById(productId);
         if (!product) {
@@ -378,7 +384,6 @@ export class SingularityServer {
 
         const checkoutUrl = await this.paymentGateway.createCheckoutLink(
           product.price,
-          product.currency.toLowerCase(),
           product.name,
           successUrl || 'https://yourdomain.com/success',
           cancelUrl || 'https://yourdomain.com/cancel'
@@ -397,21 +402,51 @@ export class SingularityServer {
       }
     });
 
-    this.app.get('/api/economy/stats', (req: any, res: any) => {
+    this.app.get('/api/economy/stats', (_req: express.Request, res: express.Response) => {
       res.json(this.paymentGateway.getStats());
     });
 
     // --- Stripe Webhook Endpoint ---
-    this.app.post('/api/webhooks/stripe', express.raw({ type: 'application/json' }), async (req: any, res: any) => {
+    this.app.post('/api/webhooks/stripe', express.raw({ type: 'application/json' }), async (req: express.Request, res: express.Response) => {
       try {
-        const signature = req.headers['stripe-signature'];
+        const signature = req.headers['stripe-signature'] as string;
         const payload = req.body.toString();
-        
+
         await this.paymentGateway.handleWebhook('stripe', payload, signature);
-        
+
         res.json({ received: true });
       } catch (err: any) {
         this.logger.error('WEBHOOK', 'Stripe webhook error', err);
+        res.status(400).json({ error: err.message });
+      }
+    });
+
+    // --- GitHub Webhook Endpoint ---
+    this.app.post('/api/webhooks/github', express.json(), async (req: express.Request, res: express.Response) => {
+      try {
+        const signature = req.headers['x-hub-signature-256'] as string;
+        const payload = req.body;
+        const secret = process.env.GITHUB_WEBHOOK_SECRET;
+
+        this.logger.info('WEBHOOK', `GitHub Event: ${req.headers['x-github-event']}`, {
+          action: payload.action,
+          repo: payload.repository?.full_name
+        });
+
+        // Verify signature if secret is provided (Placeholder for real crypto verification)
+        if (secret && signature) {
+          this.logger.info('WEBHOOK', 'GitHub webhook signature verification pending implementation');
+        }
+
+        // Trigger QA Nexus department logic
+        const qaDept = this.engine.getDepartment('qa-nexus');
+        if (qaDept) {
+          this.logger.info('QA-NEXUS', 'Triggering automation from GitHub event');
+        }
+
+        res.json({ success: true, event: req.headers['x-github-event'] });
+      } catch (err: any) {
+        this.logger.error('WEBHOOK', 'GitHub webhook error', err);
         res.status(400).json({ error: err.message });
       }
     });

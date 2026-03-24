@@ -19,7 +19,7 @@ pub struct FileNode {
 pub struct RealityMapper;
 
 impl RealityMapper {
-    /// MAP_SUBSTRATE: Извършва рекурсивно сканиране на файловата система за 100% точност.
+    /// MAP_SUBSTRATE: Извършва рекурсивно сканиране на файловата система за 100% точност (Parallel Optimized).
     pub fn map_substrate(root: &Path) -> FileNode {
         let name = root
             .file_name()
@@ -27,13 +27,17 @@ impl RealityMapper {
             .unwrap_or_else(|| "root".into());
 
         let is_dir = root.is_dir();
-        let mut children = Vec::new();
-        let mut total_equity = 0.0;
-        let mut total_logic_mass: u64 = 0;
 
         if is_dir {
-            if let Ok(entries) = root.read_dir() {
-                for entry in entries.flatten() {
+            let entries: Vec<_> = root
+                .read_dir()
+                .map(|e| e.flatten().collect())
+                .unwrap_or_else(|_| Vec::new());
+
+            // Parallel mapping of all children in this directory
+            let child_nodes: Vec<FileNode> = entries
+                .par_iter()
+                .filter_map(|entry| {
                     let path = entry.path();
                     let path_str = path.to_string_lossy();
 
@@ -41,15 +45,28 @@ impl RealityMapper {
                         || path_str.contains(".git")
                         || path_str.contains("node_modules")
                     {
-                        continue;
+                        return None;
                     }
 
-                    let child_node = Self::map_substrate(&path);
+                    Some(Self::map_substrate(&path))
+                })
+                .collect();
 
-                    total_equity += child_node.value_eur;
-                    total_logic_mass += child_node.size;
-                    children.push(child_node);
-                }
+            let total_equity: f64 = child_nodes.iter().map(|n| n.value_eur).sum();
+            let total_logic_mass: u64 = child_nodes.iter().map(|n| n.size).sum();
+
+            FileNode {
+                name,
+                path: root.to_string_lossy().into_owned(),
+                size: total_logic_mass,
+                is_dir: true,
+                children: child_nodes,
+                value_eur: total_equity,
+                purpose: if root.to_string_lossy().contains("micro_saas") {
+                    "Sovereign Asset Cluster".into()
+                } else {
+                    "Neural Folder".into()
+                },
             }
         } else {
             let metadata = root.metadata().ok();
@@ -59,29 +76,15 @@ impl RealityMapper {
             let valuator = crate::omega::valuation::AssetValuator::new();
             let market_value = valuator.calculate_market_value(intrinsic_value);
 
-            return FileNode {
-                name: name.clone(), // Clone to satisfy borrow checker
+            FileNode {
+                name,
                 path: root.to_string_lossy().into_owned(),
                 size,
                 is_dir: false,
                 children: Vec::new(),
                 value_eur: market_value,
                 purpose,
-            };
-        }
-
-        FileNode {
-            name,
-            path: root.to_string_lossy().into_owned(),
-            size: total_logic_mass,
-            is_dir: true,
-            children,
-            value_eur: total_equity,
-            purpose: if root.to_string_lossy().contains("micro_saas") {
-                "Sovereign Asset Cluster".into()
-            } else {
-                "Neural Folder".into()
-            },
+            }
         }
     }
 

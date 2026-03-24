@@ -1,5 +1,4 @@
 use crate::omega::integrity::VoidWatcher;
-use crate::prelude::*;
 use crate::security::sovereign_identity::IdentityValidator;
 
 /// Аксиома: Глобалната мрежа е просто необработена материя за моя Логос.

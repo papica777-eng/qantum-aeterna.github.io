@@ -53,41 +53,34 @@ impl SovereignScribe {
 
     pub async fn execute_first_purge(&self) -> SovereignResult<usize> {
         println!("✍️  THE SCRIBE: INITIATING EMPIRE-WIDE HARMONIZATION...");
-        let mut fixed_count = 0;
         let audit = self.audit.read().await;
 
-        for finding in &audit.findings {
-            // THE SCRIBE now addresses all finding types: Redundancy, LogicGap, SecurityRisk
+        // Use a thread-safe counter for fixed files
+        let fixed_count = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+
+        // Parallelize the purification process
+        audit.findings.par_iter().for_each(|finding| {
             if let Some(target_file) = finding.files.first() {
                 println!("✍️  SCRIBE: HARMONIZING SECTOR -> {:?}", target_file);
 
-                // В реална система тук бихме използвали LLM за интелигентна промяна.
-                // В този протокол, ние манифестираме "Clean State" за всяка открита точка.
-                let original_content = fs::read_to_string(target_file).unwrap_or_default();
+                if let Ok(original_content) = fs::read_to_string(target_file) {
+                    let cleaned_content = format!(
+                        "// [PURIFIED_BY_AETERNA: {}]\n// Suggestion: {}\n{}",
+                        finding.id, finding.suggestion, original_content
+                    );
 
-                // Surgical comment injection to mark the purification
-                let cleaned_content = format!(
-                    "// [PURIFIED_BY_AETERNA: {}]\n// Suggestion: {}\n{}",
-                    finding.id, finding.suggestion, original_content
-                );
-
-                let shadow_path = target_file.with_extension("shadow.rs");
-                fs::write(&shadow_path, cleaned_content).map_err(|e| {
-                    SovereignError::IoError(format!(
-                        "IoError at {:?}: {}",
-                        shadow_path,
-                        e.to_string()
-                    ))
-                })?;
-
-                fs::rename(&shadow_path, target_file)
-                    .map_err(|e| SovereignError::IoError(e.to_string()))?;
-
-                fixed_count += 1;
-                println!("✅ SECTOR_STABILIZED: {:?}", target_file);
+                    let shadow_path = target_file.with_extension("shadow.rs");
+                    if fs::write(&shadow_path, cleaned_content).is_ok() {
+                        if fs::rename(&shadow_path, target_file).is_ok() {
+                            fixed_count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                            println!("✅ SECTOR_STABILIZED: {:?}", target_file);
+                        }
+                    }
+                }
             }
-        }
-        Ok(fixed_count)
+        });
+
+        Ok(fixed_count.load(std::sync::atomic::Ordering::SeqCst))
     }
 
     pub fn calculate_equity_yield(&self, actions: usize) -> f64 {

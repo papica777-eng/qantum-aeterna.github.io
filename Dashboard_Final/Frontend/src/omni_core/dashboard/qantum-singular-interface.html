@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,6 +24,10 @@
             background: radial-gradient(circle at center, #111 0%, #050505 100%);
         }
 
+        .u-mt10 {
+            margin-top: 10px;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -34,6 +39,7 @@
             font-size: 4rem;
             background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             text-transform: uppercase;
             letter-spacing: 0.5rem;
@@ -59,6 +65,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             padding: 3rem;
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
@@ -170,11 +177,19 @@
         }
 
         @keyframes pulse {
-            from { opacity: 1; transform: scale(1); }
-            to { opacity: 0.3; transform: scale(0.8); }
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            to {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -207,7 +222,8 @@
                     <li>Direct Architect Support (High Res)</li>
                     <li>White-label Helios Interface</li>
                 </ul>
-                <button class="btn secondary" onclick="subscribe('paypal', 99, 'SOVEREIGN_EMPIRE')">Establish Empire</button>
+                <button class="btn secondary" onclick="subscribe('paypal', 99, 'SOVEREIGN_EMPIRE')">Establish
+                    Empire</button>
             </div>
 
             <!-- Galactic Core -->
@@ -226,15 +242,16 @@
         </div>
 
         <div class="stats-hud">
-            <div><span id="pulse-dot"></span> [NETWORK_STATUS]: SOVEREIGN_STABLE | [ACTIVE_NODES]: 4 | [ENTROPY]: 0.0000</div>
-            <div style="margin-top: 10px;">[CASHFLOW_API]: READY_FOR_INGESTION | [VERITIZED_VALUE]: €4,128,793.56</div>
+            <div><span id="pulse-dot"></span> [NETWORK_STATUS]: SOVEREIGN_STABLE | [ACTIVE_NODES]: 127 | [ENTROPY]:
+                0.0000</div>
+            <div class="u-mt10">[CASHFLOW_API]: LIVE_FEED | [VERITIZED_VALUE]: €4,128,793.56</div>
         </div>
     </div>
 
     <script>
         async function subscribe(provider, amount, plan) {
             console.log(`Initiating ${plan} subscription via ${provider} for €${amount}`);
-            
+
             try {
                 const response = await fetch('/api/economy/pay', {
                     method: 'POST',
@@ -250,7 +267,7 @@
                 });
 
                 const data = await response.json();
-                
+
                 if (data.id) {
                     alert(`[AETERNA]: Payment bridge established. ID: ${data.id}\nStatus: ${data.status}\n\nRedirecting to ${provider} gateway...`);
                     // In a real scenario, we would redirect to data.checkoutUrl or popup a modal
@@ -264,4 +281,5 @@
         }
     </script>
 </body>
+
 </html>

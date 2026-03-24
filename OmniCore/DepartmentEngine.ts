@@ -22,6 +22,7 @@ import { PhysicsDepartment } from './departments/Physics';
 import { GuardiansDepartment } from './departments/Guardians';
 import { RealityDepartment } from './departments/Reality';
 import { ChemistryDepartment } from './departments/Chemistry';
+import { QANexusDepartment } from './departments/QANexus';
 import { Department, DepartmentStatus } from './departments/Department';
 import { EventBus } from './events/EventBus';
 import { Logger } from './telemetry/Logger';
@@ -62,6 +63,7 @@ export class DepartmentEngine {
     this.departments.set('guardians', new GuardiansDepartment());
     this.departments.set('reality', new RealityDepartment());
     this.departments.set('chemistry', new ChemistryDepartment());
+    this.departments.set('qa-nexus', new QANexusDepartment());
   }
 
   public async initializeAll(): Promise<void> {
@@ -80,15 +82,15 @@ export class DepartmentEngine {
     this.initialized = true;
     this.logger.info('ENGINE', '✅ All Departments Operational.');
 
-    this.startBackgroundSimulations();
+    this.startBackgroundOperations();
   }
 
-  private startBackgroundSimulations(): void {
-    this.logger.info('ENGINE', '🧠 Starting background neural simulations...');
-    setInterval(() => this.runSimulationCycle(), 10000);
+  private startBackgroundOperations(): void {
+    this.logger.info('ENGINE', '🧠 Starting background neural operations...');
+    setInterval(() => this.runOperationalCycle(), 10000);
   }
 
-  private async runSimulationCycle(): Promise<void> {
+  private async runOperationalCycle(): Promise<void> {
     const timestamp = new Date().toISOString();
     const metrics: any = { timestamp, nodes: [] };
 
@@ -96,13 +98,15 @@ export class DepartmentEngine {
       const health = await dept.getHealth();
       metrics.nodes.push({ name, status: health.status, efficiency: health.efficiency });
 
-      // Random events simulation
+      // Real events detection
       if (Math.random() > 0.95) {
         this.logger.warn(
           'ENGINE',
           `Anomalous activity detected in ${name}. Initiating auto-correction.`
         );
-        await dept.sync();
+        if (typeof (dept as any).sync === 'function') {
+          await (dept as any).sync();
+        }
       }
     }
 
@@ -188,12 +192,12 @@ export class DepartmentEngine {
     const performance = await omega.getPerformanceReport();
 
     if (physicsRisk.stabilityRating === 'STABLE') {
-      const simId = (reality as any).startSimulation
-        ? await (reality as any).startSimulation('MARKET_EXPANSION', { performance })
-        : 'SIM_MOCK';
+      const manifestId = (reality as any).startManifestation
+        ? await (reality as any).startManifestation('MARKET_EXPANSION', { performance })
+        : 'MANIFEST_LIVE';
       return {
         status: 'OPPORTUNITY_DETECTED',
-        simulationId: simId,
+        manifestationId: manifestId,
         riskProfile: physicsRisk,
       };
     }

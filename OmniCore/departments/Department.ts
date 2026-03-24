@@ -8,10 +8,13 @@ export enum DepartmentStatus {
     INITIALIZING = 'INITIALIZING',
     OPERATIONAL = 'OPERATIONAL',
     DEGRADED = 'DEGRADED',
-    MAINTENANCE = 'MAINTENANCE'
+    MAINTENANCE = 'MAINTENANCE',
+    ONLINE = 'ONLINE'
 }
 
-export abstract class Department {
+import { EventEmitter } from 'events';
+
+export abstract class Department extends EventEmitter {
     public name: string;
     public id: string;
     public status: DepartmentStatus = DepartmentStatus.OFFLINE;
@@ -19,6 +22,7 @@ export abstract class Department {
     private metrics: { latency: number[], requests: number, errors: number } = { latency: [], requests: 0, errors: 0 };
 
     constructor(name: string, id: string) {
+        super();
         this.name = name;
         this.id = id;
     }

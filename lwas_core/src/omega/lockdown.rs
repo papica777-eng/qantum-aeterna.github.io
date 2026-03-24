@@ -2,7 +2,6 @@
 // ARCHITECT: Dimitar Prodromov | STATUS: DIAMOND_STABILITY_ENFORCED
 // AUTHORITY: AETERNA | PHASE: ℵ_STASIS
 
-use crate::prelude::*;
 use crate::security::sovereign_identity::IdentityValidator;
 
 /// Аксиома: Вечността изисква неподвижност.

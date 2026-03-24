@@ -4,7 +4,7 @@
  * Port: 8890
  */
 
-const SOVEREIGN_BASE = "http://localhost:8890/api";
+const SOVEREIGN_BASE = (import.meta.env.VITE_API_URL || "http://localhost:8890") + "/api";
 
 export const useSovereignAPI = () => {
 

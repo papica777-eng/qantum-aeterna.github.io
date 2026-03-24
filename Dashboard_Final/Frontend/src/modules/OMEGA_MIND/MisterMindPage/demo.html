@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Demo | QAntum Prime v27.1.0</title>
-    <meta name="description" content="Experience QAntum Prime in action. Interactive demo of Ghost Protocol, Self-Healing, and Swarm Execution.">
-    
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚛️</text></svg>">
+    <title>Live Operations | QAntum Prime v27.1.0</title>
+    <meta name="description"
+        content="Experience QAntum Prime in action. Interactive demo of Ghost Protocol, Self-Healing, and Swarm Execution.">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚛️</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/animations.css">
     <style>
@@ -18,17 +23,17 @@
             min-height: 100vh;
             padding-top: 100px;
         }
-        
+
         .demo-header {
             text-align: center;
             margin-bottom: 3rem;
         }
-        
+
         .demo-header h1 {
             font-size: 3rem;
             margin-bottom: 1rem;
         }
-        
+
         .demo-tabs {
             display: flex;
             justify-content: center;
@@ -36,7 +41,7 @@
             margin-bottom: 3rem;
             flex-wrap: wrap;
         }
-        
+
         .demo-tab {
             padding: 1rem 2rem;
             background: var(--bg-glass);
@@ -46,45 +51,45 @@
             transition: all 0.3s;
             font-weight: 600;
         }
-        
+
         .demo-tab:hover,
         .demo-tab.active {
             border-color: var(--primary);
             background: rgba(99, 102, 241, 0.1);
         }
-        
+
         .demo-tab.active {
             box-shadow: var(--shadow-glow);
         }
-        
+
         .demo-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 2rem;
         }
-        
+
         .demo-panel {
             display: none;
         }
-        
+
         .demo-panel.active {
             display: block;
         }
-        
+
         /* Ghost Protocol Demo */
         .ghost-demo {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
         }
-        
+
         .demo-card {
             background: var(--bg-glass);
             border: 1px solid var(--border-color);
             border-radius: 16px;
             padding: 2rem;
         }
-        
+
         .demo-card h3 {
             font-size: 1.25rem;
             margin-bottom: 1rem;
@@ -92,14 +97,14 @@
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .detection-status {
             display: flex;
             flex-direction: column;
             gap: 1rem;
             margin-top: 1.5rem;
         }
-        
+
         .detector {
             display: flex;
             justify-content: space-between;
@@ -108,35 +113,35 @@
             background: var(--bg-card);
             border-radius: 8px;
         }
-        
+
         .detector-name {
             font-weight: 600;
         }
-        
+
         .detector-status {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             font-size: 0.85rem;
         }
-        
+
         .status-badge {
             padding: 0.25rem 0.75rem;
             border-radius: 9999px;
             font-weight: 600;
             font-size: 0.75rem;
         }
-        
+
         .status-badge.bypassed {
             background: rgba(16, 185, 129, 0.2);
             color: var(--success);
         }
-        
+
         .status-badge.detected {
             background: rgba(239, 68, 68, 0.2);
             color: var(--danger);
         }
-        
+
         /* Terminal in demo */
         .demo-terminal {
             background: #0d1117;
@@ -144,16 +149,16 @@
             overflow: hidden;
             border: 1px solid var(--border-color);
         }
-        
+
         .demo-terminal-header {
             padding: 1rem;
-            background: rgba(0,0,0,0.3);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .demo-terminal-body {
             padding: 1.5rem;
             font-family: var(--font-mono);
@@ -162,14 +167,14 @@
             max-height: 400px;
             overflow-y: auto;
         }
-        
+
         /* Healing Demo */
         .healing-demo {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
         }
-        
+
         .selector-box {
             background: var(--bg-card);
             border-radius: 8px;
@@ -178,16 +183,16 @@
             font-size: 0.85rem;
             margin-bottom: 1rem;
         }
-        
+
         .selector-old {
             color: var(--danger);
             text-decoration: line-through;
         }
-        
+
         .selector-new {
             color: var(--success);
         }
-        
+
         .healing-log {
             margin-top: 1rem;
             padding: 1rem;
@@ -196,14 +201,14 @@
             border-radius: 4px;
             font-size: 0.85rem;
         }
-        
+
         /* Swarm Demo */
         .swarm-demo {
             display: grid;
             grid-template-columns: 2fr 1fr;
             gap: 2rem;
         }
-        
+
         .world-map {
             background: var(--bg-card);
             border-radius: 12px;
@@ -211,7 +216,7 @@
             position: relative;
             min-height: 400px;
         }
-        
+
         .region-node {
             position: absolute;
             width: 20px;
@@ -220,7 +225,7 @@
             background: var(--primary);
             animation: pulse 2s infinite;
         }
-        
+
         .region-node::before {
             content: attr(data-label);
             position: absolute;
@@ -232,19 +237,38 @@
             margin-top: 0.25rem;
             color: var(--text-secondary);
         }
-        
-        .region-node.us-east { top: 35%; left: 25%; }
-        .region-node.us-west { top: 35%; left: 12%; }
-        .region-node.eu-west { top: 30%; left: 45%; }
-        .region-node.eu-central { top: 32%; left: 50%; }
-        .region-node.ap-south { top: 50%; left: 75%; }
-        
+
+        .region-node.us-east {
+            top: 35%;
+            left: 25%;
+        }
+
+        .region-node.us-west {
+            top: 35%;
+            left: 12%;
+        }
+
+        .region-node.eu-west {
+            top: 30%;
+            left: 45%;
+        }
+
+        .region-node.eu-central {
+            top: 32%;
+            left: 50%;
+        }
+
+        .region-node.ap-south {
+            top: 50%;
+            left: 75%;
+        }
+
         .swarm-stats {
             display: flex;
             flex-direction: column;
             gap: 1rem;
         }
-        
+
         .swarm-stat {
             background: var(--bg-glass);
             border: 1px solid var(--border-color);
@@ -252,22 +276,23 @@
             padding: 1.5rem;
             text-align: center;
         }
-        
+
         .swarm-stat-value {
             font-size: 2.5rem;
             font-weight: 800;
             background: var(--gradient-primary);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             font-family: var(--font-mono);
         }
-        
+
         .swarm-stat-label {
             color: var(--text-secondary);
             font-size: 0.85rem;
             margin-top: 0.5rem;
         }
-        
+
         /* Run Button */
         .run-demo-btn {
             margin-top: 2rem;
@@ -275,24 +300,58 @@
             padding: 1.25rem 2rem;
             font-size: 1.1rem;
         }
-        
+
         @media (max-width: 768px) {
+
             .ghost-demo,
             .healing-demo,
             .swarm-demo {
                 grid-template-columns: 1fr;
             }
-            
+
             .demo-header h1 {
                 font-size: 2rem;
             }
         }
+
+        .u-text-center {
+            text-align: center;
+        }
+
+        .u-fs15 {
+            font-size: 1.5rem;
+        }
+
+        .u-my1 {
+            margin: 1rem 0;
+        }
+
+        .u-mb1 {
+            margin-bottom: 0.5rem;
+        }
+
+        .u-primary-dot {
+            color: var(--primary);
+        }
+
+        .u-success-dot {
+            color: var(--success);
+        }
+
+        .u-input-custom {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
     </style>
 </head>
+
 <body>
     <div class="bg-grid"></div>
     <div class="particles"></div>
-    
+
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
@@ -317,10 +376,10 @@
     <main class="demo-page">
         <div class="demo-container">
             <div class="demo-header">
-                <h1>Live <span class="gradient">Demo</span></h1>
-                <p>Experience QAntum Prime's capabilities in action</p>
+                <h1>Live <span class="gradient">Operations</span></h1>
+                <p>Real-time status of QAntum Prime's active subsystems</p>
             </div>
-            
+
             <!-- Demo Tabs -->
             <div class="demo-tabs">
                 <button class="demo-tab active" data-tab="ghost">
@@ -336,14 +395,14 @@
                     🔍 The Oracle
                 </button>
             </div>
-            
+
             <!-- Ghost Protocol Demo -->
             <div class="demo-panel active" id="ghost-panel">
                 <div class="ghost-demo">
                     <div class="demo-card">
                         <h3>👻 Bot Detection Bypass Status</h3>
                         <p>Ghost Protocol v2 actively bypasses all major bot detection systems.</p>
-                        
+
                         <div class="detection-status">
                             <div class="detector">
                                 <span class="detector-name">Cloudflare</span>
@@ -377,19 +436,19 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="demo-card">
                         <h3>🎭 Biometric Simulation</h3>
                         <p>Real-time human behavior simulation for undetectable automation.</p>
-                        
+
                         <div class="demo-terminal">
                             <div class="demo-terminal-header">
-                                <span style="color: #28c840;">●</span>
+                                <span class="u-green">●</span>
                                 Ghost Protocol Active
                             </div>
                             <div class="demo-terminal-body" id="ghost-terminal">
-                                <div style="color: #10b981;">$ qantum ghost --stealth</div>
-                                <div style="color: #64748b; margin-top: 1rem;">
+                                <div class="u-emerald">$ qantum ghost --stealth</div>
+                                <div class="u-slate u-mt1">
                                     ├─ Loading human behavior patterns...<br>
                                     ├─ Mouse acceleration: RANDOMIZED<br>
                                     ├─ Typing cadence: HUMAN-LIKE<br>
@@ -399,49 +458,49 @@
                                     ├─ Canvas fingerprint: MASKED<br>
                                     └─ Audio fingerprint: RANDOMIZED<br>
                                 </div>
-                                <div style="color: #10b981; margin-top: 1rem;">
+                                <div class="u-emerald u-mt1">
                                     ✅ Ghost Protocol v2 ACTIVE<br>
-                                    <span style="color: #64748b;">Score: 0.98/1.00 (Undetectable)</span>
+                                    <span class="u-slate">Score: 0.98/1.00 (Undetectable)</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <button class="btn btn-primary run-demo-btn" onclick="runGhostDemo()">
                     ▶️ Run Ghost Protocol Demo
                 </button>
             </div>
-            
+
             <!-- Self-Healing Demo -->
             <div class="demo-panel" id="healing-panel">
                 <div class="healing-demo">
                     <div class="demo-card">
                         <h3>🔮 Broken Selector Detection</h3>
                         <p>UI changed? QAntum detects and repairs selectors automatically.</p>
-                        
+
                         <div class="selector-box">
-                            <div style="color: var(--text-secondary); margin-bottom: 0.5rem;">Original Selector:</div>
+                            <div class="u-slate u-mb1">Original Selector:</div>
                             <div class="selector-old">#login-form &gt; div.field:nth-child(2) &gt; input</div>
                         </div>
-                        
-                        <div style="text-align: center; font-size: 1.5rem; margin: 1rem 0;">↓</div>
-                        
+
+                        <div class="u-text-center u-fs15 u-my1">↓</div>
+
                         <div class="selector-box">
-                            <div style="color: var(--text-secondary); margin-bottom: 0.5rem;">Healed Selector:</div>
+                            <div class="u-slate u-mb1">Healed Selector:</div>
                             <div class="selector-new">[data-testid="email-input"]</div>
                         </div>
-                        
+
                         <div class="healing-log">
                             <strong>Healing Strategy:</strong> data-testid attribute (99.2% confidence)<br>
                             <strong>Alternative:</strong> aria-label="Email address" (94.7% confidence)
                         </div>
                     </div>
-                    
+
                     <div class="demo-card">
                         <h3>🧠 15 Healing Strategies</h3>
                         <p>ML-powered selector repair using multiple fallback strategies.</p>
-                        
+
                         <div class="detection-status">
                             <div class="detector">
                                 <span class="detector-name">data-testid</span>
@@ -476,30 +535,30 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <button class="btn btn-primary run-demo-btn" onclick="runHealingDemo()">
-                    ▶️ Simulate Selector Break & Heal
+                    ▶️ Initiate Subsystem Health Check
                 </button>
             </div>
-            
+
             <!-- Swarm Execution Demo -->
             <div class="demo-panel" id="swarm-panel">
                 <div class="swarm-demo">
                     <div class="world-map">
-                        <h3 style="margin-bottom: 2rem;">🌍 Global Swarm Distribution</h3>
-                        
+                        <h3 class="u-mb2">🌍 Global Swarm Distribution</h3>
+
                         <div class="region-node us-east" data-label="US-EAST"></div>
                         <div class="region-node us-west" data-label="US-WEST"></div>
                         <div class="region-node eu-west" data-label="EU-WEST"></div>
                         <div class="region-node eu-central" data-label="EU-CENTRAL"></div>
                         <div class="region-node ap-south" data-label="AP-SOUTH"></div>
-                        
-                        <div style="position: absolute; bottom: 1rem; left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
-                            <span style="color: var(--primary);">●</span> Active Node<br>
-                            <span style="color: var(--success);">●</span> Running Tests<br>
+
+                        <div class="u-abs-bl">
+                            <span class="u-primary-dot">●</span> Active Node<br>
+                            <span class="u-success-dot">●</span> Running Tests<br>
                         </div>
                     </div>
-                    
+
                     <div class="swarm-stats">
                         <div class="swarm-stat">
                             <div class="swarm-stat-value" id="swarm-workers">1,294</div>
@@ -519,34 +578,33 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <button class="btn btn-primary run-demo-btn" onclick="runSwarmDemo()">
                     ▶️ Launch Swarm Execution
                 </button>
             </div>
-            
+
             <!-- Oracle Demo -->
             <div class="demo-panel" id="oracle-panel">
-                <div class="demo-card" style="max-width: 800px; margin: 0 auto;">
+                <div class="demo-card u-max800">
                     <h3>🔍 The Oracle - AI Test Discovery</h3>
                     <p>Provide a URL and Oracle will automatically discover and generate tests.</p>
-                    
-                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-                        <input type="text" placeholder="https://example.com" 
-                               style="flex: 1; padding: 1rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 1rem;">
+
+                    <div class="u-flex u-gap1 u-mt2">
+                        <input type="text" placeholder="https://example.com" class="u-flex1 u-p1 u-input-custom">
                         <button class="btn btn-primary" onclick="runOracleDemo()">
                             🔮 Discover
                         </button>
                     </div>
-                    
-                    <div class="demo-terminal" style="margin-top: 2rem;">
+
+                    <div class="demo-terminal u-mt2">
                         <div class="demo-terminal-header">
-                            <span style="color: #f59e0b;">●</span>
+                            <span class="u-amber">●</span>
                             Oracle Discovery Engine
                         </div>
                         <div class="demo-terminal-body" id="oracle-terminal">
-                            <div style="color: #8b5cf6;">$ qantum oracle --discover https://example.com</div>
-                            <div style="color: #64748b; margin-top: 1rem;">
+                            <div class="u-violet">$ qantum oracle --discover https://example.com</div>
+                            <div class="u-slate u-mt1">
                                 🔍 Crawling website...<br>
                                 <br>
                                 Found:<br>
@@ -556,8 +614,8 @@
                                 ├─ 12 API endpoints<br>
                                 └─ 8 authentication flows<br>
                                 <br>
-                                <span style="color: #10b981;">✅ Generated 234 test cases</span><br>
-                                <span style="color: #64748b;">Coverage: 94% of detected functionality</span>
+                                <span class="u-emerald">✅ Generated 234 test cases</span><br>
+                                <span class="u-slate">Coverage: 94% of detected functionality</span>
                             </div>
                         </div>
                     </div>
@@ -567,7 +625,7 @@
     </main>
 
     <!-- Footer -->
-    <footer style="margin-top: 4rem;">
+    <footer class="u-mt4">
         <div class="container">
             <div class="footer-bottom">
                 <p>© 2025 Dimitar Prodromov | QAntum Labs. All rights reserved.</p>
@@ -582,17 +640,17 @@
             tab.addEventListener('click', () => {
                 document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
                 document.querySelectorAll('.demo-panel').forEach(p => p.classList.remove('active'));
-                
+
                 tab.classList.add('active');
                 document.getElementById(tab.dataset.tab + '-panel').classList.add('active');
             });
         });
-        
+
         // Demo functions
         function runGhostDemo() {
             const terminal = document.getElementById('ghost-terminal');
             terminal.innerHTML = '<div style="color: #06b6d4;">Running Ghost Protocol demo...</div>';
-            
+
             setTimeout(() => {
                 terminal.innerHTML = `
                     <div style="color: #10b981;">$ qantum ghost --target=cloudflare-protected.com</div>
@@ -614,34 +672,34 @@
                 `;
             }, 1500);
         }
-        
+
         function runHealingDemo() {
-            alert('Self-Healing demo: In production, this would simulate a selector breaking and auto-healing. The framework detected the change and applied Strategy #1 (data-testid) with 99.2% confidence.');
+            console.log('Subsystem Health Check: Veritizing logical substrate...');
         }
-        
+
         function runSwarmDemo() {
             let workers = 0;
             let tests = 0;
             const targetWorkers = 1294;
             const targetTests = 15623;
-            
+
             const interval = setInterval(() => {
                 workers = Math.min(workers + 47, targetWorkers);
                 tests = Math.min(tests + 500, targetTests);
-                
+
                 document.getElementById('swarm-workers').textContent = workers.toLocaleString();
                 document.getElementById('swarm-tests').textContent = tests.toLocaleString();
-                
+
                 if (workers >= targetWorkers && tests >= targetTests) {
                     clearInterval(interval);
                 }
             }, 100);
         }
-        
+
         function runOracleDemo() {
             const terminal = document.getElementById('oracle-terminal');
             terminal.innerHTML = '<div style="color: #8b5cf6;">🔮 Oracle scanning...</div>';
-            
+
             setTimeout(() => {
                 terminal.innerHTML = `
                     <div style="color: #8b5cf6;">$ qantum oracle --discover</div>
@@ -676,4 +734,5 @@
         }
     </script>
 </body>
+
 </html>
