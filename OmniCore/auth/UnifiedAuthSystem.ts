@@ -102,7 +102,11 @@ export class UnifiedAuthSystem extends EventEmitter {
         super();
         this.logger = Logger.getInstance();
         this.paymentGateway = new PaymentGateway();
-        this.jwtSecret = process.env.JWT_SECRET || 'fallback-secret-key';
+
+        if (!process.env.JWT_SECRET) {
+            throw new Error('FATAL: JWT_SECRET environment variable is not set. Refusing to start with insecure fallback.');
+        }
+        this.jwtSecret = process.env.JWT_SECRET;
 
         this.initializeSystem();
     }
