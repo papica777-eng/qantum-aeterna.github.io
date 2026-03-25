@@ -1,76 +1,24 @@
-# Render.com Production Deployment Configuration
-# Multi-service setup for AETERNAAA
 services:
-  # Rust Backend Service
   - type: web
-    name: aeterna-backend
-    env: docker
+    name: aeterna-qantum-nexus
+    env: node
     plan: pro
-    dockerContext: .
-    dockerfilePath: Dockerfile.backend
-    healthCheckPath: /telemetry
-    domains:
-      - api.aeterna.website
-    envVars:
-      - key: PORT
-        value: 8890
-      - key: RUST_LOG
-        value: info
-      - key: AETERNA_ENV
-        value: production
-      - key: STRIPE_SECRET_KEY
-        sync: false
-      - key: EXCHANGE_API_KEY
-        sync: false
-      - key: EXCHANGE_SECRET_KEY
-        sync: false
-      - key: CORS_ORIGIN
-        value: https://aeterna.website
-      - key: JULES_API_KEY
-        sync: false
-
-  # TypeScript Middleware Service
-  - type: web
-    name: aeterna-middleware
-    env: docker
-    plan: starter
-    dockerContext: ./OmniCore
-    dockerfilePath: ../Dockerfile.middleware
-    healthCheckPath: /api/status
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
     envVars:
       - key: NODE_ENV
         value: production
-      - key: HTTP_PORT
-        value: 8890
-      - key: WS_PORT
-        value: 8765
+      - key: DATABASE_URL
+        fromDatabase:
+          name: aeterna-db
+          property: connectionString
       - key: STRIPE_SECRET_KEY
         sync: false
-      - key: STRIPE_WEBHOOK_SECRET
-        sync: false
-      - key: EXCHANGE_API_KEY
-        sync: false
-      - key: EXCHANGE_SECRET_KEY
-        sync: false
-      - key: CORS_ORIGIN
-        value: https://aeterna-backend.onrender.com
-      - key: JULES_API_KEY
-        sync: false
+      - key: NODE_OPTIONS
+        value: "--max-old-space-size=2048"
+    healthCheckPath: /health
 
-  # Frontend Service (Static)
-  - type: web
-    name: aeterna-frontend
-    env: static
-    plan: starter
-    buildCommand: cd helios-ui && npm install && npm run build
-    staticPublishPath: helios-ui/dist
-    domains:
-      - aeterna.website
-      - www.aeterna.website
-    envVars:
-      - key: VITE_API_URL
-        value: https://api.aeterna.website
-      - key: VITE_WS_URL
-        value: wss://ws.aeterna.website
-      - key: VITE_JULES_API_KEY
-        sync: false
+databases:
+  - name: aeterna-db
+    type: postgres
+    plan: standard
