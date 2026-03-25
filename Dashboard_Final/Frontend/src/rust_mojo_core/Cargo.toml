@@ -25,8 +25,8 @@ tokenizers = "0.20"
 candle-core = "0.8"
 candle-nn = "0.8"
 candle-transformers = "0.8"
-lwas_parser = { path = "../lwas_parser" }
-aeterna-node = { path = "../aeterna-node" }
+lwas_parser = { path = "../rust_mojo_parser" }
+aeterna-node = { path = "../aeterna_node" }
 chrono = "0.4"
 hmac = "0.12"
 sha2 = "0.10"
@@ -34,7 +34,7 @@ hex = "0.4"
 axum = "0.7"
 solana-client = "1.18"
 solana-sdk = "1.18"
-spl-token = "4.0"
+spl-token = "=4.0.0"
 regex = "1.10"
 ignore = "0.4"
 memmap2 = "0.9"
