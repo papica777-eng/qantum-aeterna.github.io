@@ -1,6 +1,7 @@
 use crate::omega::oracle::AeternaOracle;
 use crate::omega::scribe::SovereignScribe;
 use crate::omega::wealth_bridge::WealthBridge;
+use crate::security::ledger::SovereignLedger;
 use crate::prelude::*;
 use axum::{
     body::Bytes,
@@ -246,8 +247,7 @@ async fn handle_stripe_webhook(headers: HeaderMap, body: Bytes) -> impl IntoResp
                 customer_email, amount_total
             );
 
-            // TODO: Unlock license in database here
-            // SovereignLedger::record_payment(customer_email, amount_total).await;
+            SovereignLedger::record_payment(customer_email, amount_total).await;
         }
         "invoice.payment_succeeded" => {
             let invoice = &event["data"]["object"];
