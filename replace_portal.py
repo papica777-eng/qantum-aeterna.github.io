@@ -1,4 +1,6 @@
-/**
+import os
+
+content = """/**
  * Client Portal - Complete user experience
  * Registration → Payment → Dashboard → SaaS Usage
  *
@@ -9,7 +11,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { 
+import {
   User, CreditCard, CheckCircle, Star, ArrowRight, Mail, Lock,
   Zap, Brain, Shield, Globe, Activity, Settings, LogOut,
   Loader2, AlertCircle, Info, Check, BarChart3, HardDrive, Terminal
@@ -177,10 +179,10 @@ export const ClientPortal: React.FC = () => {
       subscriptions: [],
       isLoggedIn: true
     };
-    
+
     setUserData(newUser);
     localStorage.setItem('aeterna_user', JSON.stringify(newUser));
-    
+
     // If no plan selected, show pricing
     if (!selectedPlan) {
       setCurrentFlow('payment');
@@ -191,7 +193,7 @@ export const ClientPortal: React.FC = () => {
 
   const handlePayment = async (plan: PricingPlan) => {
     showNotification('Payment authenticated. Generating neural access keys...', 'success');
-    
+
     // Simulate payment processing
     setTimeout(() => {
       const updatedUser = {
@@ -330,30 +332,30 @@ const LandingPage: React.FC<{
     pricing: 'Планове и Цени'
   } : {
     title: 'AETERNA.WEBSITE',
-    subtitle: "The Last SaaS Platform You'll Ever Need",
+    subtitle: 'The Last SaaS Platform You\'ll Ever Need',
     description: 'One platform. Every tool. Superior to everything on the market.',
     getStarted: 'Get Started Free',
     login: 'Login',
-    features: 'Revolutionary Features', 
+    features: 'Revolutionary Features',
     pricing: 'Plans & Pricing'
   };
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="min-h-screen"
     >
       <div className="flex flex-col items-center justify-center min-h-screen text-center px-6">
-        <motion.h1 
+        <motion.h1
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           className="text-6xl md:text-8xl font-black mb-6 tracking-tighter bg-gradient-to-r from-white via-gray-300 to-gray-500 bg-clip-text text-transparent"
         >
           {t.title}
         </motion.h1>
-        
+
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -362,7 +364,7 @@ const LandingPage: React.FC<{
         >
           {t.subtitle}
         </motion.p>
-        
+
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -378,13 +380,13 @@ const LandingPage: React.FC<{
           transition={{ delay: 0.6 }}
           className="flex gap-4"
         >
-          <button 
+          <button
             onClick={onGetStarted}
             className="px-8 py-4 bg-white text-black rounded-xl font-bold text-lg hover:scale-105 transition-transform"
           >
             {t.getStarted}
           </button>
-          <button 
+          <button
             onClick={onLogin}
             className="px-8 py-4 border border-white/20 rounded-xl font-semibold text-lg hover:bg-white/10 transition"
           >
@@ -415,13 +417,13 @@ const LandingPage: React.FC<{
                   </span>
                 </div>
               )}
-              
+
               <h3 className="text-xl font-bold mb-2 text-white/90">{plan.name}</h3>
               <div className="text-4xl font-black mb-1">
                 €{plan.price}
                 <span className="text-lg text-gray-500 font-medium">/{plan.interval}</span>
               </div>
-              
+
               <ul className="space-y-3 mt-8 mb-8 text-sm text-gray-300">
                 {plan.features.slice(0, 4).map((feature, i) => (
                   <li key={i} className="flex items-start gap-3">
@@ -435,7 +437,7 @@ const LandingPage: React.FC<{
                   </li>
                 )}
               </ul>
-              
+
               <button className={`w-full py-4 rounded-xl font-bold transition ${plan.popular ? 'bg-white text-black hover:bg-gray-200' : 'bg-white/10 hover:bg-white/20'}`}>
                 {language === 'bg' ? 'Избери План' : 'Select Plan'}
               </button>
@@ -579,7 +581,7 @@ const RegistrationPage: React.FC<{
 
           <div className="text-center mt-8 text-sm text-gray-500 font-medium">
             {t.alreadyHave}{' '}
-            <button 
+            <button
               onClick={onBack}
               disabled={isLoading}
               className="text-white hover:text-purple-400 transition-colors underline decoration-white/30 underline-offset-4"
@@ -689,7 +691,7 @@ const LoginPage: React.FC<{
             </button>
             <div className="text-sm text-gray-500 font-medium pt-4 border-t border-white/5">
               {t.noAccount}{' '}
-              <button 
+              <button
                 onClick={onBack}
                 disabled={isLoading}
                 className="text-white hover:text-blue-400 transition-colors underline decoration-white/30 underline-offset-4"
@@ -769,15 +771,7 @@ const PaymentPage: React.FC<{
                 </div>
               </div>
             ) : (
-              <div className="text-gray-500 font-medium text-center py-12 flex flex-col items-center">
-                <div className="mb-4">No plan selected.</div>
-                <button
-                  onClick={onBack}
-                  className="px-6 py-2 border border-white/20 text-white rounded-full text-sm font-bold uppercase tracking-widest hover:bg-white/5 transition-colors"
-                >
-                  {language === 'bg' ? 'Избери План' : 'Select Plan'}
-                </button>
-              </div>
+              <div className="text-gray-500 font-medium text-center py-12">No plan selected.</div>
             )}
           </div>
 
@@ -888,7 +882,7 @@ const ClientDashboard: React.FC<{
             <button className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition">
               <Settings className="w-5 h-5" />
             </button>
-            <button 
+            <button
               onClick={onLogout}
               className="flex items-center gap-2 px-4 py-2 text-xs font-bold tracking-widest uppercase border border-white/10 hover:border-white/30 rounded-lg hover:bg-white/5 transition"
             >
@@ -980,3 +974,7 @@ const ClientDashboard: React.FC<{
 };
 
 export default ClientPortal;
+"""
+
+with open("helios-ui/src/components/ClientPortal.tsx", "w") as f:
+    f.write(content)
