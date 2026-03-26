@@ -76,6 +76,174 @@ export async function applyPatch(code: string, signature: string | null): Promis
     return `Patch applied successfully at ${new Date().toISOString()}`;
 }
 
+
+// --- Notification Helpers ---
+
+async function sendTelegram(message: string): Promise<void> {
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.ADMIN_TELEGRAM_ID || process.env.TELEGRAM_CHAT_ID;
+
+    if (!botToken || !chatId) {
+        logger.debug('ACTIVITY', 'Telegram credentials missing, skipping Telegram notification.');
+        return;
+    }
+
+    try {
+        const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: message
+            })
+        });
+
+        if (!response.ok) {
+            logger.error('ACTIVITY', `Telegram notification failed: ${response.statusText}`);
+        } else {
+            logger.info('ACTIVITY', '✅ Telegram notification sent.');
+        }
+    } catch (error: any) {
+        logger.error('ACTIVITY', 'Failed to send Telegram alert', error);
+    }
+}
+
+async function sendSlack(message: string): Promise<void> {
+    const webhookUrl = process.env.SLACK_WEBHOOK_URL;
+
+    if (!webhookUrl) {
+        logger.debug('ACTIVITY', 'Slack Webhook URL missing, skipping Slack notification.');
+        return;
+    }
+
+    try {
+        const response = await fetch(webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: message })
+        });
+
+        if (!response.ok) {
+            logger.error('ACTIVITY', `Slack notification failed: ${response.statusText}`);
+        } else {
+            logger.info('ACTIVITY', '✅ Slack notification sent.');
+        }
+    } catch (error: any) {
+        logger.error('ACTIVITY', 'Failed to send Slack alert', error);
+    }
+}
+
+async function sendEmail(message: string): Promise<void> {
+    const apiKey = process.env.SENDGRID_API_KEY;
+    const adminEmail = process.env.ADMIN_EMAIL;
+    const fromEmail = process.env.SYSTEM_EMAIL || 'system@omnicore.local';
+
+    if (!apiKey || !adminEmail) {
+        logger.debug('ACTIVITY', 'SendGrid credentials or Admin Email missing, skipping Email notification.');
+        return;
+    }
+
+    try {
+        const url = 'https://api.sendgrid.com/v3/mail/send';
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                personalizations: [{ to: [{ email: adminEmail }] }],
+                from: { email: fromEmail },
+                subject: '🚨 HIGH-RISK EVOLUTION REQUIRES APPROVAL',
+                content: [{ type: 'text/plain', value: message }]
+            })
+        });
+
+        if (!response.ok) {
+            logger.error('ACTIVITY', `Email notification failed: ${response.statusText}`);
+        } else {
+            logger.info('ACTIVITY', '✅ Email notification sent.');
+        }
+    } catch (error: any) {
+        logger.error('ACTIVITY', 'Failed to send Email alert', error);
+    }
+}
+
+async function sendPagerDuty(message: string): Promise<void> {
+    const routingKey = process.env.PAGERDUTY_ROUTING_KEY;
+
+    if (!routingKey) {
+        logger.debug('ACTIVITY', 'PagerDuty Routing Key missing, skipping PagerDuty notification.');
+        return;
+    }
+
+    try {
+        const url = 'https://events.pagerduty.com/v2/enqueue';
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                routing_key: routingKey,
+                event_action: 'trigger',
+                payload: {
+                    summary: 'HIGH-RISK EVOLUTION REQUIRES APPROVAL',
+                    source: 'OmniCore Orchestrator',
+                    severity: 'critical',
+                    custom_details: { details: message }
+                }
+            })
+        });
+
+        if (!response.ok) {
+            logger.error('ACTIVITY', `PagerDuty notification failed: ${response.statusText}`);
+        } else {
+            logger.info('ACTIVITY', '✅ PagerDuty notification sent.');
+        }
+    } catch (error: any) {
+        logger.error('ACTIVITY', 'Failed to send PagerDuty alert', error);
+    }
+}
+
+async function sendSms(message: string): Promise<void> {
+    const accountSid = process.env.TWILIO_ACCOUNT_SID;
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+    const fromNumber = process.env.TWILIO_FROM_NUMBER;
+    const adminPhone = process.env.ADMIN_PHONE_NUMBER;
+
+    if (!accountSid || !authToken || !fromNumber || !adminPhone) {
+        logger.debug('ACTIVITY', 'Twilio credentials missing, skipping SMS notification.');
+        return;
+    }
+
+    try {
+        const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`;
+
+        const params = new URLSearchParams();
+        params.append('To', adminPhone);
+        params.append('From', fromNumber);
+        params.append('Body', message);
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Basic ' + Buffer.from(`${accountSid}:${authToken}`).toString('base64'),
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            logger.error('ACTIVITY', `SMS notification failed: ${response.statusText}`);
+        } else {
+            logger.info('ACTIVITY', '✅ SMS notification sent.');
+        }
+    } catch (error: any) {
+        logger.error('ACTIVITY', 'Failed to send SMS alert', error);
+    }
+}
+
+
 /**
  * Activity: Notifies administrator about pending evolution
  * 
@@ -83,9 +251,6 @@ export async function applyPatch(code: string, signature: string | null): Promis
  */
 export async function notifyAdmin(code: string): Promise<void> {
     logger.info('ACTIVITY', '📧 Notifying administrator...');
-
-    // TODO: Implement notification logic
-    // Options: Email, SMS, Telegram, Slack, PagerDuty
 
     const notificationMessage = `
 🚨 HIGH-RISK EVOLUTION REQUIRES APPROVAL
@@ -99,9 +264,14 @@ Send approval via: npm run vortex:approve <workflowId> <signature>
 
     logger.warn('ACTIVITY', notificationMessage);
 
-    // Placeholder: In production, integrate with notification service
-    // await sendEmail(process.env.ADMIN_EMAIL, 'Vortex Evolution Approval Required', notificationMessage);
-    // await sendTelegram(process.env.ADMIN_TELEGRAM_ID, notificationMessage);
+    // Run notifications concurrently, resolving whether they fail or not to ensure activity completes
+    await Promise.allSettled([
+        sendEmail(notificationMessage),
+        sendSms(notificationMessage),
+        sendTelegram(notificationMessage),
+        sendSlack(notificationMessage),
+        sendPagerDuty(notificationMessage)
+    ]);
 
     logger.info('ACTIVITY', '✅ Administrator notified');
 }
