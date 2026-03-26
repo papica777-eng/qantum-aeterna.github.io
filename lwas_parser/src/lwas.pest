@@ -1,0 +1,75 @@
+WHITESPACE = _{ " " | "\t" | "\r" | "\n" }
+COMMENT = _{ "//" ~ (!"\n" ~ ANY)* ~ "\n" }
+
+program = { SOI ~ (statement)* ~ EOI }
+
+statement = {
+    immortal_decl |
+    body_block |
+    spirit_block |
+    manifold_block |
+    fragment_block |
+    directive_block |
+    resonate_stmt |
+    collapse_stmt |
+    entrench_stmt |
+    magnet_stmt |
+    department_stmt |
+    reflection_stmt |
+    axiom_stmt |
+    causality_stmt |
+    vibe_stmt |
+    synchronize_stmt |
+    manifest_stmt |
+    target_stmt |
+    swarm_stmt |
+    logic_stmt
+}
+
+fragment_block = { "fragment" ~ identifier ~ "{" ~ (statement)* ~ "}" }
+directive_block = { "directive" ~ identifier ~ "{" ~ (statement)* ~ "}" }
+
+vibe_stmt = { "vibe" ~ identifier ~ "(" ~ (number | string_literal | hex_literal) ~ ")" ~ ";" }
+synchronize_stmt = { "synchronize" ~ identifier ~ "(" ~ (number | string_literal | hex_literal) ~ ")" ~ ";" }
+manifest_stmt = { "manifest" ~ identifier ~ "(" ~ (string_literal | hex_literal | number) ~ ")" ~ ";" }
+
+target_stmt = { "target" ~ identifier ~ "(" ~ (number | string_literal | hex_literal) ~ ")" ~ ";" }
+swarm_stmt = { "swarm" ~ identifier ~ "(" ~ (number | string_literal | hex_literal) ~ ")" ~ ";" }
+logic_stmt = { "logic" ~ identifier ~ "(" ~ (string_literal | hex_literal | number) ~ ")" ~ ";" }
+
+resonate_stmt = { "resonate" ~ identifier ~ ("(" ~ (hex_literal | number | string_literal) ~ ")")? ~ (number | string_literal | hex_literal)? ~ ";" }
+
+collapse_stmt = { "collapse" ~ identifier ~ ("(" ~ (number | string_literal | hex_literal) ~ ")")? ~ (number | string_literal | hex_literal)? ~ ";" }
+
+entrench_stmt = { "entrench" ~ identifier ~ ("(")? ~ (vector | string_literal | hex_literal | number) ~ (")")? ~ ";" }
+
+axiom_stmt = { "axiom" ~ identifier ~ ":" ~ string_literal ~ ";" }
+
+causality_stmt = { identifier ~ "causes" ~ identifier ~ "via" ~ causality_type ~ ";" }
+
+causality_type = { "EFFICIENT" | "FORMAL" | "MATERIAL" | "FINAL" | "RETROCAUSAL" | "QUANTUM" | "EMERGENT" | "ACAUSAL" }
+
+immortal_decl = { "immortal" ~ identifier ~ "=" ~ string_literal ~ ";" }
+
+body_block = { "body" ~ identifier ~ "{" ~ text_content ~ "}" }
+
+spirit_block = { "spirit" ~ identifier ~ "{" ~
+    "goal:" ~ string_literal ~
+    ("," ~ "context:" ~ string_literal)? ~
+    "}"
+}
+
+manifold_block = { "manifold" ~ identifier ~ "{" ~ (statement)* ~ "}" }
+
+magnet_stmt = { "magnet" ~ string_literal ~ number ~ ";" }
+
+department_stmt = { "department" ~ identifier ~ number ~ ";" }
+
+reflection_stmt = { "reflect" ~ ";" }
+
+identifier = @{ ASCII_ALPHA ~ (ASCII_ALPHANUMERIC | "_")* }
+string_literal = @{ "\"" ~ (!"\"" ~ ANY)* ~ "\"" }
+number = @{ "-"? ~ ASCII_DIGIT+ ~ ("." ~ ASCII_DIGIT+)? }
+hex_literal = @{ "0x" ~ (ASCII_HEX_DIGIT | "_")+ }
+vector = { "[" ~ number ~ ("," ~ number)* ~ "]" }
+text_content = @{ (!"}" ~ ANY)* }
