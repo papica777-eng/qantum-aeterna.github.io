@@ -294,6 +294,13 @@ export class NeuralMapEngine {
     }
 
     /**
+     * 🧠 Get an anchor by ID
+     */
+    getAnchor(anchorId: string): CognitiveAnchor | null {
+        return this.anchors.get(anchorId) || null;
+    }
+
+    /**
      * 📊 Get anchor statistics
      */
     getAnchorStats(anchorId: string): object | null {
