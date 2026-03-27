@@ -1,5 +1,7 @@
 
 import { EventEmitter } from 'events';
+import * as fs from 'fs';
+import * as path from 'path';
 import { getGlobalWatchdog, EternalWatchdog } from '../guardians/EternalWatchdog'; // Correct path to Watchdog
 import { hybridHealer } from './HybridHealer'; // Correct path to Healer
 import { swarm } from './VortexSwarm'; // 🛡️ The Deca-Guard
@@ -119,8 +121,6 @@ export class VortexAI extends EventEmitter {
 
         for (const file of manifests) {
             try {
-                const fs = require('fs');
-                const path = require('path');
                 const filePath = path.join(process.cwd(), file);
 
                 if (fs.existsSync(filePath)) {
@@ -159,8 +159,6 @@ export class VortexAI extends EventEmitter {
     private async discoverDepartments() {
         console.log('[VORTEX] 🔭 Scanning 5 Strategic Sectors...');
         const rootDir = 'src/modules';
-        const fs = require('fs'); // Typo fix: require
-        const path = require('path');
 
         const sectors = [
             'ALPHA_FINANCE',
