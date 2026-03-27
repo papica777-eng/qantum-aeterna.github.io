@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-type AppMode = 'landing' | 'client' | 'admin' | 'telemetry' | '404';
+type AppMode = 'landing' | 'client' | 'admin' | 'telemetry' | '404' | 'partnerships';
 
 interface CommandPaletteProps {
   onNavigate: (mode: AppMode) => void;

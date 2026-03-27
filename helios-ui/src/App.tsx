@@ -4,12 +4,13 @@ import { ImmersiveLanding } from './components/ImmersiveLanding';
 import { QuantumTelemetryDashboard } from './components/QuantumTelemetryDashboard';
 import { QuantumGlitch404 } from './components/QuantumGlitch404';
 import { CommandPalette } from './components/CommandPalette';
+import Partnerships from './components/Partnerships';
 import { useState, useEffect } from 'react';
 import "./App.css";
 import "./LegacyComponents.css";
 
 const BACKEND_URL = 'https://aeternaaa-production.up.railway.app';
-type AppMode = 'landing' | 'client' | 'admin' | 'telemetry' | '404';
+type AppMode = 'landing' | 'client' | 'admin' | 'telemetry' | '404' | 'partnerships';
 
 function App() {
   const [mode, setMode] = useState<AppMode>('landing');
@@ -20,7 +21,9 @@ function App() {
     const modeParam = params.get('mode');
     const path = window.location.pathname;
     
-    if (modeParam === 'admin') {
+    if (modeParam === 'partnerships' || path === '/partnerships') {
+      setMode('partnerships');
+    } else if (modeParam === 'admin') {
       setMode('admin');
     } else if (modeParam === 'client') {
       setMode('client');
@@ -70,6 +73,7 @@ function App() {
 
       {/* Render based on mode */}
       {mode === 'landing' && <ImmersiveLanding />}
+      {mode === 'partnerships' && <Partnerships />}
       {mode === 'client' && <ClientPortal />}
       {mode === 'admin' && <SovereignHUD />}
       {mode === 'telemetry' && <QuantumTelemetryDashboard />}
