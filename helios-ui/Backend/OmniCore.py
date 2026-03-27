@@ -254,7 +254,7 @@ async def handler(websocket):
                 print("   >>> CHAOS SENT. WAITING FOR VERITAS TO BLOCK IT.")
 
             await asyncio.sleep(1)  # 1 update per second
-    except websockets.exceptions.ConnectionClosed:
+    except websockets.ConnectionClosed:
         print("Client Disconnected")
 
 async def main():
