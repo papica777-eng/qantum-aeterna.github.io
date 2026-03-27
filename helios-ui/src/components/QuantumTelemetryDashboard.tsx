@@ -11,6 +11,7 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { CardSkeleton } from './SkeletonLoader';
 import { 
   Activity, Cpu, Database, Globe, Zap, Brain, Shield, 
   TrendingUp, TrendingDown, AlertTriangle, CheckCircle,
@@ -179,6 +180,12 @@ const NeuralPulse: React.FC<{ active: boolean; color: string }> = ({ active, col
 
 // Main Dashboard Component
 export const QuantumTelemetryDashboard: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
   const [metrics, setMetrics] = useState(() => {
     const initial = generateMetrics();
     // Initialize history
@@ -233,6 +240,29 @@ export const QuantumTelemetryDashboard: React.FC = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-full min-h-screen bg-[#030305] text-white p-6 md:p-10 font-mono overflow-y-auto">
+        <div className="max-w-7xl mx-auto space-y-8">
+          <header className="mb-8">
+            <div className="h-10 bg-gray-800 rounded w-1/4 animate-pulse mb-2"></div>
+            <div className="h-4 bg-gray-800 rounded w-1/2 animate-pulse"></div>
+          </header>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <CardSkeleton />
+            <CardSkeleton />
+            <CardSkeleton />
+            <CardSkeleton />
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+             <CardSkeleton />
+             <CardSkeleton />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#020205] text-white p-6">

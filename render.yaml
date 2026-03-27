@@ -16,7 +16,63 @@ services:
         sync: false
       - key: NODE_OPTIONS
         value: "--max-old-space-size=2048"
+      # Background worker config
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: aeterna-redis
+          property: connectionString
+      - key: RABBITMQ_URL
+        fromService:
+          type: pserv
+          name: aeterna-rabbitmq
+          property: connectionString
+      # Observability
+      - key: DATADOG_API_KEY
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
     healthCheckPath: /health
+
+  # Background Worker Engine
+  - type: worker
+    name: aeterna-worker
+    env: node
+    plan: standard
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:worker
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: aeterna-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: aeterna-redis
+          property: connectionString
+      - key: RABBITMQ_URL
+        fromService:
+          type: pserv
+          name: aeterna-rabbitmq
+          property: connectionString
+      - key: DATADOG_API_KEY
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
+
+  # Centralized Cache & Session Store
+  - type: redis
+    name: aeterna-redis
+    ipAllowList: []
+    plan: starter
+
+  # Message Queue (Background workers)
+  - type: pserv
+    name: aeterna-rabbitmq
+    env: docker
+    dockerfilePath: Dockerfile.rabbitmq # Provide rabbitmq image
+    plan: starter
 
 databases:
   - name: aeterna-db
