@@ -15,15 +15,15 @@
  *
  */
 
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from "fs";
+import * as path from "path";
 
 //
 //  INTERFACES
 //
 
 interface Message {
-  role: 'user' | 'assistant' | 'system';
+  role: "user" | "assistant" | "system";
   content: string;
   timestamp: Date;
   context?: any;
@@ -39,11 +39,76 @@ interface ConversationMemory {
 interface Task {
   id: string;
   description: string;
-  status: 'pending' | 'in-progress' | 'completed' | 'failed';
+  status: "pending" | "in-progress" | "completed" | "failed";
   steps: string[];
   currentStep: number;
   result?: any;
   error?: string;
+}
+
+//
+//  TF-IDF SEMANTIC SEARCH UTILITIES (Lightweight RAG)
+//
+
+function tokenize(text: string): string[] {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s]/g, "")
+    .split(/\s+/)
+    .filter((w) => w.length > 0);
+}
+
+function calculateTF(tokens: string[]): Record<string, number> {
+  const tf: Record<string, number> = {};
+  for (const token of tokens) {
+    tf[token] = (tf[token] || 0) + 1;
+  }
+  const maxFreq = Math.max(...Object.values(tf), 1);
+  for (const token in tf) {
+    tf[token] = tf[token] / maxFreq;
+  }
+  return tf;
+}
+
+function calculateIDF(documents: string[][]): Record<string, number> {
+  const idf: Record<string, number> = {};
+  const N = documents.length;
+  for (const doc of documents) {
+    const uniqueTokens = new Set(doc);
+    for (const token of uniqueTokens) {
+      idf[token] = (idf[token] || 0) + 1;
+    }
+  }
+  for (const token in idf) {
+    idf[token] = Math.log(N / idf[token]);
+  }
+  return idf;
+}
+
+function getCosineSimilarity(
+  queryTfIdf: Record<string, number>,
+  docTfIdf: Record<string, number>,
+): number {
+  let dotProduct = 0;
+  let queryNorm = 0;
+  let docNorm = 0;
+
+  const allTokens = new Set([
+    ...Object.keys(queryTfIdf),
+    ...Object.keys(docTfIdf),
+  ]);
+
+  for (const token of allTokens) {
+    const qVal = queryTfIdf[token] || 0;
+    const dVal = docTfIdf[token] || 0;
+
+    dotProduct += qVal * dVal;
+    queryNorm += qVal * qVal;
+    docNorm += dVal * dVal;
+  }
+
+  if (queryNorm === 0 || docNorm === 0) return 0;
+  return dotProduct / (Math.sqrt(queryNorm) * Math.sqrt(docNorm));
 }
 
 //
@@ -57,10 +122,18 @@ export class CognitivePartner {
   private model: string;
   private activeTasks: Map<string, Task> = new Map();
 
-  constructor(ollamaUrl: string = 'http://localhost:11434', model: string = 'qantum-supreme') {
+  constructor(
+    ollamaUrl: string = "http://localhost:11434",
+    model: string = "qantum-supreme",
+  ) {
     this.ollamaUrl = ollamaUrl;
     this.model = model;
-    this.memoryFile = path.join(__dirname, '../', 'data', 'cognitive-memory.json');
+    this.memoryFile = path.join(
+      __dirname,
+      "../",
+      "data",
+      "cognitive-memory.json",
+    );
     this.memory = this.loadMemory();
 
     // Initialize with system context
@@ -119,20 +192,22 @@ REMEMBER:
   private loadMemory(): ConversationMemory {
     try {
       if (fs.existsSync(this.memoryFile)) {
-        const data = fs.readFileSync(this.memoryFile, 'utf-8');
+        const data = fs.readFileSync(this.memoryFile, "utf-8");
         const parsed = JSON.parse(data);
         return {
           messages: parsed.messages.map((m: any) => ({
             ...m,
             timestamp: new Date(m.timestamp),
           })),
-          userPreferences: new Map(Object.entries(parsed.userPreferences || {})),
+          userPreferences: new Map(
+            Object.entries(parsed.userPreferences || {}),
+          ),
           projectContext: new Map(Object.entries(parsed.projectContext || {})),
           learnings: parsed.learnings || [],
         };
       }
     } catch (error) {
-      console.error('Error loading memory:', error);
+      console.error("Error loading memory:", error);
     }
 
     return {
@@ -162,7 +237,7 @@ REMEMBER:
 
       fs.writeFileSync(this.memoryFile, JSON.stringify(data, null, 2));
     } catch (error) {
-      console.error('Error saving memory:', error);
+      console.error("Error saving memory:", error);
     }
   }
 
@@ -171,7 +246,7 @@ REMEMBER:
    */
   private addSystemMessage(content: string): void {
     this.memory.messages.push({
-      role: 'system',
+      role: "system",
       content,
       timestamp: new Date(),
     });
@@ -183,7 +258,7 @@ REMEMBER:
    */
   private addUserMessage(content: string, context?: any): void {
     this.memory.messages.push({
-      role: 'user',
+      role: "user",
       content,
       timestamp: new Date(),
       context,
@@ -196,7 +271,7 @@ REMEMBER:
    */
   private addAssistantMessage(content: string): void {
     this.memory.messages.push({
-      role: 'assistant',
+      role: "assistant",
       content,
       timestamp: new Date(),
     });
@@ -204,15 +279,85 @@ REMEMBER:
   }
 
   /**
-   * Get relevant context from conversation history
+   * Get relevant context from conversation history using lightweight RAG (TF-IDF)
    */
-  private getRelevantContext(userMessage: string, maxMessages: number = 10): Message[] {
-    // Get recent messages for context
-    const recentMessages = this.memory.messages.slice(-maxMessages);
+  private getRelevantContext(
+    userMessage: string,
+    maxMessages: number = 10,
+    recentWindow: number = 3,
+  ): Message[] {
+    // If not enough messages, just return what we have
+    if (this.memory.messages.length <= maxMessages) {
+      return [...this.memory.messages];
+    }
 
-    // TODO: Implement semantic search using RAG to find relevant past conversations
-    // For now, just return recent messages
-    return recentMessages;
+    // Always include the most recent messages to maintain immediate context
+    const recentMessages = this.memory.messages.slice(-recentWindow);
+    const olderMessages = this.memory.messages.slice(0, -recentWindow);
+
+    // If no older messages, return recent ones
+    if (olderMessages.length === 0) {
+      return recentMessages;
+    }
+
+    // Prepare TF-IDF for semantic search
+    const queryTokens = tokenize(userMessage);
+
+    // If query is empty or no valid tokens, just return recent messages up to maxMessages
+    if (queryTokens.length === 0) {
+      return this.memory.messages.slice(-maxMessages);
+    }
+
+    // Convert all older messages to tokens
+    const docTokens = olderMessages.map((m) => tokenize(m.content));
+
+    // Calculate IDF across older messages
+    const idf = calculateIDF(docTokens);
+
+    // Calculate query TF-IDF
+    const queryTf = calculateTF(queryTokens);
+    const queryTfIdf: Record<string, number> = {};
+    for (const token in queryTf) {
+      queryTfIdf[token] = queryTf[token] * (idf[token] || 0);
+    }
+
+    // Calculate document TF-IDF and similarities
+    const scoredDocs = olderMessages.map((m, index) => {
+      const docTf = calculateTF(docTokens[index]);
+      const docTfIdf: Record<string, number> = {};
+      for (const token in docTf) {
+        docTfIdf[token] = docTf[token] * (idf[token] || 0);
+      }
+      const score = getCosineSimilarity(queryTfIdf, docTfIdf);
+      return { message: m, score };
+    });
+
+    // Sort by semantic similarity score
+    scoredDocs.sort((a, b) => b.score - a.score);
+
+    // Number of RAG messages to include
+    const ragCount = Math.max(0, maxMessages - recentWindow);
+
+    // Get top relevant older messages (filter out zero scores if we want to be strict,
+    // but here we just take the top matches)
+    const topRelevantMessages = scoredDocs
+      .filter((d) => d.score > 0)
+      .slice(0, ragCount)
+      .map((d) => d.message);
+
+    // Combine relevant messages with recent messages
+    const combinedContext = [...topRelevantMessages, ...recentMessages];
+
+    // Sort by timestamp to maintain chronological order in the prompt
+    combinedContext.sort((a, b) => {
+      // In case timestamps are objects/strings, use Date.getTime()
+      return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
+    });
+
+    // Optional: Deduplicate if same message was somehow included (mostly a safeguard)
+    const uniqueContext = Array.from(new Set(combinedContext));
+
+    return uniqueContext;
   }
 
   /**
@@ -227,17 +372,23 @@ REMEMBER:
     const lowerMessage = message.toLowerCase();
 
     // Detect intent
-    let intent = 'general';
-    if (lowerMessage.includes('create') || lowerMessage.includes('generate')) {
-      intent = 'create';
-    } else if (lowerMessage.includes('fix') || lowerMessage.includes('debug')) {
-      intent = 'debug';
-    } else if (lowerMessage.includes('explain') || lowerMessage.includes('what')) {
-      intent = 'explain';
-    } else if (lowerMessage.includes('refactor') || lowerMessage.includes('improve')) {
-      intent = 'refactor';
-    } else if (lowerMessage.includes('test')) {
-      intent = 'test';
+    let intent = "general";
+    if (lowerMessage.includes("create") || lowerMessage.includes("generate")) {
+      intent = "create";
+    } else if (lowerMessage.includes("fix") || lowerMessage.includes("debug")) {
+      intent = "debug";
+    } else if (
+      lowerMessage.includes("explain") ||
+      lowerMessage.includes("what")
+    ) {
+      intent = "explain";
+    } else if (
+      lowerMessage.includes("refactor") ||
+      lowerMessage.includes("improve")
+    ) {
+      intent = "refactor";
+    } else if (lowerMessage.includes("test")) {
+      intent = "test";
     }
 
     // Extract entities (simplified - in production, use NER)
@@ -252,8 +403,10 @@ REMEMBER:
       intent,
       entities,
       isQuestion:
-        message.includes('?') || lowerMessage.startsWith('what') || lowerMessage.startsWith('how'),
-      requiresAction: intent !== 'general' && intent !== 'explain',
+        message.includes("?") ||
+        lowerMessage.startsWith("what") ||
+        lowerMessage.startsWith("how"),
+      requiresAction: intent !== "general" && intent !== "explain",
     };
   }
 
@@ -266,45 +419,45 @@ REMEMBER:
 
     // Create intelligent task breakdown based on intent
     switch (intent) {
-      case 'create':
-        steps.push('Analyze requirements and specifications');
-        steps.push('Search RAG for similar existing code');
-        steps.push('Design solution architecture');
-        steps.push('Generate code using Ollama Brain');
-        steps.push('Add error handling and validation');
-        steps.push('Generate tests');
-        steps.push('Create documentation');
+      case "create":
+        steps.push("Analyze requirements and specifications");
+        steps.push("Search RAG for similar existing code");
+        steps.push("Design solution architecture");
+        steps.push("Generate code using Ollama Brain");
+        steps.push("Add error handling and validation");
+        steps.push("Generate tests");
+        steps.push("Create documentation");
         break;
 
-      case 'debug':
-        steps.push('Analyze error or issue');
-        steps.push('Search codebase for related code');
-        steps.push('Identify root cause');
-        steps.push('Propose solution');
-        steps.push('Implement fix');
-        steps.push('Verify fix works');
+      case "debug":
+        steps.push("Analyze error or issue");
+        steps.push("Search codebase for related code");
+        steps.push("Identify root cause");
+        steps.push("Propose solution");
+        steps.push("Implement fix");
+        steps.push("Verify fix works");
         break;
 
-      case 'refactor':
-        steps.push('Analyze current code');
-        steps.push('Identify improvement opportunities');
-        steps.push('Plan refactoring approach');
-        steps.push('Implement changes incrementally');
-        steps.push('Ensure tests still pass');
-        steps.push('Update documentation');
+      case "refactor":
+        steps.push("Analyze current code");
+        steps.push("Identify improvement opportunities");
+        steps.push("Plan refactoring approach");
+        steps.push("Implement changes incrementally");
+        steps.push("Ensure tests still pass");
+        steps.push("Update documentation");
         break;
 
       default:
-        steps.push('Understand request');
-        steps.push('Gather necessary context');
-        steps.push('Execute task');
-        steps.push('Verify result');
+        steps.push("Understand request");
+        steps.push("Gather necessary context");
+        steps.push("Execute task");
+        steps.push("Verify result");
     }
 
     const task: Task = {
       id: taskId,
       description: userMessage,
-      status: 'pending',
+      status: "pending",
       steps,
       currentStep: 0,
     };
@@ -316,7 +469,10 @@ REMEMBER:
   /**
    * Generate response using Ollama with full context
    */
-  private async generateWithOllama(prompt: string, context: Message[]): Promise<string> {
+  private async generateWithOllama(
+    prompt: string,
+    context: Message[],
+  ): Promise<string> {
     try {
       // Build conversation context
       const messages = context.map((m) => ({
@@ -326,14 +482,14 @@ REMEMBER:
 
       // Add current prompt
       messages.push({
-        role: 'user',
+        role: "user",
         content: prompt,
       });
 
       // Call Ollama API
       const response = await fetch(`${this.ollamaUrl}/api/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: this.model,
           messages: messages,
@@ -353,21 +509,24 @@ REMEMBER:
       const data = await response.json();
       return data.message.content;
     } catch (error) {
-      console.error('Ollama generation error:', error);
-      return 'I apologize, but I encountered an error connecting to my neural core. Please ensure Ollama is running.';
+      console.error("Ollama generation error:", error);
+      return "I apologize, but I encountered an error connecting to my neural core. Please ensure Ollama is running.";
     }
   }
 
   /**
    * Main method: Process user message and generate cognitive response
    */
-  async processMessage(userMessage: string, additionalContext?: any): Promise<string> {
+  async processMessage(
+    userMessage: string,
+    additionalContext?: any,
+  ): Promise<string> {
     // Add user message to memory
     this.addUserMessage(userMessage, additionalContext);
 
     // Analyze intent
     const analysis = this.analyzeIntent(userMessage);
-    console.log('Intent analysis:', analysis);
+    console.log("Intent analysis:", analysis);
 
     // Get relevant context from history
     const context = this.getRelevantContext(userMessage);
@@ -376,7 +535,7 @@ REMEMBER:
     let taskPlan: Task | null = null;
     if (analysis.requiresAction && !analysis.isQuestion) {
       taskPlan = this.createTaskPlan(userMessage, analysis.intent);
-      console.log('Created task plan:', taskPlan);
+      console.log("Created task plan:", taskPlan);
     }
 
     // Build enhanced prompt with thinking process
@@ -386,7 +545,7 @@ REMEMBER:
       enhancedPrompt = `User request: ${userMessage}
 
 I've analyzed this request and created a plan:
-${taskPlan.steps.map((step, i) => `${i + 1}. ${step}`).join('\n')}
+${taskPlan.steps.map((step, i) => `${i + 1}. ${step}`).join("\n")}
 
 Please provide a thoughtful response that:
 1. Acknowledges the request
@@ -413,7 +572,11 @@ Remember: Think step-by-step, explain your reasoning, and be proactive.`;
   /**
    * Learn from interactions to improve over time
    */
-  private learnFromInteraction(userMessage: string, response: string, analysis: any): void {
+  private learnFromInteraction(
+    userMessage: string,
+    response: string,
+    analysis: any,
+  ): void {
     // Extract learnings
     const learning = `Intent: ${analysis.intent}, Context: ${userMessage.substring(0, 50)}...`;
 
@@ -486,7 +649,12 @@ Remember: Think step-by-step, explain your reasoning, and be proactive.`;
   /**
    * Update task status
    */
-  updateTaskStatus(taskId: string, status: Task['status'], result?: any, error?: string): void {
+  updateTaskStatus(
+    taskId: string,
+    status: Task["status"],
+    result?: any,
+    error?: string,
+  ): void {
     const task = this.activeTasks.get(taskId);
     if (task) {
       task.status = status;
