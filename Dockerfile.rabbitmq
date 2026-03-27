@@ -1,0 +1,2 @@
+FROM rabbitmq:3-management-alpine
+# Provide a basic RabbitMQ setup for background workers
