@@ -351,12 +351,49 @@ export class VortexHealingNexus extends EventEmitter {
     private async healDatabase(context: HealingContext): Promise<{ artifact: any; strategy: string }> {
         this.logger.debug('HEALING-NEXUS', '🗄️ Initiating Database healing...');
 
-        // TODO: Implement database query optimization
-        // - Analyze slow queries
-        // - Add missing indexes
-        // - Rewrite inefficient queries
+        const errorMsg = typeof context.error === 'string' ? context.error : (context.error as any)?.message || '';
+        const query = context.metadata?.query || '';
+        const targetTable = context.target || 'unknown_table';
 
-        throw new Error('Database healing not yet implemented');
+        this.logger.debug('HEALING-NEXUS', `Analyzing database error: ${errorMsg}`);
+
+        // Strategy 1: Add missing indexes
+        if (errorMsg.toLowerCase().includes('missing index') || errorMsg.toLowerCase().includes('seq scan') || errorMsg.toLowerCase().includes('sequence scan')) {
+            // Try to extract column name from query or error if possible, otherwise use a generic 'id'
+            let column = 'id';
+            const columnMatch = errorMsg.match(/column (?:'|")?(\w+)(?:'|")?/i);
+            if (columnMatch && columnMatch[1]) {
+                column = columnMatch[1];
+            }
+
+            const indexName = `idx_${targetTable}_${column}_auto_healed`;
+            return {
+                artifact: {
+                    sql: `CREATE INDEX CONCURRENTLY IF NOT EXISTS ${indexName} ON ${targetTable} (${column});`,
+                    type: 'index_creation'
+                },
+                strategy: 'Database:IndexOptimization'
+            };
+        }
+
+        // Strategy 2: Rewrite inefficient queries (e.g., SELECT * to specific columns, or add LIMIT)
+        if (errorMsg.toLowerCase().includes('slow query') || errorMsg.toLowerCase().includes('timeout') || errorMsg.toLowerCase().includes('inefficient')) {
+            let rewrittenQuery = query;
+            if (query.toUpperCase().includes('SELECT *')) {
+                // A simple heuristic rewrite: replace SELECT * with a generic target if not specified
+                rewrittenQuery = query.replace(/SELECT \*/ig, 'SELECT id');
+            }
+
+            return {
+                artifact: {
+                    sql: rewrittenQuery,
+                    type: 'query_rewrite'
+                },
+                strategy: 'Database:QueryRewrite'
+            };
+        }
+
+        throw new Error('All Database healing strategies exhausted');
     }
 
     /**
