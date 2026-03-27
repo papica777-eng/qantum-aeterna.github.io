@@ -18,7 +18,9 @@ import * as crypto from 'crypto';
 
 export class LivenessTokenManager {
     private static instance: LivenessTokenManager;
-    private readonly TOKEN_SECRET: string;
+    private TOKEN_SECRET: string;
+    private oldSecrets: Array<{ secret: string; expiresAt: number }> = [];
+    private readonly GRACE_PERIOD_MS = 24 * 60 * 60 * 1000; // 24 hours
     private secretInitializedAt: number;
 
     private constructor() {
@@ -79,11 +81,34 @@ export class LivenessTokenManager {
      * For now, this is a placeholder.
      */
     public async rotateSecret(newSecret: string): Promise<void> {
-        // TODO: Implement key rotation strategy
-        // - Store old secret for grace period
-        // - Accept tokens signed with either old or new secret
-        // - Expire old secret after grace period
-        throw new Error('Secret rotation not yet implemented - restart service with new LIVENESS_TOKEN_SECRET');
+        if (!newSecret || newSecret.length < 32) {
+            throw new Error('New secret must be at least 32 characters long');
+        }
+
+        console.log(`🔄 [LIVENESS-TOKEN] Rotating secret. Old secret valid for ${this.GRACE_PERIOD_MS / 3600000} hours.`);
+
+        // Store old secret for grace period
+        this.oldSecrets.push({
+            secret: this.TOKEN_SECRET,
+            expiresAt: Date.now() + this.GRACE_PERIOD_MS
+        });
+
+        // Set new secret
+        this.TOKEN_SECRET = newSecret;
+        this.secretInitializedAt = Date.now();
+    }
+
+    /**
+     * Get all active secrets (current + unexpired old secrets)
+     */
+    public getActiveSecrets(): string[] {
+        const now = Date.now();
+
+        // Clean up expired secrets
+        this.oldSecrets = this.oldSecrets.filter(s => s.expiresAt > now);
+
+        // Return current and valid old secrets
+        return [this.TOKEN_SECRET, ...this.oldSecrets.map(s => s.secret)];
     }
 }
 

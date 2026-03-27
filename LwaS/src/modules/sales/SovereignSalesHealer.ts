@@ -18,6 +18,8 @@ import { EventEmitter } from 'events';
 import { Logger } from '../../core/telemetry/Logger';
 import { VortexHealingNexus, HealingDomain, HealingContext } from '../../core/evolution/VortexHealingNexus';
 import { Page, ElementHandle } from 'playwright';
+import ResilientHttpClient from '../../utils/ResilientHttpClient';
+
 
 /**
  * Trade execution parameters
@@ -251,8 +253,54 @@ export class SovereignSalesHealer extends EventEmitter {
 
             await button.click();
         } else {
-            // API-based trade
-            // TODO: Implement API trading logic
+                        // API-based trade
+            this.logger.debug('SALES-HEALER', `Initiating API trade via ResilientHttpClient for ${params.asset}`);
+
+            try {
+                // Initialize a resilient client for the target platform
+                // Since specific platform APIs vary, we use a generic structure
+                const baseUrl = params.metadata?.apiUrl || `https://api.${params.platform.toLowerCase()}.com/v1`;
+                const apiKey = params.metadata?.apiKey || process.env[`${params.platform.toUpperCase()}_API_KEY`];
+
+                const httpClient = new ResilientHttpClient(
+                    `SalesHealer-${params.platform}`,
+                    baseUrl,
+                    apiKey
+                );
+
+                // Construct standard trade payload
+                const tradePayload = {
+                    asset: params.asset,
+                    action: params.action,
+                    quantity: params.quantity,
+                    price: params.price,
+                    type: params.price ? 'LIMIT' : 'MARKET',
+                    timestamp: Date.now()
+                };
+
+                const endpoint = params.metadata?.tradeEndpoint || '/order';
+
+                // Execute resilient request
+                await httpClient.post<any>(endpoint, tradePayload);
+
+                this.logger.debug('SALES-HEALER', `API trade payload sent successfully`);
+            } catch (error: any) {
+                // Map HTTP errors to TradeErrorTypes for the healing nexus
+                const status = error.response?.status;
+                const enhancedError: any = new Error(`API Trade failed: ${error.message}`);
+
+                if (status === 401 || status === 403) {
+                    enhancedError.type = TradeErrorType.TRADE_REJECTED;
+                } else if (status === 400 && error.response?.data?.message?.toLowerCase().includes('balance')) {
+                    enhancedError.type = TradeErrorType.INSUFFICIENT_BALANCE;
+                } else if (error.code === 'ECONNABORTED' || !error.response) {
+                    enhancedError.type = TradeErrorType.NETWORK_TIMEOUT;
+                } else {
+                    enhancedError.type = TradeErrorType.LOGIC_ERROR;
+                }
+
+                throw enhancedError;
+            }
         }
 
         // Simulate successful trade

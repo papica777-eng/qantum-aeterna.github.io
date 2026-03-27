@@ -3,12 +3,14 @@ import ClientPortal from './components/ClientPortal';
 import { ImmersiveLanding } from './components/ImmersiveLanding';
 import { QuantumTelemetryDashboard } from './components/QuantumTelemetryDashboard';
 import { QuantumGlitch404 } from './components/QuantumGlitch404';
+import { CommandPalette } from './components/CommandPalette';
+import Partnerships from './components/Partnerships';
 import { useState, useEffect } from 'react';
 import "./App.css";
 import "./LegacyComponents.css";
 
 const BACKEND_URL = 'https://aeternaaa-production.up.railway.app';
-type AppMode = 'landing' | 'client' | 'admin' | 'telemetry' | '404';
+type AppMode = 'landing' | 'client' | 'admin' | 'telemetry' | '404' | 'partnerships';
 
 function App() {
   const [mode, setMode] = useState<AppMode>('landing');
@@ -19,7 +21,9 @@ function App() {
     const modeParam = params.get('mode');
     const path = window.location.pathname;
     
-    if (modeParam === 'admin') {
+    if (modeParam === 'partnerships' || path === '/partnerships') {
+      setMode('partnerships');
+    } else if (modeParam === 'admin') {
       setMode('admin');
     } else if (modeParam === 'client') {
       setMode('client');
@@ -31,9 +35,10 @@ function App() {
   }, []);
 
   return (
-    <div className="w-screen h-screen bg-black overflow-hidden selection:bg-cyan-500/30">
+    <div className="w-screen h-screen bg-black overflow-hidden selection:bg-cyan-500/30 relative">
+      <CommandPalette onNavigate={setMode} />
       {/* Mode Toggle - Enhanced with all modes */}
-      <div className="fixed top-4 left-4 z-50 flex gap-2 flex-wrap">
+      <div className="fixed top-4 left-4 z-[90] flex gap-2 flex-wrap">
         <button 
           onClick={() => setMode('landing')}
           className={`px-3 py-1.5 rounded-lg text-sm transition font-medium ${mode === 'landing' ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white' : 'bg-white/10 hover:bg-white/20 text-white/70'}`}
@@ -68,6 +73,7 @@ function App() {
 
       {/* Render based on mode */}
       {mode === 'landing' && <ImmersiveLanding />}
+      {mode === 'partnerships' && <Partnerships />}
       {mode === 'client' && <ClientPortal />}
       {mode === 'admin' && <SovereignHUD />}
       {mode === 'telemetry' && <QuantumTelemetryDashboard />}
