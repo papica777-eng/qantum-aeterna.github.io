@@ -35,8 +35,8 @@ services:
   # TypeScript Middleware - OmniCore
   middleware:
     build:
-      context: ./OmniCore
-      dockerfile: ../Dockerfile.middleware
+      context: .
+      dockerfile: Dockerfile.middleware
     container_name: aeterna-middleware
     restart: unless-stopped
     ports:
@@ -90,8 +90,8 @@ services:
   # Frontend - Nginx serving React build
   frontend:
     build:
-      context: ./helios-ui
-      dockerfile: ../Dockerfile.frontend
+      context: .
+      dockerfile: Dockerfile.frontend
     container_name: aeterna-frontend
     restart: unless-stopped
     ports:
