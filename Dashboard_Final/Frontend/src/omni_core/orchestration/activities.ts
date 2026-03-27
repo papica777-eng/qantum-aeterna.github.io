@@ -1,3 +1,4 @@
+import { applyPatchToCodebase } from "./utils/git-patcher";
 import { SandboxGuard } from '../security/SandboxGuard';
 import { EvolutionNotary } from '../governance/EvolutionNotary';
 import { Logger } from '../telemetry/Logger';
@@ -65,12 +66,12 @@ export async function applyPatch(code: string, signature: string | null): Promis
         logger.info('ACTIVITY', '✅ Cryptographic signature verified');
     }
 
-    // TODO: Atomic patch application logic
-    // In production: Use git, database transactions, or filesystem atomicity
+
+
     logger.info('ACTIVITY', `📝 Applying patch (${code.length} bytes)...`);
 
-    // Placeholder for actual patch application
-    // await applyPatchToCodebase(code);
+
+    await applyPatchToCodebase(code);
 
     logger.info('ACTIVITY', '✅ Patch applied successfully');
     return `Patch applied successfully at ${new Date().toISOString()}`;
