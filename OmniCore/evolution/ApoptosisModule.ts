@@ -267,14 +267,23 @@ export class ApoptosisModule extends EventEmitter {
 
             // Step 4: Cryptographically verify HMAC-SHA256 signature
             const tokenManager = LivenessTokenManager.getInstance();
-            const TOKEN_SECRET = tokenManager.getSecret();
+            const activeSecrets = tokenManager.getActiveSecrets();
             const payload = `${tokenModuleId}:${timestampStr}:${status}`;
-            const expectedSignature = crypto
-                .createHmac('sha256', TOKEN_SECRET)
-                .update(payload)
-                .digest('hex');
+            let signatureVerified = false;
 
-            if (providedSignature !== expectedSignature) {
+            for (const secret of activeSecrets) {
+                const expectedSignature = crypto
+                    .createHmac('sha256', secret)
+                    .update(payload)
+                    .digest('hex');
+
+                if (providedSignature === expectedSignature) {
+                    signatureVerified = true;
+                    break;
+                }
+            }
+
+            if (!signatureVerified) {
                 throw new Error('LivenessToken signature verification FAILED - token is forged or corrupted');
             }
 
