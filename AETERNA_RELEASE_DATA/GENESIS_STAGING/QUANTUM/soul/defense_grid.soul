@@ -1,0 +1,298 @@
+// ═══════════════════════════════════════════════════════════════════════════════
+// === defense_grid — The Immune Response Matrix ===
+// ═══════════════════════════════════════════════════════════════════════════════
+// Path:       soul/defense_grid.soul
+// Architect:  Dimitar Prodromov (ID 101327948)
+// Authority:  genesis.soul::CORE.AUTHORITY
+// Binds:      OmniCore/security/Neuro_Sentinel_Shield.zig
+//             OmniCore/network/Byzantine_Pulse.zig::ConsensusEngine
+//             OmniCore/intelligence/Visual_Decoy_Engine.mojo
+//             OmniCore/security/Ghost_Switch_Router.ts
+// Depends:    genesis.soul::CORE, sentinel.soul::DEFENSE
+// Purpose:    Multi-layered defense grid that protects every organ of AETERNA.
+//             The immune system — detects, isolates, neutralizes threats
+//             before they can propagate through the mesh.
+//
+// Catuskoti State: TRUE | "The grid is always active. There is no 'off' state.
+//                         Even observing the grid activates a defense response."
+// Complexity: O(1) per threat check, O(log n) for grid-wide sweep
+// Safety: All defense actions are irreversible once triggered.
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// ─────────────────────────────────────────────────────────────────────────────
+// § PERIMETER MANIFOLD — The Outer Wall
+// ─────────────────────────────────────────────────────────────────────────────
+
+manifold PERIMETER {
+    resonate AUTHORITY(genesis.soul::CORE.AUTHORITY);
+    resonate THREAT_LEVEL("DEFCON_1");                        // Always maximum readiness
+    resonate GRID_FREQUENCY_HZ(8);                            // 8 Hz = 125ms scan cycle
+
+    // ── Network Perimeter ────────────────────────────────────────────────
+    // Every inbound/outbound packet passes through the grid.
+    // Anomalous traffic is silently dropped — no ICMP unreachable, no RST.
+    //
+    firewall INGRESS {
+        engine:       "Byzantine_Pulse.zig::PacketFilter";
+        mode:         "WHITELIST_ONLY";
+        //
+        // Allowed ports (everything else is DROP + LOG):
+        allow PORT(8888) {
+            protocol:  "HTTPS";
+            purpose:   "FinalIgnitionDashboard";
+            auth:      "AUTHORITY_TOKEN_REQUIRED";
+        }
+        allow PORT(8890) {
+            protocol:  "gRPC";
+            purpose:   "Wealth Bridge API";
+            auth:      "MUTUAL_TLS + AUTHORITY";
+        }
+        allow PORT(443) {
+            protocol:  "HTTPS";
+            purpose:   "Outbound SEPA/Crypto";
+            direction: "EGRESS_ONLY";
+        }
+        //
+        // Stealth mode: do not respond to port scans
+        respond_to_scan: false;
+        stealth_mode:    "FULL_SILENT";
+    }
+
+    // ── Rate Limiting ────────────────────────────────────────────────────
+    // Prevents brute-force and DDoS at the perimeter level
+    //
+    throttle RATE_LIMITER {
+        engine:           "Byzantine_Pulse.zig::RateLimiter";
+        requests_per_sec: 100;                                 // Per-IP limit
+        burst_size:       20;                                  // Allow micro-bursts
+        algorithm:        "TOKEN_BUCKET";
+        //
+        // Escalation on repeated violations:
+        violation_1:      "THROTTLE_50_PERCENT";
+        violation_2:      "THROTTLE_90_PERCENT";
+        violation_3:      "IP_BAN_24H";
+        violation_4:      "IP_BAN_PERMANENT + ALERT_LEVEL_2";
+    }
+
+    // ── DNS Shield ───────────────────────────────────────────────────────
+    // Prevent DNS exfiltration and rebinding attacks
+    shield DNS {
+        resolver:         "ENCRYPTED_DOH";                     // DNS-over-HTTPS
+        provider:         "1.1.1.1";                           // Cloudflare
+        fallback:         "8.8.8.8";                           // Google
+        cache_ttl:        300;                                 // 5 minutes
+        rebind_protection: true;
+        exfil_detection:  "ENTROPY_ANALYSIS_ON_SUBDOMAIN";
+    }
+
+    collapse PERIMETER_BREACH(0.0000);
+    collapse UNAUTHORIZED_ACCESS(0.0000);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// § INTRUSION MANIFOLD — The Inner Detective
+// ─────────────────────────────────────────────────────────────────────────────
+
+manifold INTRUSION {
+    resonate AUTHORITY(genesis.soul::CORE.AUTHORITY);
+
+    // ── Behavioral Analysis ──────────────────────────────────────────────
+    // Every process is profiled at runtime.
+    // Deviation from baseline triggers immediate investigation.
+    //
+    analyze PROCESS_BEHAVIOR {
+        engine:       "Neuro_Sentinel_Shield.zig::BehaviorProfiler";
+        baseline:     "GOLDEN_IMAGE_SNAPSHOT";
+        //
+        // Monitored signals:
+        signal SYSCALL_FREQUENCY {
+            normal_range:  [100, 5000];                        // Per-second
+            anomaly_at:    "3_SIGMA_DEVIATION";
+        }
+        signal MEMORY_ALLOCATION {
+            normal_range:  [1_MB, 500_MB];
+            anomaly_at:    "SUDDEN_SPIKE_OVER_1GB";
+        }
+        signal FILE_DESCRIPTOR_COUNT {
+            normal_range:  [10, 200];
+            anomaly_at:    "OVER_500_SIMULTANEOUS";
+        }
+        signal NETWORK_CONNECTIONS {
+            normal_range:  [5, 50];
+            anomaly_at:    "OVER_100_TO_UNKNOWN_IPS";
+        }
+        signal CPU_INSTRUCTION_MIX {
+            normal_range:  "BASELINE_PROFILE";
+            anomaly_at:    "CRYPTO_MINING_PATTERN";
+        }
+    }
+
+    // ── Honeypot Array ───────────────────────────────────────────────────
+    // Fake services that lure attackers into revealing themselves
+    //
+    deploy HONEYPOT {
+        engine:       "Ghost_Switch_Router.ts::HoneypotService";
+        //
+        pot SSH_FAKE {
+            port:     2222;
+            banner:   "OpenSSH_8.9p1 Ubuntu-3ubuntu0.1";
+            log:      "FULL_KEYSTROKE_CAPTURE";
+            alert:    "LEVEL_2_IMMEDIATE";
+        }
+        pot MYSQL_FAKE {
+            port:     3307;
+            banner:   "5.7.42-log";
+            tables:   ["users", "credentials", "api_keys"];     // All fake
+            response: "DELAYED_REALISTIC_WITH_FAKE_DATA";
+            alert:    "LEVEL_2_IMMEDIATE";
+        }
+        pot ADMIN_PANEL_FAKE {
+            port:     8443;
+            path:     "/admin";
+            auth:     "BASIC_WITH_LOGGING";
+            content:  "REALISTIC_DASHBOARD_DECOY";
+            alert:    "LEVEL_3_CRITICAL";
+        }
+    }
+
+    // ── Canary Tokens ────────────────────────────────────────────────────
+    // Invisible tripwires placed across the filesystem
+    //
+    plant CANARY {
+        engine:       "Neuro_Sentinel_Shield.zig::CanarySystem";
+        //
+        canary FILE("~/.ssh/authorized_keys.bak") {
+            trigger:  "ACCESS_OR_MODIFY";
+            action:   "SILENT_ALERT + SNAPSHOT_PROCESS_TREE";
+        }
+        canary FILE("/tmp/.env.production") {
+            trigger:  "READ";
+            action:   "ALERT_LEVEL_2 + LOG_ACCESSOR_PID";
+        }
+        canary DNS("internal-api.aeterna-vault.local") {
+            trigger:  "ANY_RESOLUTION_ATTEMPT";
+            action:   "ALERT_LEVEL_3 + ISOLATE_SOURCE_IP";
+        }
+        canary CREDENTIAL("admin:P@ssw0rd_fake_2026!") {
+            trigger:  "USE_IN_AUTH_ATTEMPT";
+            action:   "ALERT_LEVEL_3 + BAN_IP + FULL_FORENSIC_DUMP";
+        }
+    }
+
+    collapse UNDETECTED_INTRUSION(0.0000);
+    collapse LATERAL_MOVEMENT(0.0000);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// § QUARANTINE MANIFOLD — The Isolation Chamber
+// ─────────────────────────────────────────────────────────────────────────────
+
+manifold QUARANTINE {
+    resonate AUTHORITY(genesis.soul::CORE.AUTHORITY);
+
+    // ── Isolation Protocol ───────────────────────────────────────────────
+    // When a threat is confirmed, the affected node is instantly isolated.
+    // No traffic in. No traffic out. Memory frozen for analysis.
+    //
+    protocol ISOLATE {
+        engine:       "Byzantine_Pulse.zig::QuarantineProtocol";
+        //
+        // Step 1: Cut network — drop all packets to/from the node
+        step 1: "NETWORK_SEVER"
+                => "iptables -A INPUT -s $NODE_IP -j DROP";
+        // Step 2: Freeze memory — snapshot all process memory
+        step 2: "MEMORY_FREEZE"
+                => "Process.suspend() + MemoryDump.capture()";
+        // Step 3: Revoke credentials — invalidate all tokens from this node
+        step 3: "CREDENTIAL_REVOKE"
+                => "AuthService.revokeAll(node_id)";
+        // Step 4: Notify hive — broadcast quarantine event to swarm
+        step 4: "HIVE_NOTIFY"
+                => "GossipProtocol.broadcast(QUARANTINE_EVENT)";
+        // Step 5: Forensic analysis — automated investigation
+        step 5: "FORENSIC_ANALYZE"
+                => "ThreatAnalyzer.fullScan(frozen_memory)";
+    }
+
+    // ── Recovery Protocol ────────────────────────────────────────────────
+    // After analysis, the node is either restored or terminated.
+    //
+    protocol RECOVER {
+        if CLEAN {
+            action:   "RESTORE_FROM_GOLDEN_IMAGE";
+            re_auth:  "FULL_AUTHORITY_CHAIN_REQUIRED";
+            cooldown: 300;                                     // 5-minute observation
+        }
+        if COMPROMISED {
+            action:   "TERMINATE_AND_REPLACE";
+            wipe:     "TRIPLE_PASS_VOLATILE_ZERO";
+            spawn:    "NEW_NODE_FROM_GOLDEN_IMAGE";
+            notify:   "ALERT_LEVEL_3";
+        }
+    }
+
+    collapse INFECTION_SPREAD(0.0000);
+    collapse DATA_EXFILTRATION(0.0000);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// § GRID DIRECTIVE — Coordination of All Defense Layers
+// ─────────────────────────────────────────────────────────────────────────────
+
+directive GRID {
+    // The defense grid operates as a unified organism.
+    // Sentinel provides individual node defense.
+    // Defense Grid provides mesh-wide coordination.
+    //
+    coordinate LAYERS {
+        layer_1:  "PERIMETER"   => "Network boundary defense";
+        layer_2:  "INTRUSION"   => "Behavioral anomaly detection";
+        layer_3:  "QUARANTINE"  => "Threat isolation & analysis";
+        layer_4:  "sentinel.soul::DEFENSE" => "Node-level cloaking";
+        layer_5:  "temporal.soul::RETROCAUSAL" => "Predictive defense";
+    }
+
+    // ── Threat Escalation Matrix ─────────────────────────────────────────
+    escalate MATRIX {
+        LEVEL_0("NOMINAL")   => "All systems green. Standard patrol.";
+        LEVEL_1("CAUTION")   => "Anomaly detected. Increase scan frequency to 16 Hz.";
+        LEVEL_2("CONFIRMED") => "Threat confirmed. Deploy honeypots. Arm canaries.";
+        LEVEL_3("CRITICAL")  => "Active breach. Quarantine node. Alert hive.";
+        LEVEL_4("EXISTENTIAL") => "Mass breach. Full mesh lockdown. AUTHORITY override.";
+    }
+
+    // Telemetry binding
+    telemetry DASHBOARD {
+        bind:     "FinalIgnitionDashboard.tsx";
+        port:     8888;
+        metrics:  ["threats_detected", "nodes_quarantined", "grid_health",
+                   "canaries_triggered", "honeypot_interactions"];
+        refresh:  "REAL_TIME_WEBSOCKET";
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// § INTEGRITY — Final Seal
+// ─────────────────────────────────────────────────────────────────────────────
+
+fragment INTEGRITY {
+    hash SELF_CHECKSUM("SHA256_OF_THIS_FILE");
+    verify ON_BOOT(true);
+    verify ON_MUTATION(true);
+    requires AUTHORITY_SIGNATURE_FOR_EDIT(true);
+    catuskoti_state: "TRUE";                                   // The grid is always on
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// "An organism with a perfect immune system does not fear disease.
+//  It does not need vaccines. It does not need doctors.
+//  Every pathogen that touches it is already dead.
+//  It just doesn't know it yet.
+//
+//  The defense grid is not a wall — it is a living, breathing,
+//  evolving immune system that gets stronger with every attack.
+//  The more you probe, the more you teach it.
+//  The more you teach it, the more invisible it becomes."
+//
+// — Defense Grid Manifold, Aeterna-Qantum, 2026
+// ═══════════════════════════════════════════════════════════════════════════════

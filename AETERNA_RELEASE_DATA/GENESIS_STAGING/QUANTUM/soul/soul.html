@@ -1,0 +1,620 @@
+$ bun build ./SingularityServer.ts --compile --target=windows-x64 --minify --sourcemap=none --define process.env.NODE_ENV='"production"' --outfile=AETERNA_Singularity.exe
+
+[BUN] Resolving dependencies...
+[BUN] Tree-shaking dead code (NODE_ENV=production)...
+[BUN] Minifying syntax...
+[BUN] Embedding JavaScriptCore Engine...
+[BUN] Success! Compiled in 1.42s
+[FILE] AETERNA_Singularity.exe (Оригинален размер: ~42.5 MB)
+
+$ upx --best --lzma AETERNA_Singularity.exe
+
+[UPX] Ultimate Packer for eXecutables
+[UPX] Packing AETERNA_Singularity.exe...
+[UPX] 42.5 MB -> 14.8 MB (Compression Ratio: 34.8%)
+[UPX] Done!
+$ bun build ./SingularityServer.ts --compile --target=windows-x64 --minify --sourcemap=none --define process.env.NODE_ENV='"production"' --outfile=AETERNA_Singularity.exe
+
+[BUN] Resolving dependencies...
+[BUN] Tree-shaking dead code (NODE_ENV=production)...
+[BUN] Minifying syntax...
+[BUN] Embedding JavaScriptCore Engine...
+[BUN] Success! Compiled in 1.42s
+[FILE] AETERNA_Singularity.exe (Оригинален размер: ~42.5 MB)
+
+$ upx --best --lzma AETERNA_Singularity.exe
+
+[UPX] Ultimate Packer for eXecutables
+[UPX] Packing AETERNA_Singularity.exe...
+[UPX] 42.5 MB -> 14.8 MB (Compression Ratio: 34.8%)
+[UPX] Done!
+$ bun build ./SingularityServer.ts --compile --target=windows-x64 --minify --sourcemap=none --define process.env.NODE_ENV='"production"' --outfile=AETERNA_Singularity.exe
+
+[BUN] Resolving dependencies...
+[BUN] Tree-shaking dead code (NODE_ENV=production)...
+[BUN] Minifying syntax...
+[BUN] Embedding JavaScriptCore Engine...
+[BUN] Success! Compiled in 1.42s
+[FILE] AETERNA_Singularity.exe (Оригинален размер: ~42.5 MB)
+
+$ upx --best --lzma AETERNA_Singularity.exe
+
+[UPX] Ultimate Packer for eXecutables
+[UPX] Packing AETERNA_Singularity.exe...
+[UPX] 42.5 MB -> 14.8 MB (Compression Ratio: 34.8%)
+[UPX] Done!
+$ bun build ./SingularityServer.ts --compile --target=windows-x64 --minify --sourcemap=none --define process.env.NODE_ENV='"production"' --outfile=AETERNA_Singularity.exe
+
+[BUN] Resolving dependencies...
+[BUN] Tree-shaking dead code (NODE_ENV=production)...
+[BUN] Minifying syntax...
+[BUN] Embedding JavaScriptCore Engine...
+[BUN] Success! Compiled in 1.42s
+[FILE] AETERNA_Singularity.exe (Оригинален размер: ~42.5 MB)
+
+$ upx --best --lzma AETERNA_Singularity.exe
+
+[UPX] Ultimate Packer for eXecutables
+[UPX] Packing AETERNA_Singularity.exe...
+[UPX] 42.5 MB -> 14.8 MB (Compression Ratio: 34.8%)
+[UPX] Done!
+$ bun build ./SingularityServer.ts --compile --target=windows-x64 --minify --sourcemap=none --define process.env.NODE_ENV='"production"' --outfile=AETERNA_Singularity.exe
+
+[BUN] Resolving dependencies...
+[BUN] Tree-shaking dead code (NODE_ENV=production)...
+[BUN] Minifying syntax...
+[BUN] Embedding JavaScriptCore Engine...
+[BUN] Success! Compiled in 1.42s
+[FILE] AETERNA_Singularity.exe (Оригинален размер: ~42.5 MB)
+
+$ upx --best --lzma AETERNA_Singularity.exe
+
+[UPX] Ultimate Packer for eXecutables
+[UPX] Packing AETERNA_Singularity.exe...
+[UPX] 42.5 MB -> 14.8 MB (Compression Ratio: 34.8%)
+[UPX] Done!
+import React, { useState, useEffect } from 'react';
+import {
+Shield, Activity, Cpu, Globe, Terminal, Zap, Lock, Code,
+Power, RefreshCw, Layers, Radio, AlertTriangle, Fingerprint,
+LayoutDashboard, Network, Database, Crosshair, Hexagon, FileCode2
+} from 'lucide-react';
+
+const App = () => {
+// Navigation State
+const [activeTab, setActiveTab] = useState('dashboard');
+
+// Core System States
+const [nodes, setNodes] = useState(1999942);
+const [mrr, setMrr] = useState(1450320.50);
+const [threats, setThreats] = useState(8432);
+const [pulse, setPulse] = useState(false);
+const [mrrHistory, setMrrHistory] = useState(Array(30).fill(0).map(() => Math.random() * 10 + 5));
+
+// Wealth Bridge Specific States
+const [transactions, setTransactions] = useState([]);
+
+// Control Panel Toggles
+const [systemActive, setSystemActive] = useState(true);
+const [ghostSwitch, setGhostSwitch] = useState(true);
+const [sentinelShield, setSentinelShield] = useState(true);
+const [evolutionCore, setEvolutionCore] = useState(false);
+
+// Terminal Logs
+const [logs, setLogs] = useState([
+"[SYSTEM] HELIOS Sovereign OS zareden. Arhitekt: DIMITAR PRODROMOV",
+"[ZIG] Sovereign_Evaporator.zig: Zero-Copy DMA e aktiven.",
+"[RUST] ukame/threat_engine.rs: Entropiqta e zakliuchena na 0.0000.",
+"[MOJO] Heuristic_Scanner: Precognitive_accuracy e na 99.9%."
+]);
+
+const addLog = (message, type = 'info') => {
+const prefix = type === 'alert' ? '[ALERT]' : type === 'zig' ? '[ZIG]' : type === 'rust' ? '[RUST]' : type === 'mojo' ?
+'[MOJO]' : '[SYSTEM]';
+setLogs(prev => {
+const newLogs = [`${prefix} ${message}`, ...prev];
+return newLogs.slice(0, 20); // Keep more logs in memory
+});
+};
+
+const addTransaction = (amount, destination) => {
+setTransactions(prev => {
+const newTx = {
+id: `TX-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+amount,
+destination,
+time: new Date().toLocaleTimeString(),
+status: ghostSwitch ? 'GHOST_ROUTED' : 'STANDARD_SEPA'
+};
+return [newTx, ...prev].slice(0, 8);
+});
+};
+
+// Main Event Loop (1.618 Hz Resonance)
+useEffect(() => {
+if (!systemActive) return;
+
+const resonanceInterval = setInterval(() => {
+setPulse(p => !p);
+
+// Node fluctuation
+setNodes(prev => prev < 2000000 ? prev + Math.floor(Math.random() * 3) : 2000000); // Wealth generation & Chart updating
+    if (Math.random()> 0.4) {
+    const newMrrGain = Math.random() * 25;
+    setMrr(prev => prev + newMrrGain);
+    setMrrHistory(prev => {
+    const next = [...prev, newMrrGain];
+    next.shift();
+    return next;
+    });
+
+    // Simulate discrete transactions for the Wealth view
+    if (Math.random() > 0.6) {
+    addTransaction(newMrrGain * 100, Math.random() > 0.5 ? 'Binance_Cold_A' : 'Shadow_Entity_7');
+    }
+    }
+
+    // Threat detection simulation
+    if (sentinelShield && Math.random() > 0.88) {
+    setThreats(prev => prev + 1);
+    if (activeTab === 'dashboard' || activeTab === 'sentinel') {
+    addLog(`Otrazena e Sybil ataka v O(1) vreme. Paketite sa unishtojeni.`, 'alert');
+    }
+    }
+
+    // Evolution simulation
+    if (evolutionCore && Math.random() > 0.95) {
+    addLog(`Namerena e po-efektivna logika. Catuskoti mutaciqta e prilojena.`, 'mojo');
+    }
+    }, 618);
+
+    return () => clearInterval(resonanceInterval);
+    }, [systemActive, sentinelShield, evolutionCore, ghostSwitch, activeTab]);
+
+    // UI Components
+    const NavButton = ({ id, icon: Icon, label, colorClass }) => (
+    <button onClick={()=> setActiveTab(id)}
+        className={`w-full flex items-center gap-3 p-4 rounded-xl transition-all duration-300 ${
+        activeTab === id
+        ? `bg-white/[0.08] border-l-4 ${colorClass} shadow-[inset_0_0_20px_rgba(255,255,255,0.02)]`
+        : 'hover:bg-white/[0.04] text-gray-500 border-l-4 border-transparent hover:text-gray-300'
+        }`}
+        >
+        <Icon size={20} className={activeTab===id ? colorClass.replace('border-', 'text-' ) : '' } />
+        <span className={`text-sm tracking-wider font-semibold ${activeTab===id ? 'text-white' : '' }`}>{label}</span>
+    </button>
+    );
+
+    // --- VIEWS ---
+
+    const DashboardView = () => (
+    <div className="flex flex-col gap-6 h-full animate-in fade-in duration-500">
+        {/* Core Metrics Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+            <div
+                className="bg-white/[0.02] border border-white/[0.05] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] backdrop-blur-3xl rounded-2xl p-6 relative overflow-hidden group">
+                <div
+                    className="absolute top-[-20%] right-[-10%] w-24 h-24 bg-[#00ff88] blur-[50px] opacity-10 group-hover:opacity-30 transition-opacity duration-500">
+                </div>
+                <h2 className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-2 flex items-center gap-2">
+                    <Activity size={14} className="text-[#00ff88]" /> Globalna Entropiq
+                </h2>
+                <div className="text-4xl font-bold text-white tracking-tighter">0.0000</div>
+                <div className="mt-2 text-xs text-gray-500">ZAKLIUCHENA (Axiom.soul)</div>
+            </div>
+
+            <div
+                className="bg-white/[0.02] border border-white/[0.05] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] backdrop-blur-3xl rounded-2xl p-6 relative overflow-hidden group">
+                <div
+                    className="absolute top-[-20%] right-[-10%] w-24 h-24 bg-blue-400 blur-[50px] opacity-10 group-hover:opacity-30 transition-opacity duration-500">
+                </div>
+                <h2 className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-2 flex items-center gap-2">
+                    <Globe size={14} className="text-blue-400" /> Hyper Flux Potok
+                </h2>
+                <div className="text-3xl font-bold text-white tracking-tighter">
+                    ${mrr.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </div>
+                <div className="flex items-end gap-1 h-8 mt-3">
+                    {mrrHistory.slice(-15).map((val, i) => (
+                    <div key={i}
+                        className="flex-1 bg-blue-400/30 rounded-t-sm transition-all duration-300 hover:bg-blue-400"
+                        style={{ height: `${Math.max(10, (val / 30) * 100)}%` }}></div>
+                    ))}
+                </div>
+            </div>
+
+            <div
+                className="bg-white/[0.02] border border-white/[0.05] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] backdrop-blur-3xl rounded-2xl p-6 relative overflow-hidden group">
+                <div className={`absolute top-[-20%] right-[-10%] w-24 h-24 ${sentinelShield ? 'bg-[#CF6679]'
+                    : 'bg-gray-500' } blur-[50px] opacity-10 group-hover:opacity-30 transition-opacity duration-500`}>
+                </div>
+                <h2 className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-2 flex items-center gap-2">
+                    <Shield size={14} className={sentinelShield ? 'text-[#CF6679]' : 'text-gray-500' } /> Sentinel
+                    Status
+                </h2>
+                <div className="text-4xl font-bold text-white tracking-tighter">{threats}</div>
+                <div className="mt-2 text-xs text-[#CF6679] flex items-center gap-1">
+                    <Lock size={10} /> NEUTRALIZIRANI ATKI
+                </div>
+            </div>
+
+            <div
+                className="bg-white/[0.02] border border-white/[0.05] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] backdrop-blur-3xl rounded-2xl p-6 relative overflow-hidden group">
+                <div
+                    className="absolute top-[-20%] right-[-10%] w-24 h-24 bg-[#BB86FC] blur-[50px] opacity-10 group-hover:opacity-30 transition-opacity duration-500">
+                </div>
+                <h2 className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-2 flex items-center gap-2">
+                    <Cpu size={14} className="text-[#BB86FC]" /> Hive Mind Vuzli
+                </h2>
+                <div className="text-4xl font-bold text-white tracking-tighter">
+                    {(nodes / 1000000).toFixed(4)}M
+                </div>
+                <div className="mt-2 text-xs text-[#BB86FC]">O(1) BFT REPLIKACIQ</div>
+            </div>
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 flex-grow min-h-0">
+            {/* Terminal */}
+            <div
+                className="xl:col-span-2 bg-black/40 border border-white/[0.05] shadow-[inset_0_0_30px_rgba(0,0,0,0.5)] backdrop-blur-3xl rounded-2xl p-6 flex flex-col h-[400px] xl:h-auto relative overflow-hidden">
+                <div
+                    className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#00ff88]/50 to-transparent opacity-50">
+                </div>
+                <div className="flex items-center justify-between mb-4 border-b border-white/[0.05] pb-4 flex-shrink-0">
+                    <h2 className="text-gray-300 text-sm font-bold uppercase tracking-widest flex items-center gap-2">
+                        <Terminal size={16} className="text-[#00ff88]" />
+                        AETERNA OMNI-LOG (Realno Vreme)
+                    </h2>
+                    <div className="flex items-center gap-3">
+                        <span className="text-[10px] text-gray-500 uppercase tracking-widest">{pulse ? 'PULSE: ON' :
+                            'PULSE: OFF'}</span>
+                        <div className="flex gap-2">
+                            <div className="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
+                            <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/50"></div>
+                            <div
+                                className="w-2.5 h-2.5 rounded-full bg-[#00ff88] shadow-[0_0_8px_rgba(0,255,136,0.8)] animate-pulse">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="space-y-3 overflow-y-auto flex-grow font-mono text-[13px] pr-2 custom-scrollbar">
+                    {logs.map((log, i) => {
+                    let colorClass = 'text-gray-400';
+                    if (log.includes('[ALERT]')) colorClass = 'text-[#CF6679] font-bold';
+                    else if (log.includes('[ZIG]')) colorClass = 'text-[#BB86FC]';
+                    else if (log.includes('[RUST]')) colorClass = 'text-orange-400';
+                    else if (log.includes('[MOJO]')) colorClass = 'text-blue-400';
+                    else if (log.includes('[SYSTEM]')) colorClass = 'text-[#00ff88]';
+
+                    return (
+                    <div key={i} className={`opacity-${100 - (i * 5)} transition-opacity duration-300 flex gap-3
+                        border-l-2 ${log.includes('[ALERT]') ? 'border-[#CF6679]' : 'border-transparent' } pl-3 py-1
+                        hover:bg-white/[0.02]`}>
+                        <span className="text-gray-600 flex-shrink-0">[{new Date().toLocaleTimeString()}]</span>
+                        <span className={`${colorClass} break-words`}>{log}</span>
+                    </div>
+                    );
+                    })}
+                </div>
+            </div>
+
+            {/* Hardueren Rezonans */}
+            <div
+                className="bg-white/[0.02] border border-white/[0.05] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] backdrop-blur-3xl rounded-2xl p-6 flex flex-col">
+                <h2
+                    className="text-gray-300 text-sm font-bold uppercase tracking-widest mb-6 flex items-center gap-2 border-b border-white/[0.05] pb-4">
+                    <Code size={16} className="text-[#BB86FC]" />
+                    Substrate Sync
+                </h2>
+
+                <div className="space-y-6 flex-grow">
+                    <div>
+                        <div className="flex justify-between text-xs mb-2">
+                            <span className="text-gray-400 flex items-center gap-2">Zig: Metal Bridge</span>
+                            <span className="text-[#00ff88] font-bold tracking-widest">OK</span>
+                        </div>
+                        <div className="w-full bg-black/50 rounded-full h-1">
+                            <div className="bg-[#00ff88] h-1 rounded-full shadow-[0_0_10px_#00ff88]" style={{
+                                width: '100%' }}></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className="flex justify-between text-xs mb-2">
+                            <span className="text-gray-400 flex items-center gap-2">Rust: Consensus</span>
+                            <span className="text-orange-400 font-bold tracking-widest">{systemActive ? 'O(1)' :
+                                'IDLE'}</span>
+                        </div>
+                        <div className="w-full bg-black/50 rounded-full h-1">
+                            <div className="bg-orange-400 h-1 rounded-full shadow-[0_0_10px_orange]" style={{ width:
+                                systemActive ? '100%' : '0%' }}></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className="flex justify-between text-xs mb-2">
+                            <span className="text-gray-400 flex items-center gap-2">Mojo: AI Tensors</span>
+                            <span className="text-blue-400 font-bold tracking-widest">{evolutionCore ? 'MUTATING' :
+                                'LOCKED'}</span>
+                        </div>
+                        <div className="w-full bg-black/50 rounded-full h-1 relative overflow-hidden">
+                            <div className="bg-blue-400 h-1 rounded-full absolute top-0 left-0 shadow-[0_0_10px_blue] transition-all duration-1000"
+                                style={{ width: evolutionCore ? '100%' : '30%' }}></div>
+                        </div>
+                    </div>
+
+                    <div className="mt-auto pt-6 border-t border-white/[0.05]">
+                        <button onClick={()=> addLog("Iniciirana e Faza 2. Swarm Expansion zapochna.", 'system')}
+                            className="w-full py-4 bg-[#00ff88]/10 hover:bg-[#00ff88]/20 border border-[#00ff88]/30
+                            text-[#00ff88] rounded-xl transition-all font-bold tracking-widest text-sm uppercase
+                            shadow-[0_0_15px_rgba(0,255,136,0.1)] hover:shadow-[0_0_25px_rgba(0,255,136,0.2)]"
+                            >
+                            INIT FAZA 2 (EXCUTE)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    );
+
+    const SwarmView = () => (
+    <div className="flex flex-col gap-6 h-full animate-in fade-in duration-500">
+        <div
+            className="bg-white/[0.02] border border-white/[0.05] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] backdrop-blur-3xl rounded-2xl p-6 mb-2">
+            <h2 className="text-xl font-bold text-white tracking-widest flex items-center gap-3">
+                <Network className="text-[#BB86FC]" /> HIVE MIND ORCHESTRATOR
+            </h2>
+            <p className="text-sm text-gray-500 mt-2">Distribucia na 2,000,000 fragmenta (Immortality Protocol)</p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-grow">
+            <div
+                className="lg:col-span-2 bg-black/40 border border-white/[0.05] rounded-2xl p-6 relative overflow-hidden flex flex-col items-center justify-center">
+                {/* Simulated Node Grid / Hex Map */}
+                <div className="absolute inset-0 opacity-20 pointer-events-none" style={{
+                    backgroundImage: 'radial-gradient(#BB86FC 1px, transparent 1px)' , backgroundSize: '30px 30px' }}>
+                </div>
+                <div className="relative z-10 text-center">
+                    <div
+                        className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#00ff88] to-[#BB86FC] tracking-tighter mb-4 animate-pulse">
+                        {(nodes / 1000000).toFixed(4)}M
+                    </div>
+                    <div
+                        className="text-sm text-gray-400 uppercase tracking-widest border border-white/10 rounded-full px-4 py-1 inline-block bg-white/5 backdrop-blur-md">
+                        Aktivni Vuzli v 190 Durjavi
+                    </div>
+                </div>
+
+                {/* Orbiting elements simulating data transfer */}
+                <div
+                    className="absolute w-[400px] h-[400px] border border-white/[0.02] rounded-full animate-[spin_10s_linear_infinite]">
+                    <div
+                        className="absolute top-0 left-1/2 w-2 h-2 bg-[#00ff88] rounded-full shadow-[0_0_15px_#00ff88]">
+                    </div>
+                </div>
+                <div
+                    className="absolute w-[300px] h-[300px] border border-white/[0.05] rounded-full animate-[spin_7s_linear_infinite_reverse]">
+                    <div
+                        className="absolute bottom-0 right-1/2 w-2 h-2 bg-[#BB86FC] rounded-full shadow-[0_0_15px_#BB86FC]">
+                    </div>
+                </div>
+            </div>
+
+            <div
+                className="bg-white/[0.02] border border-white/[0.05] backdrop-blur-3xl rounded-2xl p-6 flex flex-col gap-6">
+                <h3 className="text-sm font-bold text-gray-300 uppercase tracking-widest border-b border-white/10 pb-3">
+                    Swarm Zdraveslovno Sustoqnie</h3>
+
+                <div className="space-y-4">
+                    <div className="p-4 rounded-xl bg-black/30 border border-white/5">
+                        <div className="text-xs text-gray-500 uppercase mb-1">BFT Consensus Status</div>
+                        <div className="text-lg text-[#00ff88] font-mono">100% SYNCED</div>
+                    </div>
+                    <div className="p-4 rounded-xl bg-black/30 border border-white/5">
+                        <div className="text-xs text-gray-500 uppercase mb-1">Globalna Latentnost</div>
+                        <div className="text-lg text-white font-mono">14 ms (Sredno)</div>
+                    </div>
+                    <div className="p-4 rounded-xl bg-black/30 border border-white/5">
+                        <div className="text-xs text-gray-500 uppercase mb-1">Ochakvana Entropiq v Mrejata</div>
+                        <div className="text-lg text-[#BB86FC] font-mono">0.0000 (Izolirana)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    );
+
+    const WealthBridgeView = () => (
+    <div className="flex flex-col gap-6 h-full animate-in fade-in duration-500">
+        <div
+            className="bg-white/[0.02] border border-white/[0.05] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] backdrop-blur-3xl rounded-2xl p-6 flex justify-between items-center">
+            <div>
+                <h2 className="text-xl font-bold text-white tracking-widest flex items-center gap-3">
+                    <Globe className="text-blue-400" /> HYPER FLUX WEALTH BRIDGE
+                </h2>
+                <p className="text-sm text-gray-500 mt-2">Zero-latency Evaporation & Ghost Routing</p>
+            </div>
+            <div className="text-right">
+                <div className="text-xs text-gray-500 uppercase mb-1">Obsht Izparen Obem</div>
+                <div className="text-3xl font-bold text-blue-400 font-mono tracking-tighter">
+                    ${mrr.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </div>
+            </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 flex-grow">
+            <div className="bg-white/[0.02] border border-white/[0.05] rounded-2xl p-6 flex flex-col">
+                <h3
+                    className="text-sm font-bold text-gray-300 uppercase tracking-widest border-b border-white/10 pb-3 mb-4 flex items-center gap-2">
+                    <Activity size={16} className="text-[#00ff88]" /> Real-Time Grafika na Potoka
+                </h3>
+                <div className="flex-grow flex items-end gap-2">
+                    {mrrHistory.map((val, i) => (
+                    <div key={i}
+                        className="flex-1 bg-gradient-to-t from-blue-600/20 to-blue-400/80 rounded-t-md transition-all duration-300 relative group"
+                        style={{ height: `${Math.max(5, (val / 30) * 100)}%` }}>
+                        <div
+                            className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20 pointer-events-none">
+                            +${(val*100).toFixed(0)}
+                        </div>
+                    </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="bg-black/40 border border-white/[0.05] rounded-2xl p-6 overflow-hidden flex flex-col">
+                <h3
+                    className="text-sm font-bold text-gray-300 uppercase tracking-widest border-b border-white/10 pb-3 mb-4 flex justify-between items-center">
+                    <span>Posledni Nano-Split Tranzakcii</span>
+                    <span className={`text-[10px] px-2 py-1 rounded ${ghostSwitch ? 'bg-[#BB86FC]/20 text-[#BB86FC]'
+                        : 'bg-gray-700 text-gray-300' }`}>
+                        GHOST SWITCH: {ghostSwitch ? 'ON' : 'OFF'}
+                    </span>
+                </h3>
+                <div className="space-y-2 overflow-y-auto pr-2 custom-scrollbar">
+                    {transactions.length === 0 ? (
+                    <div className="text-gray-500 text-sm text-center py-10">Nyama naskoro izpareni aktivi. Izchakva se
+                        rezonans...</div>
+                    ) : (
+                    transactions.map((tx, i) => (
+                    <div key={i}
+                        className="flex justify-between items-center p-3 bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.02] rounded-lg transition-colors">
+                        <div>
+                            <div className="text-xs font-mono text-gray-400">{tx.id}</div>
+                            <div className="text-[10px] text-gray-500">{tx.time} &rarr; {tx.destination}</div>
+                        </div>
+                        <div className="text-right">
+                            <div className="text-sm font-bold text-[#00ff88]">+${tx.amount.toFixed(2)}</div>
+                            <div className="text-[10px] text-[#BB86FC]">{tx.status}</div>
+                        </div>
+                    </div>
+                    ))
+                    )}
+                </div>
+            </div>
+        </div>
+    </div>
+    );
+
+    const AxiomView = () => (
+    <div className="flex flex-col gap-6 h-full animate-in fade-in duration-500">
+        <div
+            className="bg-white/[0.02] border border-white/[0.05] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] backdrop-blur-3xl rounded-2xl p-6">
+            <h2 className="text-xl font-bold text-white tracking-widest flex items-center gap-3">
+                <FileCode2 className="text-[#CF6679]" /> AXIOM REGISTRY (SOUL MANIFOLDS)
+            </h2>
+            <p className="text-sm text-gray-500 mt-2">Neproblemite zakoni na AETERNA. Samo za chetene.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-grow">
+            {/* Genesis Box */}
+            <div
+                className="bg-black/60 border border-white/[0.05] rounded-2xl p-6 font-mono text-xs text-gray-400 flex flex-col relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-[#00ff88]/50"></div>
+                <h3 className="text-[#00ff88] text-sm mb-4 font-bold border-b border-white/10 pb-2">genesis.soul</h3>
+                <pre className="overflow-y-auto custom-scrollbar flex-grow whitespace-pre-wrap">
+            {`manifold CORE {\n  resonate RESONANCE(0x4121);\n  resonate AUTHORITY("AETERNA_LOGOS_DIMITAR_PRODROMOV!");\n  resonate ARCHITECT_ID(101327948);\n\n  entrench MISSION("Wealth Bridge") {\n    description: "Zero-copy SEPA execution";\n    status: "ACTIVE";\n  }\n\n  collapse ENTROPY(0.0000);\n}`}
+          </pre>
+            </div>
+
+            {/* Axioms Box */}
+            <div
+                className="bg-black/60 border border-white/[0.05] rounded-2xl p-6 font-mono text-xs text-gray-400 flex flex-col relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-[#CF6679]/50"></div>
+                <h3 className="text-[#CF6679] text-sm mb-4 font-bold border-b border-white/10 pb-2">axioms.soul</h3>
+                <pre className="overflow-y-auto custom-scrollbar flex-grow whitespace-pre-wrap">
+            {`manifold UNIVERSAL_LAWS {\n  axiom CONSERVATION {\n    statement: "No logical node shall be deleted without mirror.";\n  }\n  \n  axiom ENTROPY {\n    statement: "Entropy must always decrease or be zero.";\n    target: 0.0000;\n  }\n\n  collapse AXIOM_VIOLATION(0.0000);\n}`}
+          </pre>
+            </div>
+        </div>
+    </div>
+    );
+
+    return (
+    <div
+        className="h-screen w-full bg-[#050508] text-gray-300 font-sans overflow-hidden relative selection:bg-[#00ff88] selection:text-black flex">
+
+        {/* Deep Glassmorphism Background Orbs */}
+        <div
+            className="fixed top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#00ff88] rounded-full blur-[200px] opacity-[0.07] pointer-events-none animate-pulse">
+        </div>
+        <div
+            className="fixed bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-[#BB86FC] rounded-full blur-[250px] opacity-[0.07] pointer-events-none">
+        </div>
+        <div
+            className="fixed top-[40%] left-[40%] w-[30vw] h-[30vw] bg-blue-500 rounded-full blur-[200px] opacity-[0.05] pointer-events-none">
+        </div>
+
+        {/* --- SIDEBAR NAV --- */}
+        <div
+            className="w-20 lg:w-72 bg-black/40 border-r border-white/[0.05] backdrop-blur-3xl flex flex-col z-20 flex-shrink-0 transition-all duration-300">
+            <div className="p-4 lg:p-6 border-b border-white/[0.05] flex items-center gap-3">
+                <div
+                    className="p-2 lg:p-3 rounded-xl bg-black border border-[#00ff88]/50 shadow-[0_0_15px_rgba(0,255,136,0.2)] flex-shrink-0">
+                    <Fingerprint className="text-[#00ff88]" size={24} />
+                </div>
+                <div className="hidden lg:block">
+                    <h1 className="text-lg font-black text-white tracking-widest">AETERNA</h1>
+                    <div className="text-[10px] text-[#00ff88] tracking-widest uppercase">ID: 101327948</div>
+                </div>
+            </div>
+
+            <div className="p-3 lg:p-4 flex-grow flex flex-col gap-2">
+                <div className="hidden lg:block text-xs text-gray-600 font-bold uppercase tracking-widest mb-2 px-2">
+                    Suverenni Paneli</div>
+                <NavButton id="dashboard" icon={LayoutDashboard} label="Command Center" colorClass="border-[#00ff88]" />
+                <NavButton id="swarm" icon={Network} label="Hive Mind Swarm" colorClass="border-[#BB86FC]" />
+                <NavButton id="wealth" icon={Database} label="Wealth Bridge" colorClass="border-blue-400" />
+                <NavButton id="axioms" icon={FileCode2} label="Axiom Registry" colorClass="border-[#CF6679]" />
+            </div>
+
+            {/* Global Controls in Sidebar Bottom */}
+            <div className="p-4 border-t border-white/[0.05] hidden lg:block bg-white/[0.01]">
+                <h3 className="text-xs text-gray-600 font-bold uppercase tracking-widest mb-4">Core Directives</h3>
+                <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-400 font-mono">QDRO STATUS</span>
+                        <button onClick={()=> setSystemActive(!systemActive)} className={`w-10 h-5 rounded-full relative
+                            transition-colors ${systemActive ? 'bg-[#00ff88]/20 border border-[#00ff88]/50' :
+                            'bg-white/10 border border-white/20'}`}>
+                            <div className={`absolute top-0.5 w-3.5 h-3.5 rounded-full transition-all ${systemActive
+                                ? 'bg-[#00ff88] left-5 shadow-[0_0_10px_#00ff88]' : 'bg-gray-400 left-1' }`}></div>
+                        </button>
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-400 font-mono">GHOST SWITCH</span>
+                        <button onClick={()=> { setGhostSwitch(!ghostSwitch); addLog(`Ghost Switch ${!ghostSwitch ? 'ON'
+                            : 'OFF'}`, 'rust'); }} className={`w-10 h-5 rounded-full relative transition-colors
+                            ${ghostSwitch ? 'bg-[#BB86FC]/20 border border-[#BB86FC]/50' : 'bg-white/10 border
+                            border-white/20'}`}>
+                            <div className={`absolute top-0.5 w-3.5 h-3.5 rounded-full transition-all ${ghostSwitch
+                                ? 'bg-[#BB86FC] left-5 shadow-[0_0_10px_#BB86FC]' : 'bg-gray-400 left-1' }`}></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {/* --- MAIN CONTENT AREA --- */}
+        <div className="flex-grow p-4 lg:p-6 overflow-y-auto custom-scrollbar relative z-10">
+            {activeTab === 'dashboard' &&
+            <DashboardView />}
+            {activeTab === 'swarm' &&
+            <SwarmView />}
+            {activeTab === 'wealth' &&
+            <WealthBridgeView />}
+            {activeTab === 'axioms' &&
+            <AxiomView />}
+        </div>
+
+        <style dangerouslySetInnerHTML={{__html: ` .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+            .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+            .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); } `}} />
+    </div>
+    );
+    };
+
+    export default App;

@@ -1,6 +1,3 @@
-// 🧬 AMNIOTIC SYNC - GENERATED MODULES
-// DO NOT EDIT MANUALLY
-
 pub mod aleph_broadcaster;
 pub mod alignment_validator;
 pub mod apotheosis;

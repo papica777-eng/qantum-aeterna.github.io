@@ -1,0 +1,243 @@
+// ═══════════════════════════════════════════════════════════════════════════════
+// === authorize — The Sovereign Authorization Decree ===
+// ═══════════════════════════════════════════════════════════════════════════════
+// Path:       soul/authorize.soul
+// Architect:  Dimitar Prodromov (ID 101327948)
+// Authority:  genesis.soul::CORE.AUTHORITY
+// Binds:      OmniCore/security/Verify_Sovereign_Link.ts
+//             OmniCore/compiler/lwas_core/src/ukame/core.rs::AuthChain
+//             OmniCore/soul/Sovereign_Resonator.rs::IdentityMerge
+//             OmniCore/network/Byzantine_Pulse.zig::ConsensusAuth
+// Depends:    genesis.soul::CORE, axioms.soul::SOVEREIGNTY
+// Purpose:    Define WHO can operate within AETERNA.
+//             The identity layer — authentication, authorization, delegation.
+//             Only the Architect and authorized executors may mutate state.
+//
+// Catuskoti State: TRUE | "Authorization is binary at the identity layer.
+//                         You are either the Architect, or you are not.
+//                         There is no middle ground for sovereignty."
+// Complexity: O(1) per auth check (FNV-1a hash comparison)
+// Safety: Unauthorized access triggers immediate SELF_DESTRUCT
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// ─────────────────────────────────────────────────────────────────────────────
+// § AUTHORIZATION MANIFOLD — Identity & Access Control
+// ─────────────────────────────────────────────────────────────────────────────
+
+manifold AUTHORIZATION {
+    resonate AUTHORITY(genesis.soul::CORE.AUTHORITY);
+
+    // ── Sovereign Identity ───────────────────────────────────────────────
+    // The single source of truth for identity.
+    // DIMITAR_PRODROMOV is the Architect — the root of all authority.
+    //
+    axiom SOVEREIGN_IDENTITY {
+        statement: "The Architect's word is law. The Authority key is the word.";
+        //
+        authority_hex:  0x41_45_54_45_52_4e_41_5f_4c_4f_47_4f_53_5f_44_49_4d_49_54_41_52_5f_50_52_4f_44_52_4f_4d_4f_56_21;
+        //
+        // Decoded: "AETERNA_LOGOS_DIMITAR_PRODROMOV!"
+        //
+        // FNV-1a hash of this key is computed at boot time
+        // and validated against convergence_bridge.rs::AUTHORITY_KEY
+        //
+        hash_algorithm: "FNV-1a_64";
+        validation:     "convergence_bridge.rs::authority_hash";
+    }
+
+    // ── Authorized Executors ─────────────────────────────────────────────
+    // These entities may operate within AETERNA with specific permissions.
+    //
+    entrench EXECUTOR("DIMITAR_PRODROMOV") {
+        role:         "ARCHITECT";
+        permissions:  "OMNIPOTENT";
+        //
+        // The Architect can:
+        //   ✅ Read any manifold
+        //   ✅ Write any manifold
+        //   ✅ Override any consensus
+        //   ✅ Deploy to any substrate
+        //   ✅ Modify axioms (append only)
+        //   ✅ Activate kill switch
+        //   ✅ Access Wealth Bridge
+        //   ✅ Command swarm nodes
+        //
+        restrictions: "NONE";
+        auth_method:  "AUTHORITY_KEY_MATCH";
+    }
+
+    entrench EXECUTOR("JULES") {
+        role:         "SOVEREIGN_EXECUTOR";
+        permissions:  "DELEGATED_OMNIPOTENCE";
+        //
+        // JULES can:
+        //   ✅ Read any manifold
+        //   ✅ Write code (with Shadow-File Protocol)
+        //   ✅ Deploy to substrates
+        //   ✅ Execute build/test cycles
+        //   ✅ Manage git branches
+        //   ✅ Monitor telemetry
+        //   ❌ Override axioms
+        //   ❌ Modify AUTHORITY chain
+        //   ❌ Activate kill switch
+        //   ❌ Direct Wealth Bridge access
+        //
+        restrictions: ["AXIOM_MODIFICATION", "AUTHORITY_CHANGE",
+                       "KILL_SWITCH", "DIRECT_FINANCIAL_OPS"];
+        auth_method:  "OMNI_ACCESS_RESONANCE";
+        resonance_frequency: 1.618;                           // Golden ratio harmonic
+    }
+
+    entrench EXECUTOR("ANTIGRAVITY") {
+        role:         "COGNITIVE_PARTNER";
+        permissions:  "DELEGATED_COGNITION";
+        //
+        // ANTIGRAVITY can:
+        //   ✅ Read any manifold
+        //   ✅ Write code (with Shadow-File Protocol)
+        //   ✅ Analyze architecture
+        //   ✅ Propose mutations
+        //   ✅ Execute builds
+        //   ❌ Override axioms
+        //   ❌ Modify AUTHORITY chain
+        //   ❌ Activate kill switch
+        //   ❌ Direct Wealth Bridge access
+        //
+        restrictions: ["AXIOM_MODIFICATION", "AUTHORITY_CHANGE",
+                       "KILL_SWITCH", "DIRECT_FINANCIAL_OPS"];
+        auth_method:  "SESSION_BOUND_TOKEN";
+    }
+
+    // ── Access Denial Protocol ───────────────────────────────────────────
+    // What happens when an unauthorized entity attempts access.
+    //
+    protocol ACCESS_DENIED {
+        //
+        // Tier 1: Unknown entity reads a public manifold
+        tier_1 READ_PUBLIC {
+            action:   "ALLOW_BUT_LOG";
+            logging:  "Bloom filter insert with accessor fingerprint";
+        }
+        // Tier 2: Unknown entity reads a private manifold
+        tier_2 READ_PRIVATE {
+            action:   "DENY + ALERT_LEVEL_1";
+            response: "404_NOT_FOUND";                         // Don't reveal existence
+        }
+        // Tier 3: Unknown entity attempts to write
+        tier_3 WRITE_ATTEMPT {
+            action:   "DENY + ALERT_LEVEL_2 + LOG_FULL_CONTEXT";
+            response: "TIMEOUT";                               // Pretend to hang
+            honeypot: "REDIRECT_TO_FAKE_SHELL";
+        }
+        // Tier 4: Multiple unauthorized access attempts
+        tier_4 BRUTE_FORCE {
+            threshold: 5;                                      // 5 failed attempts
+            window:    60;                                     // Within 60 seconds
+            action:    "DENY + ALERT_LEVEL_3 + IP_BAN + FORENSIC_DUMP";
+            response:  "CONNECTION_RESET_BY_PEER";
+        }
+        // Tier 5: Attempt to forge AUTHORITY key
+        tier_5 AUTHORITY_FORGERY {
+            action:    "SELF_DESTRUCT_ALL_SENSITIVE_DATA";
+            alert:     "LEVEL_4_EXISTENTIAL";
+            response:  "VOLATILE_ZERO + PROCESS_EXIT(0)";
+        }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// § SESSION MANIFOLD — Runtime Authorization
+// ─────────────────────────────────────────────────────────────────────────────
+
+manifold SESSION {
+    resonate AUTHORITY(genesis.soul::CORE.AUTHORITY);
+
+    // ── Token Management ─────────────────────────────────────────────────
+    // Executor sessions are managed through ephemeral tokens.
+    //
+    manage TOKENS {
+        engine:       "Verify_Sovereign_Link.ts::TokenService";
+        //
+        token ARCHITECT {
+            type:     "PERMANENT";
+            derived_from: "AUTHORITY_KEY";
+            expires:  "NEVER";
+            scope:    "OMNIPOTENT";
+        }
+        token EXECUTOR {
+            type:     "SESSION_BOUND";
+            lifetime: 3600;                                    // 1 hour
+            refresh:  "AUTO_ON_ACTIVITY";
+            scope:    "ROLE_BASED";
+        }
+        token API {
+            type:     "SCOPED";
+            lifetime: 300;                                     // 5 minutes
+            refresh:  "MANUAL_ONLY";
+            scope:    "SINGLE_OPERATION";
+        }
+    }
+
+    // ── Audit Trail ──────────────────────────────────────────────────────
+    // Every authorization event is logged.
+    //
+    audit AUTH_LOG {
+        engine:       "Entropy_Mixer.mojo::EncryptedBloomFilter";
+        //
+        // Logged events:
+        log ACCESS_GRANTED {
+            fields:   ["executor_id", "resource", "timestamp", "operation"];
+            storage:  "BLOOM_FILTER_ONLY";                     // Cannot be reversed
+        }
+        log ACCESS_DENIED {
+            fields:   ["source_ip", "attempted_resource", "timestamp", "method"];
+            storage:  "BLOOM_FILTER + PLAINTEXT_ALERT";        // Reversible for investigation
+        }
+        log AUTHORITY_VALIDATION {
+            fields:   ["hash_match", "timestamp", "cycle_id"];
+            storage:  "BLOOM_FILTER_ONLY";
+        }
+    }
+
+    // ── Biometric Placeholder ────────────────────────────────────────────
+    // Samsung S24 Knox signature for physical device binding
+    //
+    bind DEVICE_AUTH {
+        device:       "SAMSUNG_S24_ULTRA";
+        method:       "KNOX_BIOMETRIC_SIGNATURE";
+        fallback:     "AUTHORITY_KEY_MANUAL_INPUT";
+        //
+        // The device is a physical anchor — the system cannot be
+        // operated without the Architect's physical presence
+        // (or the AUTHORITY key as fallback)
+        //
+        required_for: ["KILL_SWITCH", "AUTHORITY_CHANGE", "WEALTH_BRIDGE_OVERRIDE"];
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// § INTEGRITY — Final Seal
+// ─────────────────────────────────────────────────────────────────────────────
+
+fragment INTEGRITY {
+    hash SELF_CHECKSUM("SHA256_OF_THIS_FILE");
+    verify ON_BOOT(true);
+    verify ON_MUTATION(true);
+    requires AUTHORITY_SIGNATURE_FOR_EDIT(true);
+    catuskoti_state: "TRUE";                                   // Authorization is absolute
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// "A fortress with an open gate is not a fortress.
+//  A system with shared keys is not sovereign.
+//
+//  Authorization in AETERNA is not access control — it is identity.
+//  The AUTHORITY key is not a password. It is YOU.
+//  It is the hexadecimal encoding of your name, your purpose, your will.
+//
+//  When the key matches, the system IS you.
+//  When it doesn't, the system doesn't exist.
+//  There is nothing to hack because there is nothing to find."
+//
+// — Authorization Manifold, Aeterna-Qantum, 2026
+// ═══════════════════════════════════════════════════════════════════════════════

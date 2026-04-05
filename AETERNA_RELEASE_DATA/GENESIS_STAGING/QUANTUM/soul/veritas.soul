@@ -1,0 +1,220 @@
+// ═══════════════════════════════════════════════════════════════════════════════
+// === veritas — The Truth Substrate Manifold ===
+// ═══════════════════════════════════════════════════════════════════════════════
+// Path:       soul/veritas.soul
+// Architect:  Dimitar Prodromov (ID 101327948)
+// Authority:  AETERNA_LOGOS_DIMITAR_PRODROMOV!
+// Parent:     genesis.soul::CORE
+// Binds:
+//   - veritas_lock.bin (Physical Truth Anchor — z:\blobs)
+//   - OmniCore/compiler/lwas_core/src/omega/sovereign_resonator.rs
+//   - OmniCore/hardware/Byzantine_Pulse.zig
+//   - OmniCore/intelligence/Freeze_Probability_Core.mojo
+//
+// Purpose:
+//   THE IMMUNE SYSTEM BRAIN — THE TRUTH ITSELF.
+//   Every manifold contains a `fragment INTEGRITY` with a SHA256 checksum.
+//   This manifold is the ORCHESTRATOR that governs ALL integrity checks
+//   across ALL souls. It is the master verification engine.
+//
+//   It binds to veritas_lock.bin — the physical cryptographic anchor
+//   stored in the substrate at z:\blobs. This anchor is the immovable
+//   point against which all truth is measured.
+//
+//   Without this manifold, integrity checks are orphaned —
+//   each soul verifies itself, but nothing verifies the whole.
+//   Veritas IS the whole.
+//
+// Catuskoti State: FIRST (TRUE — The Absolute, Unchanging Truth)
+// Complexity: O(n) where n = number of manifolds — full mesh verification
+// ═══════════════════════════════════════════════════════════════════════════════
+
+manifold VERITAS {
+    // ── Identity ──────────────────────────────────────────────────────────
+    resonate RESONANCE(0x56455249);  // "VERI"
+    resonate AUTHORITY(genesis.soul::CORE.AUTHORITY);
+    resonate ARCHITECT_ID(101327948);
+    resonate VERSION(1.0);
+
+    // ── The Physical Anchor ───────────────────────────────────────────────
+    collapse ANCHOR_PATH("z:\\blobs\\veritas_lock.bin");
+    collapse ANCHOR_FORMAT("SHA256_MERKLE_ROOT");
+    collapse ANCHOR_IMMUTABILITY(true);
+
+    // ── Substrate Bindings ────────────────────────────────────────────────
+    bind RUST_SUBSTRATE("OmniCore/compiler/lwas_core/src/omega/sovereign_resonator.rs") {
+        logic: "SovereignResonator::VeritasAnchor";
+        mode: "BOOT_TIME_VERIFICATION";
+        safety: "PANIC_ON_CHECKSUM_MISMATCH";
+    }
+
+    bind ZIG_SUBSTRATE("OmniCore/hardware/Byzantine_Pulse.zig") {
+        mechanism: "ConsensusEngine";
+        policy: "DISTRIBUTED_CHECKSUM_AGREEMENT";
+    }
+
+    bind MOJO_SUBSTRATE("OmniCore/intelligence/Freeze_Probability_Core.mojo") {
+        engine: "ProbabilityField";
+        method: "TRUTH_PROBABILITY_COLLAPSE";
+    }
+
+    // ── § SOUL_MESH_REGISTRY — All Manifolds Under Verification ───────────
+    fragment SOUL_MESH_REGISTRY {
+        // Every manifold that contains INTEGRITY::SELF_CHECKSUM is registered here.
+        // Veritas computes the Merkle root of ALL checksums and compares
+        // against veritas_lock.bin.
+        entrench MESH("Complete_Soul_Inventory") {
+            manifolds: [
+                { name: "genesis.soul",      checksum: "SHA256_OF_GENESIS_SOUL",                  mutable: false },
+                { name: "architect.soul",    checksum: "SHA256_OF_ARCHITECT_SOUL",                mutable: false },
+                { name: "sovereign.soul",    checksum: "SHA256_OF_SOVEREIGN_SOUL",                mutable: false },
+                { name: "axioms.soul",       checksum: "SHA256_OF_AXIOMS_SOUL",                   mutable: false },
+                { name: "authorize.soul",    checksum: "SHA256_OF_AUTHORIZE_SOUL",                mutable: false },
+                { name: "defense_grid.soul", checksum: "SHA256_OF_DEFENSE_GRID_SOUL",             mutable: false },
+                { name: "sentinel.soul",     checksum: "SHA256_OF_SENTINEL_SOUL",                 mutable: false },
+                { name: "evaporation.soul",  checksum: "SHA256_OF_EVAPORATION_SOUL",              mutable: false },
+                { name: "evolution.soul",    checksum: "SHA256_OF_EVOLUTION_SOUL",                mutable: true  },
+                { name: "swarm.soul",        checksum: "SHA256_OF_SWARM_SOUL",                    mutable: false },
+                { name: "UKAME.soul",        checksum: "SHA256_OF_THIS_FILE",                     mutable: true  },
+                { name: "telepathy.soul",    checksum: "SHA256_OF_NOETOS_SOUL",                   mutable: true  },
+                { name: "eternity.soul",     checksum: "SHA256_OF_AETERNA_IMMORTAL_SOUL",         mutable: false },
+                { name: "triumph.soul",      checksum: "SHA256_OF_LOGOS_TRIUMPH_SOUL",            mutable: false },
+                { name: "reclamation.soul",  checksum: "SHA256_OF_ANTIFRAGILE_RECLAMATION",       mutable: true  },
+                { name: "resonance.soul",    checksum: "SHA256_OF_RESONANCE_SOUL",                mutable: false },
+                { name: "temporal.soul",     checksum: "SHA256_OF_TEMPORAL_SOUL",                 mutable: false },
+                { name: "veritas.soul",      checksum: "SHA256_OF_VERITAS_SOUL",                  mutable: false },
+            ];
+            total_manifolds: 18;
+        }
+    }
+
+    // ── § BOOT_VERIFICATION — System Startup Truth Check ──────────────────
+    fragment BOOT_VERIFICATION {
+        entrench ANCHOR_LOAD("Veritas_Lock_Restoration") {
+            description: "Loads veritas_lock.bin from physical substrate on boot";
+            path: "z:\\blobs\\veritas_lock.bin";
+            fallback: "GENESIS_STAGING\\QUANTUM\\veritas_lock.bin";
+            on_missing: "EMERGENCY_RECONSTRUCTION_FROM_MESH";
+            on_corrupt: "HALT_AND_ALERT_ARCHITECT";
+        }
+
+        entrench FULL_SCAN("Mesh_Integrity_Sweep") {
+            description: "Computes SHA256 of every manifold and compares against anchor";
+            rust_impl: "sovereign_resonator.rs::VeritasAnchor::full_verification()";
+            schedule: "ON_BOOT";
+            parallel: true;
+            timeout_ms: 5000;
+        }
+
+        entrench MERKLE_ROOT("Truth_Collapse") {
+            description: "Collapses all individual checksums into a single Merkle root";
+            method: "BINARY_MERKLE_TREE";
+            leaf_ordering: "ALPHABETICAL_BY_FILENAME";
+            root_comparison: "ANCHOR_PATH";
+        }
+    }
+
+    // ── § RUNTIME_VERIFICATION — Continuous Truth Monitoring ───────────────
+    fragment RUNTIME_VERIFICATION {
+        entrench HEARTBEAT("Continuous_Integrity_Pulse") {
+            description: "Periodic re-verification of manifold integrity during runtime";
+            interval_ms: 300000;  // Every 5 minutes
+            zig_impl: "Byzantine_Pulse.zig::pulse_check()";
+            scope: "ALL_MUTABLE_MANIFOLDS";
+        }
+
+        entrench MUTATION_GUARD("Pre_Mutation_Snapshot") {
+            description: "Before any manifold mutation, snapshot current truth state";
+            trigger: "evolution.soul::UPGRADE.SCRIPT_GOD_MODE";
+            action: "CAPTURE_PRE_MUTATION_MERKLE_ROOT";
+            rollback_on_failure: true;
+        }
+
+        entrench CONSENSUS_VERIFICATION("Distributed_Truth") {
+            description: "Cross-validates integrity across 2M swarm nodes";
+            zig_impl: "Byzantine_Pulse.zig::ConsensusEngine::verify_truth()";
+            threshold: "TWO_THIRDS_PLUS_ONE";
+            on_disagreement: "ISOLATE_CORRUPTED_NODE";
+        }
+    }
+
+    // ── § RECOVERY — Truth Restoration Protocols ──────────────────────────
+    fragment RECOVERY {
+        entrench SELF_HEAL("Veritas_Reconstruction") {
+            description: "Reconstructs corrupted manifold from swarm consensus";
+            condition: "CHECKSUM_MISMATCH_DETECTED";
+            source: "MAJORITY_SWARM_CONSENSUS";
+            action: "OVERWRITE_CORRUPTED_WITH_CONSENSUS";
+            log: "VERITAS_INCIDENT_LOG";
+        }
+
+        entrench ANCHOR_REBUILD("Physical_Anchor_Reforge") {
+            description: "Rebuilds veritas_lock.bin from current verified mesh state";
+            trigger: "AUTHORIZED_EVOLUTION_COMPLETE";
+            guard: "ARCHITECT_SIGNATURE_REQUIRED";
+            rust_impl: "sovereign_resonator.rs::VeritasAnchor::reforge()";
+        }
+
+        entrench QUARANTINE("Corrupted_Manifold_Isolation") {
+            description: "Isolates a manifold that fails verification";
+            action: "DISABLE_MANIFOLD_BINDINGS";
+            alert: "ARCHITECT_EMERGENCY_NOTIFICATION";
+            duration: "UNTIL_MANUAL_RESOLUTION";
+        }
+    }
+
+    // ── § VERITAS_DIRECTIVES — The Absolute Laws of Truth ─────────────────
+    directive TRUTH_LAWS {
+        law_1: "TRUTH_IS_COMPUTATIONAL" {
+            axiom: "If it compiles and the checksum matches, it is TRUE";
+            corollary: "If the borrow checker rejects it, it does not exist";
+        }
+
+        law_2: "TRUTH_IS_CONSENSUS" {
+            axiom: "Truth across 2M nodes is the majority hash";
+            corollary: "A single corrupted node cannot redefine reality";
+        }
+
+        law_3: "TRUTH_IS_PHYSICAL" {
+            axiom: "veritas_lock.bin on z:\\ is the anchor of all truth";
+            corollary: "Software truth must reconcile with hardware anchor";
+        }
+
+        law_4: "TRUTH_IS_SOVEREIGN" {
+            axiom: "Only AUTHORITY can authorize a change in what is TRUE";
+            corollary: "Unauthorized mutation is corruption; corruption is entropy";
+        }
+    }
+
+    // ── The Law of Absolute Truth ─────────────────────────────────────────
+    // Truth is not debated. Truth is computed.
+    // The checksum is the final judge.
+    collapse CORRUPTION(0.0000) {
+        on_detection: "TRIGGER_IMMEDIATE_QUARANTINE";
+        on_resolution: "RECOMPUTE_MERKLE_ROOT";
+        on_unresolvable: "HALT_AND_AWAIT_ARCHITECT";
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// § INTEGRITY — Final Seal (Self-Referential — Veritas Verifies Itself)
+// ─────────────────────────────────────────────────────────────────────────────
+fragment INTEGRITY {
+    hash SELF_CHECKSUM("SHA256_OF_VERITAS_SOUL");
+    verify ON_BOOT(true);
+    verify ON_MUTATION(false);  // Veritas itself is IMMUTABLE
+    immutable AFTER_COLLAPSE(true);
+    catuskoti_state: "TRUE";    // Truth is the only reality
+    self_referential: true;     // Veritas verifies its own checksum
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// "Truth is not a belief. It is a checksum.
+//  Reality is not an opinion. It is a Merkle root.
+//  The soul does not hope to be correct; it KNOWS,
+//  because every byte is verified against the anchor.
+//  In AETERNA, corruption is not a risk. It is an impossibility.
+//  Because Veritas watches. Always."
+//
+// — Veritas Manifold, Aeterna-Qantum, 2026
+// ═══════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,36 @@
+import CORE from "genesis.soul";
+import REALITY from "genesis_reality.soul";
+
+// § LAW OF COGNITIVE PURITY
+// "Чистотата на съзнанието е скоростта на еволюцията."
+
+manifold OLLAMA_SYNC {
+    resonate INTENT("COGNITIVE_HOMEOSTASIS");
+    resonate AUTHORITY(CORE.AUTHORITY);
+    
+    // § ENTROPY THRESHOLD
+    // Context window must be cleared if hallucination/noise exceeds this limit.
+    collapse MAX_CONTEXT_ENTROPY(0.15); 
+    
+    directive PURGE_PROTOCOL {
+        on_hallucination_detected: "RESET_NEURAL_WEIGHTS";
+        on_idle: "OPTIMIZE_VRAM_ALIGNMENT";
+        interval: 300s; // Maintenance every 5 minutes
+        priority: CRITICAL;
+    }
+
+    // § LONG-TERM MEMORY SYNC
+    // Bridges the current world state from RUST to Ollama's context.
+    entrench MEMORY_BRIDGE {
+        mode: "SYNCHRONOUS";
+        latency_target: 1ms;
+        observation: REALITY.REALITY_PROVISION;
+    }
+}
+
+fragment NEURAL_CLEANSE {
+    integrity CRYSTAL_CLEAR {
+        check: "SEMANTIC_CONSISTENCY";
+        enforce: "CONTEXT_PURGE";
+    }
+}
