@@ -752,21 +752,46 @@ export class VortexSystem extends EventEmitter {
         } catch (e) {}
     }
 
-    // Complexity: O(1) — cached runtime detection
+    // Complexity: O(1) — cached runtime detection with SUBSTRATE_HEALING fallback
     private _mojoAvailable: boolean | null = null;
+    private _mojoPath: string = 'mojo'; // Resolved binary path
 
     private isMojoAvailable(): boolean {
         if (this._mojoAvailable !== null) return this._mojoAvailable;
         const { execSync } = require('child_process');
+        const fs = require('fs');
+
+        // Strategy 1: Check PATH
         try {
             execSync('mojo --version', { stdio: 'pipe', timeout: 3000 });
             this._mojoAvailable = true;
-            this.logger.success('RUNTIME', 'Mojo SDK detected — NATIVE execution mode');
-        } catch {
-            this._mojoAvailable = false;
-            this.logger.warn('RUNTIME', 'Mojo SDK not found — modules will run in SIMULATED mode. Install: https://docs.modular.com/mojo/manual/get-started');
+            this._mojoPath = 'mojo';
+            this.logger.success('RUNTIME', 'Mojo SDK detected in PATH — NATIVE execution mode');
+            return true;
+        } catch {}
+
+        // Strategy 2: SUBSTRATE_HEALING — check known absolute location
+        const KNOWN_MOJO_PATHS = [
+            'C:\\PHANTOM-TEE-FINAL\\bin\\mojo.exe',
+            path.join(process.env.USERPROFILE || '', '.modular', 'bin', 'mojo.exe'),
+            path.join(process.env.USERPROFILE || '', '.modular', 'pkg', 'packages.modular.com_mojo', 'bin', 'mojo.exe'),
+        ];
+
+        for (const candidate of KNOWN_MOJO_PATHS) {
+            try {
+                if (fs.existsSync(candidate)) {
+                    execSync(`"${candidate}" --version`, { stdio: 'pipe', timeout: 3000 });
+                    this._mojoAvailable = true;
+                    this._mojoPath = `"${candidate}"`;
+                    this.logger.success('RUNTIME', `Mojo SDK recovered at ${candidate} — NATIVE execution mode`);
+                    return true;
+                }
+            } catch {}
         }
-        return this._mojoAvailable;
+
+        this._mojoAvailable = false;
+        this.logger.warn('RUNTIME', 'Mojo SDK not found in PATH or known locations — modules will run in SIMULATED mode');
+        return false;
     }
 
     private executeMojo(filePath: string, callback?: (output: string) => void): string {
@@ -780,7 +805,7 @@ export class VortexSystem extends EventEmitter {
 
         const { execSync } = require('child_process');
         try {
-            const output = execSync(`mojo run ${filePath}`).toString();
+            const output = execSync(`${this._mojoPath} run ${filePath}`).toString();
             if (callback) callback(output);
             return output;
         } catch (e) {
