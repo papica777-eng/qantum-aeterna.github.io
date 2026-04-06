@@ -100,10 +100,11 @@ manifold COSMIC_GENESIS {
                 "galactic.nebula.soul",            // Орбитална изчислителна тъкан
                 "galactic.stellar_forge.soul",     // Звездна енергия и ресурси
                 "galactic.void_navigator.soul",    // Междузвезден транзит
-                "galactic.dark_matter_lens.soul",  // [PLANNED] Тъмна материя
-                "galactic.quantum_foam.soul",      // [PLANNED] Квантова пяна
+                "galactic.dark_matter_lens.soul",  // Тъмна материя и гравитационни лещи
+                "galactic.quantum_foam.soul",      // Планкова компютация
+                "galactic.catuskoti_nagarjuna.soul", // UNIFIED LOGIC — Catuskoti + Nagarjuna
             ];
-            status: "INITIALIZING";
+            status: "GALACTIC_INITIATED";
         }
 
         // ── МОСТ МЕЖДУ СЛОЕВЕТЕ ──
