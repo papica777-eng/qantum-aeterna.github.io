@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Cancelled - Aeterna Nexus</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --accent-red: #ff3366;
+            --glass-bg: rgba(10, 10, 15, 0.7);
+            --glass-border: rgba(255, 51, 102, 0.15);
+        }
+        body {
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(255, 51, 102, 0.05), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(255, 51, 102, 0.02), transparent 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .cancel-icon {
+            color: var(--accent-red);
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 51, 102, 0.5);
+            font-weight: bold;
+        }
+        .btn-glow {
+            background: rgba(255, 51, 102, 0.1);
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 30px;
+        }
+        .btn-glow:hover {
+            background: var(--accent-red);
+            color: var(--bg-dark);
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.5);
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glass-panel">
+        <div class="cancel-icon">✗</div>
+        <h1 class="text-3xl font-bold mb-4">PAYMENT DECLINED</h1>
+        <p class="text-gray-300 mb-6">
+            The transaction was cancelled or rejected by the payment gateway.
+            Your session has been terminated.
+        </p>
+        <p class="mono">[AETERNA_NEXUS] Transaction aborted. Zero-Entropy maintained.</p>
+        <a href="/" class="btn-glow">RETURN SECURELY</a>
+    </div>
+
+</body>
+</html>
