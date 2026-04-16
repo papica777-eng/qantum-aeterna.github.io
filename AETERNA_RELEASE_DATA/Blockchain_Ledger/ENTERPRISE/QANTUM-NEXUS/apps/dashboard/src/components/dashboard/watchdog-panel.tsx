@@ -1,4 +1,5 @@
 'use client';
+import { useStore } from '@/stores/nexus-store';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
@@ -406,92 +407,62 @@ export function WatchdogPanel() {
   const [activeTab, setActiveTab] = useState<'overview' | 'health' | 'prison'>('overview');
 
   // Neural Link Native Backend State
-  const [watchdogState, setWatchdogState] = useState(WATCHDOG_STATE_DEFAULT);
+  const daemonStatus = useStore(state => state.daemonStatus);
+  const isConnected = useStore(state => state.isConnected);
+  const liveFeed = useStore(state => state.liveFeed);
+  const systemHealth = useStore(state => state.systemHealth);
+  
   const [linkStatus, setLinkStatus] = useState<'AWAITING' | 'CONNECTED' | 'SEVERED'>('AWAITING');
   const [glitchFactor, setGlitchFactor] = useState(0);
   const [externalLogs, setExternalLogs] = useState<string[]>([]);
   
+  // Create derived state matching the old Watchdog format
+  const watchdogState = {
+    status: daemonStatus?.state || 'PATROLLING',
+    uptime: `${Math.floor((daemonStatus?.uptime || 0) / 3600000)}h`,
+    patrolCount: daemonStatus?.metrics?.tasksProcessed || 4521,
+    teleportCount: daemonStatus?.metrics?.errorsHandled || 89,
+    threatsNeutralized: 12, // Derived manually or mocked if missing
+    prisonerCount: 7, // Kept static for mock prison until integrated
+    healthChecks: [
+      { name: 'Data Integrity', status: systemHealth?.overall > 50 ? 'healthy' : 'critical', icon: Database, lastCheck: new Date().toISOString().split('T')[1].slice(0,8) },
+      { name: 'Sensor Pulse', status: isConnected ? 'healthy' : 'critical', icon: Radio, lastCheck: new Date().toISOString().split('T')[1].slice(0,8) },
+      { name: 'Memory Usage', status: 'healthy', icon: Cpu, value: `${systemHealth?.detailed?.memory || 0}%`, lastCheck: new Date().toISOString().split('T')[1].slice(0,8) },
+      { name: 'Disk Space', status: 'healthy', icon: HardDrive, value: '45%', lastCheck: new Date().toISOString().split('T')[1].slice(0,8) }
+    ],
+    recentEvents: liveFeed.length > 0 
+      ? liveFeed.slice(0, 50).map(feed => ({
+          id: feed.id,
+          type: feed.type.toUpperCase(),
+          message: feed.message,
+          time: new Date(feed.timestamp).toLocaleTimeString(),
+          severity: feed.severity ? feed.severity.toLowerCase() : 'info'
+        }))
+      : WATCHDOG_STATE_DEFAULT.recentEvents,
+    prisoners: WATCHDOG_STATE_DEFAULT.prisoners
+  };
+
   const wsRef = useRef<WebSocket | null>(null);
 
-  // Neural Link Binding Object
+  // Sync isConnected with our local internal linkStatus
   useEffect(() => {
-    let reconnectTimer: NodeJS.Timeout;
+    if (isConnected) {
+      setLinkStatus('CONNECTED');
+    } else {
+      setLinkStatus('SEVERED');
+    }
+  }, [isConnected]);
 
-    const establishNeuralLink = () => {
-      try {
-        setLinkStatus('AWAITING');
-        const ws = new WebSocket('ws://localhost:3401/');
-        
-        ws.onopen = () => {
-          setLinkStatus('CONNECTED');
-          setExternalLogs(prev => [...prev, `[NEURAL LINK] Sockets successfully bonded to OmniCore (Port 3401)`]);
-          setWatchdogState(prev => ({
-            ...prev,
-            status: 'NEURAL_LINK_ACTIVE'
-          }));
-        };
-
-        ws.onmessage = (event) => {
-          try {
-            const parsed = JSON.parse(event.data);
-            
-            // Raw log dumping for terminal
-            if (parsed.log) {
-               setExternalLogs(prev => [...prev.slice(-49), `[TELEMETRY] ${parsed.log}`]);
-            }
-
-            if (parsed.type === 'HEARTBEAT' || parsed.type === 'TELEMETRY' || parsed.type === 'STATUS') {
-               setWatchdogState(prev => ({...prev, ...parsed.payload}));
-               if (parsed.payload.healthChecks) {
-                  // Assess severity for glitches
-                  const hasCritical = parsed.payload.healthChecks.some((c: any) => c.status === 'critical');
-                  setGlitchFactor(hasCritical ? 100 : 0);
-               }
-            } else if (parsed.type === 'EVENT') {
-               setWatchdogState(prev => ({
-                 ...prev, 
-                 recentEvents: [parsed.payload, ...prev.recentEvents].slice(0, 50)
-               }));
-               if (parsed.payload.severity === 'critical') setGlitchFactor(100);
-            } else if (parsed.type === 'PRISON_ADMISSION') {
-               setWatchdogState(prev => ({
-                 ...prev,
-                 prisonerCount: prev.prisonerCount + 1,
-                 prisoners: [parsed.payload, ...prev.prisoners]
-               }));
-               setGlitchFactor(100);
-            }
-          } catch(err) {
-            // Ignore corrupted packets
-          }
-        };
-
-        ws.onclose = () => {
-          setLinkStatus('SEVERED');
-          setWatchdogState(prev => ({...prev, status: 'ISOLATED_MOCK_MODE'}));
-          setExternalLogs(prev => [...prev.slice(-49), `[FATAL] Neural Link Severed. Retrying...`]);
-          reconnectTimer = setTimeout(establishNeuralLink, 3000);
-        };
-
-        ws.onerror = () => {
-          ws.close();
-        };
-
-        wsRef.current = ws;
-      } catch (err) {
-        setLinkStatus('SEVERED');
-        reconnectTimer = setTimeout(establishNeuralLink, 3000);
+  // Hook into liveFeed changes to simulate external logs
+  useEffect(() => {
+    if (liveFeed.length > 0) {
+      const latest = liveFeed[0];
+      setExternalLogs(prev => [...prev.slice(-49), `[TELEMETRY] ${latest.message}`]);
+      if (latest.severity === 'CRITICAL' || latest.severity === 'HIGH') {
+        setGlitchFactor(100);
       }
-    };
-
-    if (isActive) establishNeuralLink();
-    else if (wsRef.current) wsRef.current.close();
-
-    return () => {
-      clearTimeout(reconnectTimer);
-      if (wsRef.current) wsRef.current.close();
-    };
-  }, [isActive]);
+    }
+  }, [liveFeed]);
 
   // Handle auto-recovery of glitch effect
   useEffect(() => {
