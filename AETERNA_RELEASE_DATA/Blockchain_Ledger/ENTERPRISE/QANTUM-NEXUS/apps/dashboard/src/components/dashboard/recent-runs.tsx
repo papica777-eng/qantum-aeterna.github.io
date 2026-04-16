@@ -155,7 +155,7 @@ export function RecentRuns() {
           {runs?.map((run) => (
             <Link
               key={run.id}
-              href={`/runs/${run.id}`}
+              href="/runs"
               className="flex items-center justify-between p-4 rounded-lg border hover:bg-accent/50 transition-colors"
             >
               <div className="flex items-center gap-4">

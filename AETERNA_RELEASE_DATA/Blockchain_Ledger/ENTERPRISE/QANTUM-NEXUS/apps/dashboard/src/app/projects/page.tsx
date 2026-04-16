@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import DashboardLayout from '@/components/layout/dashboard-layout';
+import { useStore } from '@/stores/nexus-store';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { 
@@ -36,78 +37,14 @@ interface Project {
   color: string;
 }
 
-const mockProjects: Project[] = [
-  {
-    id: 'proj-001',
-    name: 'E-Commerce Platform',
-    description: 'Main e-commerce application with checkout, payments, and inventory',
-    testsCount: 248,
-    runsCount: 156,
-    passRate: 94.2,
-    lastActivity: '5 minutes ago',
-    members: 8,
-    status: 'active',
-    favorite: true,
-    color: 'from-violet-500 to-purple-600'
-  },
-  {
-    id: 'proj-002',
-    name: 'Mobile API',
-    description: 'REST API for iOS and Android mobile applications',
-    testsCount: 127,
-    runsCount: 89,
-    passRate: 98.5,
-    lastActivity: '2 hours ago',
-    members: 4,
-    status: 'active',
-    favorite: true,
-    color: 'from-cyan-500 to-blue-600'
-  },
-  {
-    id: 'proj-003',
-    name: 'Admin Dashboard',
-    description: 'Internal admin panel for customer support and operations',
-    testsCount: 86,
-    runsCount: 45,
-    passRate: 91.3,
-    lastActivity: '1 day ago',
-    members: 3,
-    status: 'active',
-    favorite: false,
-    color: 'from-emerald-500 to-green-600'
-  },
-  {
-    id: 'proj-004',
-    name: 'Payment Gateway',
-    description: 'Stripe and PayPal integration microservice',
-    testsCount: 64,
-    runsCount: 112,
-    passRate: 99.1,
-    lastActivity: '3 hours ago',
-    members: 5,
-    status: 'active',
-    favorite: false,
-    color: 'from-orange-500 to-red-600'
-  },
-  {
-    id: 'proj-005',
-    name: 'Legacy CRM',
-    description: 'Old customer relationship management system - migrating',
-    testsCount: 42,
-    runsCount: 23,
-    passRate: 76.4,
-    lastActivity: '2 weeks ago',
-    members: 2,
-    status: 'archived',
-    favorite: false,
-    color: 'from-gray-500 to-gray-600'
-  }
-];
-
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState(mockProjects);
+  const projectsStore = useStore((state) => state.projects) || [];
+  const [projects, setProjects] = useState(projectsStore);
   const [searchQuery, setSearchQuery] = useState('');
   const [showArchived, setShowArchived] = useState(false);
+
+  // Sync state
+  if (projectsStore !== projects) setProjects(projectsStore);
 
   const toggleFavorite = (projectId: string) => {
     setProjects(prev => prev.map(p => 

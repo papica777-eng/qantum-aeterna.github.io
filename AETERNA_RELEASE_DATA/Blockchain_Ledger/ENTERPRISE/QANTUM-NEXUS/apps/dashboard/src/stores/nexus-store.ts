@@ -78,7 +78,12 @@ interface NexusState {
   healingEvents: any[];
   insights: any[];
   thoughtFlow: any[];
-  activeThought: any;
+  activeThought: any | null;
+  testCases: any[];
+  testRuns: any[];
+  projects: any[];
+
+  // Actions
   connect: (url?: string) => void;
   disconnect: () => void;
   toggleHealing: () => void;
@@ -102,6 +107,9 @@ export const useStore = create<NexusState>((set, get) => ({
   insights: [],
   thoughtFlow: [],
   activeThought: null,
+  testCases: [],
+  testRuns: [],
+  projects: [],
 
   connect: (url = 'ws://localhost:3401/') => {
     const currentWs = get()._ws;

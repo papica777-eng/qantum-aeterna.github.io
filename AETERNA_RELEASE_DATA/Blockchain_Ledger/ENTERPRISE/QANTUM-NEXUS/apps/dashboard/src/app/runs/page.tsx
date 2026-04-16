@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import DashboardLayout from '@/components/layout/dashboard-layout';
+import { useStore } from '@/stores/nexus-store';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { 
@@ -40,89 +41,6 @@ interface TestRun {
   parallelism: number;
 }
 
-const mockRuns: TestRun[] = [
-  {
-    id: 'run-001',
-    name: 'E2E Tests - Main Suite',
-    status: 'running',
-    progress: 67,
-    totalTests: 48,
-    passedTests: 30,
-    failedTests: 2,
-    duration: '4m 23s',
-    startedAt: '2 minutes ago',
-    branch: 'main',
-    commit: 'a3f2b1c',
-    browser: 'chrome',
-    triggeredBy: 'GitHub Actions',
-    parallelism: 4
-  },
-  {
-    id: 'run-002',
-    name: 'Smoke Tests',
-    status: 'passed',
-    progress: 100,
-    totalTests: 12,
-    passedTests: 12,
-    failedTests: 0,
-    duration: '1m 45s',
-    startedAt: '15 minutes ago',
-    branch: 'feature/auth',
-    commit: 'b5d8e2f',
-    browser: 'chrome',
-    triggeredBy: 'Manual',
-    parallelism: 2
-  },
-  {
-    id: 'run-003',
-    name: 'API Integration Tests',
-    status: 'failed',
-    progress: 100,
-    totalTests: 34,
-    passedTests: 31,
-    failedTests: 3,
-    duration: '2m 12s',
-    startedAt: '1 hour ago',
-    branch: 'develop',
-    commit: 'c9a1f3d',
-    browser: 'firefox',
-    triggeredBy: 'Schedule',
-    parallelism: 3
-  },
-  {
-    id: 'run-004',
-    name: 'Cross-Browser Suite',
-    status: 'passed',
-    progress: 100,
-    totalTests: 24,
-    passedTests: 24,
-    failedTests: 0,
-    duration: '8m 56s',
-    startedAt: '3 hours ago',
-    branch: 'main',
-    commit: 'd2e4f6g',
-    browser: 'safari',
-    triggeredBy: 'GitHub Actions',
-    parallelism: 6
-  },
-  {
-    id: 'run-005',
-    name: 'Regression Tests',
-    status: 'cancelled',
-    progress: 45,
-    totalTests: 86,
-    passedTests: 38,
-    failedTests: 1,
-    duration: '3m 20s',
-    startedAt: '5 hours ago',
-    branch: 'hotfix/payment',
-    commit: 'e8h2i4j',
-    browser: 'edge',
-    triggeredBy: 'Manual',
-    parallelism: 4
-  }
-];
-
 const browserIcons = {
   chrome: '🌐',
   firefox: '🦊',
@@ -138,8 +56,12 @@ const statusConfig = {
 };
 
 export default function RunsPage() {
-  const [runs, setRuns] = useState(mockRuns);
+  const runsStore = useStore((state) => state.testRuns) || [];
+  const [runs, setRuns] = useState(runsStore);
   const [filter, setFilter] = useState<'all' | 'running' | 'passed' | 'failed'>('all');
+
+  // Sync internal state with store
+  if (runsStore !== runs) setRuns(runsStore);
 
   const filteredRuns = runs.filter(run => 
     filter === 'all' ? true : run.status === filter

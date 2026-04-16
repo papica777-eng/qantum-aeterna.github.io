@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import DashboardLayout from '@/components/layout/dashboard-layout';
+import { useStore } from '@/stores/nexus-store';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { 
@@ -36,55 +37,6 @@ interface TestSuite {
   expanded: boolean;
 }
 
-const mockSuites: TestSuite[] = [
-  {
-    id: '1',
-    name: 'Authentication',
-    expanded: true,
-    tests: [
-      { id: '1-1', name: 'User can login with valid credentials', status: 'passed', duration: '2.3s', lastRun: '2 hours ago', priority: 'high' },
-      { id: '1-2', name: 'User cannot login with invalid password', status: 'passed', duration: '1.8s', lastRun: '2 hours ago', priority: 'high' },
-      { id: '1-3', name: 'User can register new account', status: 'failed', duration: '4.5s', lastRun: '2 hours ago', priority: 'high' },
-      { id: '1-4', name: 'Password reset flow works correctly', status: 'passed', duration: '3.2s', lastRun: '2 hours ago', priority: 'medium' },
-      { id: '1-5', name: 'OAuth login with Google', status: 'pending', duration: '-', lastRun: 'Never', priority: 'medium' },
-    ]
-  },
-  {
-    id: '2',
-    name: 'Dashboard',
-    expanded: true,
-    tests: [
-      { id: '2-1', name: 'Dashboard loads with correct data', status: 'passed', duration: '1.5s', lastRun: '1 hour ago', priority: 'high' },
-      { id: '2-2', name: 'Stats cards display correctly', status: 'passed', duration: '0.8s', lastRun: '1 hour ago', priority: 'medium' },
-      { id: '2-3', name: 'Chart renders with mock data', status: 'passed', duration: '1.2s', lastRun: '1 hour ago', priority: 'low' },
-      { id: '2-4', name: 'Recent runs table pagination', status: 'skipped', duration: '-', lastRun: '3 days ago', priority: 'low' },
-    ]
-  },
-  {
-    id: '3',
-    name: 'API Integration',
-    expanded: false,
-    tests: [
-      { id: '3-1', name: 'GET /api/tests returns test list', status: 'passed', duration: '0.5s', lastRun: '30 min ago', priority: 'high' },
-      { id: '3-2', name: 'POST /api/tests creates new test', status: 'passed', duration: '0.7s', lastRun: '30 min ago', priority: 'high' },
-      { id: '3-3', name: 'DELETE /api/tests removes test', status: 'failed', duration: '0.3s', lastRun: '30 min ago', priority: 'medium' },
-      { id: '3-4', name: 'Rate limiting works correctly', status: 'passed', duration: '2.1s', lastRun: '30 min ago', priority: 'high' },
-    ]
-  },
-  {
-    id: '4',
-    name: 'E2E User Flows',
-    expanded: false,
-    tests: [
-      { id: '4-1', name: 'Complete checkout flow', status: 'passed', duration: '8.2s', lastRun: '5 hours ago', priority: 'high' },
-      { id: '4-2', name: 'User profile update', status: 'passed', duration: '3.4s', lastRun: '5 hours ago', priority: 'medium' },
-      { id: '4-3', name: 'Search and filter products', status: 'failed', duration: '5.1s', lastRun: '5 hours ago', priority: 'high' },
-      { id: '4-4', name: 'Add to cart and remove', status: 'passed', duration: '2.8s', lastRun: '5 hours ago', priority: 'high' },
-      { id: '4-5', name: 'Wishlist functionality', status: 'pending', duration: '-', lastRun: 'Never', priority: 'low' },
-    ]
-  }
-];
-
 const statusIcons = {
   passed: <CheckCircle2 className="h-4 w-4 text-green-500" />,
   failed: <XCircle className="h-4 w-4 text-red-500" />,
@@ -106,9 +58,13 @@ const priorityColors = {
 };
 
 export default function TestsPage() {
-  const [suites, setSuites] = useState(mockSuites);
+  const suitesStore = useStore((state) => state.testCases) || [];
+  const [suites, setSuites] = useState(suitesStore);
   const [selectedTests, setSelectedTests] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Sync state
+  if (suitesStore !== suites) setSuites(suitesStore);
 
   const toggleSuite = (suiteId: string) => {
     setSuites(prev => prev.map(suite => 
