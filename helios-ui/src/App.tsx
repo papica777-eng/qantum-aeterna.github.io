@@ -8,12 +8,17 @@ import Partnerships from './components/Partnerships';
 import SelfHealingDashboard from './components/SelfHealingDashboard';
 import LogsViewer from './components/LogsViewer';
 import BillingPage from './components/BillingPage';
+import TestCases from './components/TestCases';
+import TestRuns from './components/TestRuns';
+import Projects from './components/Projects';
+import AIGenerator from './components/AIGenerator';
+import Settings from './components/Settings';
 import { useState, useEffect } from 'react';
 import "./App.css";
 import "./LegacyComponents.css";
 
 const BACKEND_URL = 'https://aeternaaa-production.up.railway.app';
-type AppMode = 'landing' | 'client' | 'admin' | 'telemetry' | '404' | 'partnerships' | 'healing' | 'logs' | 'billing';
+type AppMode = 'landing' | 'client' | 'admin' | 'telemetry' | '404' | 'partnerships' | 'healing' | 'logs' | 'billing' | 'testcases' | 'testruns' | 'projects' | 'aigenerator' | 'settings';
 
 function App() {
   const [mode, setMode] = useState<AppMode>('landing');
@@ -30,6 +35,14 @@ function App() {
       '/healing': 'healing',
       '/logs': 'logs',
       '/billing': 'billing',
+      '/testcases': 'testcases',
+      '/tests': 'testcases',
+      '/testruns': 'testruns',
+      '/runs': 'testruns',
+      '/projects': 'projects',
+      '/generate': 'aigenerator',
+      '/aigenerator': 'aigenerator',
+      '/settings': 'settings',
       '/404': '404',
       '/not-found': '404',
     };
@@ -42,6 +55,11 @@ function App() {
       'healing': 'healing',
       'logs': 'logs',
       'billing': 'billing',
+      'testcases': 'testcases',
+      'testruns': 'testruns',
+      'projects': 'projects',
+      'aigenerator': 'aigenerator',
+      'settings': 'settings',
     };
 
     if (pathMap[path]) {
@@ -63,6 +81,11 @@ function App() {
       'billing': '/billing',
       'telemetry': '/telemetry',
       'partnerships': '/partnerships',
+      'testcases': '/testcases',
+      'testruns': '/testruns',
+      'projects': '/projects',
+      'aigenerator': '/generate',
+      'settings': '/settings',
     };
     const path = modeToPath[newMode];
     if (path) {
@@ -108,6 +131,11 @@ function App() {
       {mode === 'healing'      && <SelfHealingDashboard onBack={() => navigateTo('landing')} />}
       {mode === 'logs'         && <LogsViewer onBack={() => navigateTo('landing')} />}
       {mode === 'billing'      && <BillingPage onBack={() => navigateTo('landing')} />}
+      {mode === 'testcases'    && <TestCases onBack={() => navigateTo('landing')} />}
+      {mode === 'testruns'     && <TestRuns onBack={() => navigateTo('landing')} />}
+      {mode === 'projects'     && <Projects onBack={() => navigateTo('landing')} />}
+      {mode === 'aigenerator'  && <AIGenerator onBack={() => navigateTo('landing')} />}
+      {mode === 'settings'     && <Settings onBack={() => navigateTo('landing')} />}
       {mode === '404'          && <QuantumGlitch404 onNavigateHome={() => navigateTo('landing')} />}
     </div>
   );
