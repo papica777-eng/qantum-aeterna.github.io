@@ -51,7 +51,7 @@ function normalizeRun(run: any): TestRun {
 
   return {
     id: run.id,
-    name: run.name || run.project?.name || `Run #${run.id.slice(0, 8)}`,
+    name: run.name || run.project?.name || `Run #${String(run.id).slice(0, 8)}`,
     status: statusMap[run.status] || 'running',
     duration: durationMs,
     passedTests: run.passed ?? run.passedTests ?? 0,

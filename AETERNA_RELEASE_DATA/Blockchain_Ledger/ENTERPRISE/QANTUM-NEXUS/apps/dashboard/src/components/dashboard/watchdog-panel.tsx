@@ -394,7 +394,7 @@ function ProgressBar({ value, color = 'cyan' }: { value: number; color?: string 
     <div className="w-full h-1.5 bg-black border border-slate-800 rounded-none overflow-hidden">
       <div 
         className={`h-full bg-gradient-to-r ${colorClasses[color]} transition-all duration-300`}
-        style={{ width: \`\${Math.min(100, Math.max(0, value))}%\` }}
+        style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
       />
     </div>
   );
@@ -424,7 +424,7 @@ export function WatchdogPanel() {
         
         ws.onopen = () => {
           setLinkStatus('CONNECTED');
-          setExternalLogs(prev => [...prev, \`[NEURAL LINK] Sockets successfully bonded to OmniCore (Port 3401)\`]);
+          setExternalLogs(prev => [...prev, `[NEURAL LINK] Sockets successfully bonded to OmniCore (Port 3401)`]);
           setWatchdogState(prev => ({
             ...prev,
             status: 'NEURAL_LINK_ACTIVE'
@@ -437,7 +437,7 @@ export function WatchdogPanel() {
             
             // Raw log dumping for terminal
             if (parsed.log) {
-               setExternalLogs(prev => [...prev.slice(-49), \`[TELEMETRY] \${parsed.log}\`]);
+               setExternalLogs(prev => [...prev.slice(-49), `[TELEMETRY] ${parsed.log}`]);
             }
 
             if (parsed.type === 'HEARTBEAT' || parsed.type === 'TELEMETRY' || parsed.type === 'STATUS') {
@@ -469,7 +469,7 @@ export function WatchdogPanel() {
         ws.onclose = () => {
           setLinkStatus('SEVERED');
           setWatchdogState(prev => ({...prev, status: 'ISOLATED_MOCK_MODE'}));
-          setExternalLogs(prev => [...prev.slice(-49), \`[FATAL] Neural Link Severed. Retrying...\`]);
+          setExternalLogs(prev => [...prev.slice(-49), `[FATAL] Neural Link Severed. Retrying...`]);
           reconnectTimer = setTimeout(establishNeuralLink, 3000);
         };
 
@@ -512,7 +512,7 @@ export function WatchdogPanel() {
         externalLogs={externalLogs}
       />
       
-      <Card className={\`border-2 \${isSevere ? 'border-red-600/50 shadow-[0_0_30px_rgba(220,38,38,0.2)]' : 'border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.1)]'} bg-[#020205] backdrop-blur-3xl overflow-hidden transition-colors duration-500 relative rounded-none\`}>
+      <Card className={`border-2 ${isSevere ? 'border-red-600/50 shadow-[0_0_30px_rgba(220,38,38,0.2)]' : 'border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.1)]'} bg-[#020205] backdrop-blur-3xl overflow-hidden transition-colors duration-500 relative rounded-none`}>
         
         {/* Brutal Background Noise & Grid */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
@@ -543,9 +543,9 @@ export function WatchdogPanel() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="relative">
-                  <div className={\`w-14 h-14 border border-white/10 bg-black flex items-center justify-center shadow-2xl \${isSevere ? 'shadow-red-500/50' : 'shadow-cyan-500/20'} z-10 relative overflow-hidden\`}>
-                     <div className={\`absolute inset-0 bg-gradient-to-br \${isSevere ? 'from-red-900 to-black' : 'from-cyan-900 to-black'} opacity-50\`}></div>
-                    <Shield className={\`h-8 w-8 relative z-20 \${isSevere ? 'text-red-500' : 'text-cyan-400'}\`} />
+                  <div className={`w-14 h-14 border border-white/10 bg-black flex items-center justify-center shadow-2xl ${isSevere ? 'shadow-red-500/50' : 'shadow-cyan-500/20'} z-10 relative overflow-hidden`}>
+                     <div className={`absolute inset-0 bg-gradient-to-br ${isSevere ? 'from-red-900 to-black' : 'from-cyan-900 to-black'} opacity-50`}></div>
+                    <Shield className={`h-8 w-8 relative z-20 ${isSevere ? 'text-red-500' : 'text-cyan-400'}`} />
                   </div>
                   <div className="absolute -top-1.5 -right-1.5 z-30">
                     <PulsingDot color={linkStatus === 'CONNECTED' ? 'cyan' : 'red'} fast={isSevere} />
@@ -553,7 +553,7 @@ export function WatchdogPanel() {
                 </div>
                 <div>
                   <CardTitle className="text-2xl font-black font-mono tracking-tighter">
-                    <span className={\`\${isSevere ? 'text-red-500 animate-pulse' : 'text-slate-100'}\`}>
+                    <span className={`${isSevere ? 'text-red-500 animate-pulse' : 'text-slate-100'}`}>
                       ETERNAL_WATCHDOG v34.1
                     </span>
                   </CardTitle>
@@ -569,11 +569,11 @@ export function WatchdogPanel() {
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={\`px-3 py-1.5 text-xs font-black uppercase tracking-wider transition-all \${
+                      className={`px-3 py-1.5 text-xs font-black uppercase tracking-wider transition-all ${
                         activeTab === tab
                           ? 'bg-slate-100 text-black'
                           : 'text-slate-500 hover:text-white hover:bg-white/5'
-                      }\`}
+                      }`}
                     >
                       {tab === 'overview' ? 'Overview' : tab === 'health' ? 'System Health' : 'Prison Matrix'}
                     </button>
@@ -594,10 +594,10 @@ export function WatchdogPanel() {
                   variant={isActive ? "default" : "outline"}
                   size="sm"
                   onClick={() => setIsActive(!isActive)}
-                  className={\`rounded-none font-mono text-xs tracking-widest uppercase \${isActive 
+                  className={`rounded-none font-mono text-xs tracking-widest uppercase ${isActive 
                     ? "bg-emerald-600 hover:bg-emerald-700 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]" 
                     : "border-slate-600 hover:border-amber-500 bg-black text-slate-300"
-                  }\`}
+                  }`}
                 >
                   {isActive ? (
                     <><Pause className="h-4 w-4 mr-2" /> Pause</>
@@ -615,7 +615,7 @@ export function WatchdogPanel() {
             <div className="space-y-6">
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 <StatCard icon={Activity} label="State Status" value={watchdogState.status.replace(/_/g, ' ')} color={isSevere ? 'red' : 'cyan'} isGlitching={isSevere} />
-                <StatCard icon={Eye} label="Core Patrols" value={watchdogState.patrolCount.toLocaleString()} color="blue" trend="up" trendValue={\`\${(Math.random() * 5 + 10).toFixed(0)}/hr\`} />
+                <StatCard icon={Eye} label="Core Patrols" value={watchdogState.patrolCount.toLocaleString()} color="blue" trend="up" trendValue={`${(Math.random() * 5 + 10).toFixed(0)}/hr`} />
                 <StatCard icon={Zap} label="Teleports" value={watchdogState.teleportCount.toString()} color="amber" />
                 <StatCard icon={AlertTriangle} label="Neutralized" value={watchdogState.threatsNeutralized.toString()} color={watchdogState.threatsNeutralized > 0 ? 'red' : 'cyan'} />
                 <StatCard icon={Lock} label="Prisoners" value={watchdogState.prisonerCount.toString()} color={watchdogState.prisonerCount > 0 ? 'red' : 'cyan'} />
@@ -647,7 +647,7 @@ export function WatchdogPanel() {
                         {event.type === 'PRISON' && <Lock className="h-4 w-4 text-red-500" />}
                       </div>
                       <div className="flex-1 min-w-0 flex items-center justify-between">
-                        <p className={\`text-sm font-mono \${event.severity === 'critical' ? 'text-red-400 font-bold' : 'text-slate-300'}\`}>{event.message}</p>
+                        <p className={`text-sm font-mono ${event.severity === 'critical' ? 'text-red-400 font-bold' : 'text-slate-300'}`}>{event.message}</p>
                         <div className="flex items-center gap-3">
                           <span className="text-[10px] text-slate-600 font-mono uppercase truncate w-24 text-right">{event.time}</span>
                           <StatusBadge status={event.severity} />
@@ -674,14 +674,14 @@ export function WatchdogPanel() {
                 </div>
                 <div className="space-y-2">
                   {watchdogState.healthChecks.map((check, i) => (
-                    <div key={i} className={\`flex items-center justify-between p-3 border \${check.status === 'healthy' ? 'border-emerald-500/20 bg-emerald-500/5' : 'border-red-500/30 bg-red-500/10'} hover:border-white/20 transition-colors\`}>
+                    <div key={i} className={`flex items-center justify-between p-3 border ${check.status === 'healthy' ? 'border-emerald-500/20 bg-emerald-500/5' : 'border-red-500/30 bg-red-500/10'} hover:border-white/20 transition-colors`}>
                       <div className="flex items-center gap-4">
-                        <div className={\`p-2 bg-black border \${check.status === 'healthy' ? 'border-emerald-500/50 outline outline-1 outline-emerald-500/20' : 'border-red-500/50 outline outline-1 outline-red-500/20'}\`}>
-                          <check.icon className={\`h-4 w-4 \${check.status === 'healthy' ? 'text-emerald-400' : 'text-red-500'}\`} />
+                        <div className={`p-2 bg-black border ${check.status === 'healthy' ? 'border-emerald-500/50 outline outline-1 outline-emerald-500/20' : 'border-red-500/50 outline outline-1 outline-red-500/20'}`}>
+                          <check.icon className={`h-4 w-4 ${check.status === 'healthy' ? 'text-emerald-400' : 'text-red-500'}`} />
                         </div>
                         <div>
                           <p className="font-bold text-slate-200 font-mono text-sm uppercase tracking-wider">{check.name}</p>
-                          {check.value && <p className={\`text-xs font-mono font-bold mt-0.5 \${check.status === 'healthy' ? 'text-slate-500' : 'text-red-400 animate-pulse'}\`}>{check.value}</p>}
+                          {check.value && <p className={`text-xs font-mono font-bold mt-0.5 ${check.status === 'healthy' ? 'text-slate-500' : 'text-red-400 animate-pulse'}`}>{check.value}</p>}
                         </div>
                       </div>
                       <div className="flex flex-col items-end gap-1">

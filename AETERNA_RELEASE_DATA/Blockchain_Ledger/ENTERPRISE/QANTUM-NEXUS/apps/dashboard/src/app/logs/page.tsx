@@ -1,6 +1,6 @@
-import { DashboardLayout } from "@/components/layout/dashboard-layout";
-import { LiveFeedPanel } from "@/components/terminal/live-feed-panel";
-import { WatchdogPanel } from "@/components/terminal/watchdog-panel";
+import DashboardLayout from "@/components/layout/dashboard-layout";
+import { LiveFeedPanel } from "@/components/nexus/operations/live-feed-panel";
+import { WatchdogPanel } from "@/components/dashboard/watchdog-panel";
 
 export default function LogsPage() {
   return (
