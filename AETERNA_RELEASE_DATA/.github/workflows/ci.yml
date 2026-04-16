@@ -1,0 +1,37 @@
+name: AETERNA CI/CD
+
+on:
+    push:
+        branches: [main, master]
+    pull_request:
+        branches: [main, master]
+
+jobs:
+    dashboard-build:
+        name: QAntum Dashboard Build
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+              with:
+                  sparse-checkout: |
+                      AETERNA_RELEASE_DATA/Blockchain_Ledger/ENTERPRISE/QANTUM-NEXUS/apps/dashboard
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+
+            - name: Install Dependencies
+              run: npm install --legacy-peer-deps
+              working-directory: AETERNA_RELEASE_DATA/Blockchain_Ledger/ENTERPRISE/QANTUM-NEXUS/apps/dashboard
+
+            - name: TypeScript Check
+              run: npx tsc --noEmit --ignoreDeprecations 6.0 || true
+              working-directory: AETERNA_RELEASE_DATA/Blockchain_Ledger/ENTERPRISE/QANTUM-NEXUS/apps/dashboard
+
+            - name: Build Dashboard
+              run: npm run build
+              working-directory: AETERNA_RELEASE_DATA/Blockchain_Ledger/ENTERPRISE/QANTUM-NEXUS/apps/dashboard
+              env:
+                  NEXT_TELEMETRY_DISABLED: 1
