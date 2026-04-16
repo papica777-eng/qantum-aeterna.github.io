@@ -12,7 +12,8 @@ import React, { useState, useEffect } from 'react';
 import { 
   User, CreditCard, CheckCircle, Star, ArrowRight, Mail, Lock,
   Zap, Brain, Shield, Globe, Activity, Settings, LogOut, Search,
-  Loader2, AlertCircle, Info, Check, BarChart3, HardDrive
+  Loader2, AlertCircle, Info, Check, BarChart3, HardDrive,
+  RefreshCw, Terminal, Receipt
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -297,6 +298,10 @@ export const ClientPortal: React.FC = () => {
               user={userData}
               onLogout={logout}
               onLaunchApp={(appId) => setCurrentFlow('app')}
+              onNavigate={(page) => {
+                // Navigate via URL for full-page mode outside ClientPortal
+                window.location.href = `/${page}`;
+              }}
             />
           )}
         </AnimatePresence>
@@ -822,7 +827,8 @@ const ClientDashboard: React.FC<{
   user: UserData;
   onLogout: () => void;
   onLaunchApp: (appId: string) => void;
-}> = ({ language, user, onLogout, onLaunchApp }) => {
+  onNavigate?: (page: 'healing' | 'logs' | 'billing' | 'telemetry') => void;
+}> = ({ language, user, onLogout, onLaunchApp, onNavigate }) => {
   const t = language === 'bg' ? {
     welcome: 'КОМАНДЕН ЦЕНТЪР',
     yourApps: 'АКТИВНИ ИНСТАНЦИИ',
@@ -972,6 +978,55 @@ const ClientDashboard: React.FC<{
               </div>
             </motion.div>
           ))}
+        </div>
+
+        {/* Quick Access — System Pages */}
+        <div className="mt-16 mb-4">
+          <div className="mb-6">
+            <h2 className="text-sm font-black text-gray-400 tracking-[0.2em] uppercase mb-1">SYSTEM ACCESS</h2>
+            <div className="h-1 w-12 bg-blue-500 rounded-full" />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <button
+              onClick={() => onNavigate?.('healing')}
+              className="group flex items-center gap-4 p-5 bg-[#0d0d12] border border-white/5 hover:border-purple-500/30 rounded-xl transition-all text-left hover:shadow-[0_0_20px_-5px_rgba(139,92,246,0.2)]"
+            >
+              <div className="w-10 h-10 bg-purple-500/10 border border-purple-500/20 rounded-lg flex items-center justify-center group-hover:bg-purple-500/20 transition">
+                <RefreshCw className="w-5 h-5 text-purple-400" />
+              </div>
+              <div>
+                <div className="text-sm font-bold text-white/90">Self-Healing Engine</div>
+                <div className="text-xs text-gray-500">Anomaly detection & auto-repair</div>
+              </div>
+              <ArrowRight className="w-4 h-4 text-gray-600 ml-auto group-hover:text-purple-400 group-hover:translate-x-1 transition-all" />
+            </button>
+            <button
+              onClick={() => onNavigate?.('logs')}
+              className="group flex items-center gap-4 p-5 bg-[#0d0d12] border border-white/5 hover:border-green-500/30 rounded-xl transition-all text-left hover:shadow-[0_0_20px_-5px_rgba(34,197,94,0.2)]"
+            >
+              <div className="w-10 h-10 bg-green-500/10 border border-green-500/20 rounded-lg flex items-center justify-center group-hover:bg-green-500/20 transition">
+                <Terminal className="w-5 h-5 text-green-400" />
+              </div>
+              <div>
+                <div className="text-sm font-bold text-white/90">Execution Logs</div>
+                <div className="text-xs text-gray-500">Live stream & audit trail</div>
+              </div>
+              <ArrowRight className="w-4 h-4 text-gray-600 ml-auto group-hover:text-green-400 group-hover:translate-x-1 transition-all" />
+            </button>
+            <button
+              onClick={() => onNavigate?.('billing')}
+              className="group flex items-center gap-4 p-5 bg-[#0d0d12] border border-white/5 hover:border-yellow-500/30 rounded-xl transition-all text-left hover:shadow-[0_0_20px_-5px_rgba(234,179,8,0.2)]"
+            >
+              <div className="w-10 h-10 bg-yellow-500/10 border border-yellow-500/20 rounded-lg flex items-center justify-center group-hover:bg-yellow-500/20 transition">
+                <Receipt className="w-5 h-5 text-yellow-400" />
+              </div>
+              <div>
+                <div className="text-sm font-bold text-white/90">Billing & Plans</div>
+                <div className="text-xs text-gray-500">Subscriptions & invoices</div>
+              </div>
+              <ArrowRight className="w-4 h-4 text-gray-600 ml-auto group-hover:text-yellow-400 group-hover:translate-x-1 transition-all" />
+            </button>
+          </div>
         </div>
 
       </main>
