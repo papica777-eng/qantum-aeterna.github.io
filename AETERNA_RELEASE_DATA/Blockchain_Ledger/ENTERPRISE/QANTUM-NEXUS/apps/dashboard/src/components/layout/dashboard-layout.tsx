@@ -19,6 +19,7 @@ import {
   User,
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useStore } from '@/stores/nexus-store';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
@@ -43,11 +44,14 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  
+  const connectNexus = useStore((state) => state.connect);
 
   // Ensure component is mounted before rendering to prevent hydration issues
   useEffect(() => {
     setMounted(true);
-  }, []);
+    connectNexus();
+  }, [connectNexus]);
 
   // Close sidebar on route change (mobile)
   useEffect(() => {
