@@ -1,28 +1,25 @@
-'use client';
-
-import DashboardLayout from '@/components/layout/dashboard-layout';
-import { LiveFeedPanel } from '@/components/nexus/operations/live-feed-panel';
-import { Terminal } from 'lucide-react';
+import { DashboardLayout } from "@/components/layout/dashboard-layout";
+import { LiveFeedPanel } from "@/components/terminal/live-feed-panel";
+import { WatchdogPanel } from "@/components/terminal/watchdog-panel";
 
 export default function LogsPage() {
   return (
     <DashboardLayout>
-      <div className="space-y-6 h-[calc(100vh-140px)] flex flex-col">
-        {/* Header */}
-        <div className="flex items-center justify-between shrink-0">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">System Logs</h1>
-            <p className="text-muted-foreground text-sm">Real-time telemetry and process activity logs</p>
-          </div>
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-400 text-xs font-medium">
-            <Terminal className="h-4 w-4" />
-            Active Feed
-          </div>
+      <div className="flex flex-col h-full space-y-4 p-4 lg:p-8">
+        <div className="flex flex-col space-y-2">
+          <h1 className="text-3xl font-bold tracking-tight">System Logs</h1>
+          <p className="text-muted-foreground">
+            Real-time telemetry and autonomous swarm activity monitoring.
+          </p>
         </div>
-
-        {/* Live Feed Panel */}
-        <div className="flex-1 min-h-0">
-          <LiveFeedPanel />
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 min-h-0">
+          <div className="flex flex-col h-full border rounded-xl overflow-hidden bg-backgroundShadow">
+            <LiveFeedPanel />
+          </div>
+          <div className="flex flex-col h-full border rounded-xl overflow-hidden bg-backgroundShadow">
+            <WatchdogPanel />
+          </div>
         </div>
       </div>
     </DashboardLayout>
