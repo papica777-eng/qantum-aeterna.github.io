@@ -111,12 +111,23 @@ export const useStore = create<NexusState>((set, get) => ({
   testRuns: [],
   projects: [],
 
-  connect: (url = 'ws://localhost:3401/') => {
+  connect: (url?: string) => {
+    // If no URL provided, use environment variable or default to local ws
+    const wsUrl = url || process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3401/';
+    
+    // Automatically upgrade to wss:// if we are on https and trying to connect to a remote server
+    // (Localhost is exempt from mixed content rules in most modern browsers, but we check anyway)
+    let finalUrl = wsUrl;
+    if (typeof window !== 'undefined' && window.location.protocol === 'https:' && finalUrl.startsWith('ws://') && !finalUrl.includes('localhost')) {
+       finalUrl = finalUrl.replace('ws://', 'wss://');
+    }
+
     const currentWs = get()._ws;
     if (currentWs) return; // Already connected or connecting
 
     try {
-      const ws = new WebSocket(url);
+      const ws = new WebSocket(finalUrl);
+
       
       ws.onopen = () => {
         set({ isConnected: true, _ws: ws });
