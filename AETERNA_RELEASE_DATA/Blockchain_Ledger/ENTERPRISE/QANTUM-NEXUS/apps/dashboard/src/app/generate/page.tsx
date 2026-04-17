@@ -233,7 +233,10 @@ export default function ApiSenseiPage() {
                       </div>
 
                       <div className="mb-8">
-                        <h4 className="text-[14px] font-bold uppercase text-[var(--q-text-muted)] mb-3">Endpoint Map</h4>
+                        <h4 className="text-[14px] font-bold uppercase text-[var(--q-text-muted)] mb-3 flex items-center justify-between">
+                          <span>Endpoint Map</span>
+                          <span className="text-[10px] bg-[var(--q-bg-dark)] px-2 py-0.5 rounded text-[var(--q-text-primary)]">Layer 7</span>
+                        </h4>
                         <div className="border border-[var(--q-border)] rounded-[10px] overflow-hidden">
                            {result.endpoints.map((ep: any, idx: number) => (
                              <div key={idx} className="flex justify-between items-center p-3 border-b border-[var(--q-border)] last:border-0 bg-[var(--q-bg-input)]">
@@ -248,6 +251,32 @@ export default function ApiSenseiPage() {
                            ))}
                         </div>
                       </div>
+
+                      {result.findings && result.findings.length > 0 && (
+                        <div className="mb-4">
+                          <h4 className="text-[14px] font-bold uppercase text-[var(--q-text-muted)] mb-3 flex items-center gap-2">
+                             <ShieldCheck className="w-4 h-4 text-[var(--q-warning)]" /> CyberCody Security Audit
+                          </h4>
+                          <div className="space-y-3">
+                            {result.findings.map((f: any, idx: number) => (
+                               <div key={idx} className="border border-[var(--q-warning)]/30 bg-[var(--q-warning)]/5 p-4 rounded-[10px]">
+                                  <div className="flex justify-between items-start mb-2">
+                                     <div className="flex items-center gap-2">
+                                        <span className="bg-[var(--q-warning)] text-[var(--q-bg-dark)] text-[10px] px-2 py-0.5 rounded-[4px] font-bold uppercase">{f.severity}</span>
+                                        <h5 className="font-bold text-[14px] text-[var(--q-text-primary)]">{f.title}</h5>
+                                     </div>
+                                     <span className="text-[12px] font-mono text-[var(--q-text-muted)] border border-[var(--q-border)] px-1.5 rounded bg-[var(--q-bg-input)]">CVSS: {f.cvss}</span>
+                                  </div>
+                                  <p className="text-[13px] text-[var(--q-text-secondary)] mb-2">{f.description}</p>
+                                  <div className="bg-[var(--q-bg-dark)] p-3 rounded-[6px] border border-[var(--q-border)]">
+                                     <div className="text-[11px] font-bold text-[var(--q-text-muted)] uppercase mb-1">Recommendation</div>
+                                     <code className="text-[12px] text-[var(--q-primary)] font-mono">{f.recommendation}</code>
+                                  </div>
+                               </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                    </div>
 
                    {/* Actions Footer */}

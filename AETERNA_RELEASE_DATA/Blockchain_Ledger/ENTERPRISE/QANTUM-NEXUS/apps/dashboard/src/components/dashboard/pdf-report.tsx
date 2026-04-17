@@ -67,7 +67,7 @@ export function PdfReport({ url, result, timestamp, uuid }: PdfReportProps) {
                 <td className="py-2">&lt; 100ms</td>
                 <td className="py-2 font-bold text-green-700">PASS</td>
               </tr>
-              <tr className="border-b border-gray-200">
+              <tr className="border-b border-black">
                 <td className="py-2 font-bold">Vulnerability Headers</td>
                 <td className="py-2">{result.secHeaders || 'X-Frame, HSTS'}</td>
                 <td className="py-2">Required</td>
@@ -77,8 +77,30 @@ export function PdfReport({ url, result, timestamp, uuid }: PdfReportProps) {
           </table>
         </div>
 
+        {/* Security Audit Findings */}
+        {result.findings && result.findings.length > 0 && (
+          <div className="mb-8 p-4 bg-yellow-50 border border-yellow-200">
+            <h2 className="text-lg font-bold mb-4 uppercase border-b border-yellow-300 pb-2 text-yellow-800">CyberCody Security Audit</h2>
+            <div className="space-y-4">
+              {result.findings.map((f: any, idx: number) => (
+                <div key={idx} className="bg-white p-4 border border-yellow-300">
+                  <div className="flex justify-between font-mono mb-2">
+                    <span className="font-bold text-yellow-700">[{f.severity.toUpperCase()}] {f.title}</span>
+                    <span className="text-sm text-gray-500">CVSS: {f.cvss}</span>
+                  </div>
+                  <div className="text-sm mb-3">{f.description}</div>
+                  <div className="bg-gray-100 p-2 font-mono text-xs border border-gray-300 relative">
+                     <span className="absolute -top-2 left-2 bg-gray-100 px-1 font-bold text-gray-500" style={{fontSize: '9px'}}>RECOMMENDATION</span>
+                     {f.recommendation}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Final Grade */}
-        <div className="flex items-center gap-6 mb-8 mt-12 bg-gray-50 p-6 border border-gray-200">
+        <div className="flex items-center gap-6 mb-8 mt-8 bg-gray-50 p-6 border border-gray-200">
           <div className="text-6xl font-black">{result.grade || 'A+'}</div>
           <div>
             <h3 className="font-bold text-xl uppercase">Target Certified Resilient</h3>
