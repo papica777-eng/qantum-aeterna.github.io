@@ -57,28 +57,9 @@ const TABS: Tab[] = [
 ];
 
 export default function NexusPage() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const tabParam = searchParams.get('tab') as TabId;
-  
-  const [activeTab, setActiveTab] = React.useState<TabId>(tabParam || 'overview');
+  const [activeTab, setActiveTab] = React.useState<TabId>('overview');
   const { connect, disconnect, isConnected } = useNexusStore();
   const systemHealth = useSystemHealth();
-
-  // Sync state with URL parameter
-  React.useEffect(() => {
-    if (tabParam && TABS.some(t => t.id === tabParam)) {
-      setActiveTab(tabParam);
-    }
-  }, [tabParam]);
-
-  const handleTabChange = (id: TabId) => {
-    setActiveTab(id);
-    // Update URL without full refresh
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('tab', id);
-    router.push(`?${params.toString()}`, { scroll: false });
-  };
 
   React.useEffect(() => {
     connect();
@@ -185,7 +166,7 @@ export default function NexusPage() {
             {TABS.map((tab) => (
               <motion.button
                 key={tab.id}
-                onClick={() => handleTabChange(tab.id)}
+                onClick={() => setActiveTab(tab.id)}
                 className={cn(
                   'flex items-center gap-2.5 px-5 py-3 rounded-t-xl text-sm font-medium transition-all whitespace-nowrap',
                   activeTab === tab.id
@@ -241,32 +222,32 @@ function OverviewTab() {
 
   const stats = [
     { 
-      label: 'Neural Sync', 
+      label: 'System Health', 
       value: `${systemHealth?.overall ?? 100}%`, 
       icon: Activity,
-      color: (systemHealth?.overall ?? 100) >= 80 ? 'text-violet-400' : 'text-amber-400',
+      color: (systemHealth?.overall ?? 100) >= 80 ? 'text-emerald-400' : 'text-amber-400',
+      bg: 'from-emerald-500/20'
+    },
+    { 
+      label: 'Daemon Status', 
+      value: daemonStatus?.state ?? 'ACTIVE', 
+      icon: Shield,
+      color: 'text-violet-400',
       bg: 'from-violet-500/20'
     },
     { 
-      label: 'Daemon Orchestration', 
-      value: daemonStatus?.state ?? 'STABLE', 
-      icon: Shield,
+      label: 'Vectors', 
+      value: (pineconeStats?.totalVectors ?? 52573).toLocaleString(), 
+      icon: Database,
       color: 'text-cyan-400',
       bg: 'from-cyan-500/20'
     },
     { 
-      label: 'Vector Density', 
-      value: (pineconeStats?.totalVectors ?? 52573).toLocaleString(), 
-      icon: Database,
-      color: 'text-pink-400',
-      bg: 'from-pink-500/20'
-    },
-    { 
-      label: 'Substrate Healing', 
+      label: 'Auto-Healed', 
       value: (healingEvents?.length ?? 0).toString(), 
       icon: RefreshCw,
-      color: 'text-emerald-400',
-      bg: 'from-emerald-500/20'
+      color: 'text-pink-400',
+      bg: 'from-pink-500/20'
     },
   ];
 

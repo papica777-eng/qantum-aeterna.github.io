@@ -1,0 +1,22 @@
+{
+  "name": "fix-docker-actions-5011349744198194576",
+  "version": "1.0.0",
+  "description": "> \"We do not predict the future. We compute it.\"",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
