@@ -33,10 +33,13 @@ import {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 const BOOT_SEQUENCE = [
-  "INITIALIZING SYSTEM DIAGNOSTICS...",
-  "LOADING TELEMETRY MODULES... OK",
-  "ACTIVATING SURVEILLANCE NETWORK... OK", 
-  "AWAITING CONNECTIONS."
+  "⚡ INITIALIZING ETERNAL WATCHDOG v34.1...",
+  "🔒 LOADING ETERNAL HANDCUFFS MODULE... OK",
+  "👁️ ACTIVATING SURVEILLANCE NETWORK... OK", 
+  "⚛️ ARMING ATOMIC SENSORS... OK",
+  "🏛️ OPENING ETERNAL PRISON GATES... OK",
+  "📡 PATROL FREQUENCY: 5000ms",
+  "✅ ДЕЖУРНИЯТ ГОТОВ. НИКОГА НЕ СПИ.",
 ];
 
 const WATCHDOG_COMMANDS: Record<string, () => string> = {
@@ -217,9 +220,9 @@ function LiveTerminal({
         <div className="bg-gradient-to-r from-black to-[#050510] px-4 py-3 flex items-center justify-between border-b border-purple-500/30">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <Terminal className="h-4 w-4 text-[var(--q-text-muted)]" />
-              <span className="text-[var(--q-text-primary)] text-sm font-semibold">
-                System Diagnostics Terminal
+              <Shield className="h-4 w-4 text-purple-400" />
+              <span className="text-purple-300 text-sm font-mono font-bold tracking-widest text-shadow-glow">
+                🛡️ ETERNAL WATCHDOG TERMINAL
               </span>
             </div>
           </div>
@@ -473,7 +476,8 @@ export function WatchdogPanel() {
         externalLogs={externalLogs}
       />
       
-      <Card className="bg-[var(--q-bg-card)] border border-[var(--q-border)] rounded-[16px] overflow-hidden shadow-sm relative">
+      <Card className="bg-[#020205]/80 border border-purple-500/20 rounded-[16px] overflow-hidden shadow-[0_0_50px_rgba(139,92,246,0.1)] relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-transparent pointer-events-none"></div>
 
         {isSevere && (
           <div className="absolute inset-x-0 top-0 h-1 bg-red-600 animate-pulse pointer-events-none z-50"></div>
@@ -510,50 +514,65 @@ export function WatchdogPanel() {
                 </div>
                 <div>
                   <CardTitle className="text-2xl font-black font-mono tracking-tighter">
-                    <span className="text-[var(--q-text-primary)]">
-                      System Telemetry Watchdog
+                    <span className="text-purple-400 text-shadow-glow">
+                      ETERNAL WATCHDOG v34.1
                     </span>
                   </CardTitle>
-                  <CardDescription className="text-[var(--q-text-muted)] font-mono text-xs uppercase tracking-widest">
-                     // SYSTEM DIAGNOSTICS ACTIVE
+                  <CardDescription className="text-slate-400 font-mono text-xs italic opacity-80">
+                     "Дежурният винаги е на смяна. Никога не спи."
                   </CardDescription>
                 </div>
               </div>
               
               <div className="flex items-center gap-3">
-                <div className="flex gap-1 bg-black border border-white/10 p-1">
-                  {(['overview', 'health', 'prison'] as const).map(tab => (
-                    <button
-                      key={tab}
-                      onClick={() => setActiveTab(tab)}
-                      className={`px-3 py-1.5 text-xs font-black uppercase tracking-wider transition-all ${
-                        activeTab === tab
-                          ? 'bg-slate-100 text-black'
-                          : 'text-slate-500 hover:text-white hover:bg-white/5'
-                      }`}
-                    >
-                      {tab === 'overview' ? 'Overview' : tab === 'health' ? 'System Health' : 'Prison Matrix'}
-                    </button>
-                  ))}
+                <div className="flex gap-2 bg-black/40 border border-white/5 p-1 rounded-lg">
+                  <button
+                    onClick={() => setActiveTab('overview')}
+                    className={`px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all rounded-md flex items-center gap-2 ${
+                      activeTab === 'overview'
+                        ? 'bg-purple-600 text-white shadow-[0_0_15px_rgba(139,92,246,0.5)]'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <Activity className="h-3 w-3" /> Overview
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('health')}
+                    className={`px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all rounded-md flex items-center gap-2 ${
+                      activeTab === 'health'
+                        ? 'bg-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.5)]'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <Heart className="h-3 w-3" /> Health
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('prison')}
+                    className={`px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all rounded-md flex items-center gap-2 ${
+                      activeTab === 'prison'
+                        ? 'bg-amber-600 text-white shadow-[0_0_15px_rgba(245,158,11,0.5)]'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <Lock className="h-3 w-3" /> Prison
+                  </button>
                 </div>
                 
                 <Button 
                   variant="outline" 
                   size="sm"
                   onClick={() => setTerminalOpen(true)}
-                  className="rounded-none border-cyan-500/30 hover:border-cyan-400 hover:bg-cyan-500/10 text-cyan-400 font-mono text-xs tracking-widest uppercase bg-black"
+                  className="rounded-lg border-white/10 hover:border-purple-500/50 hover:bg-purple-500/10 text-slate-300 font-mono text-xs uppercase bg-black/40"
                 >
-                  <Terminal className="h-4 w-4 mr-2" />
-                  Terminal
+                  <Terminal className="h-4 w-4 mr-2" /> Terminal
                 </Button>
                 
                 <Button 
-                  variant={isActive ? "default" : "outline"}
                   size="sm"
                   onClick={() => setIsActive(!isActive)}
-                  className={`rounded-none font-mono text-xs tracking-widest uppercase ${isActive 
-                    ? "bg-emerald-600 hover:bg-emerald-700 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]" 
-                    : "border-slate-600 hover:border-amber-500 bg-black text-slate-300"
+                  className={`rounded-lg font-bold text-xs uppercase transition-all ${isActive 
+                    ? "bg-emerald-500 hover:bg-emerald-600 text-black shadow-[0_0_20px_rgba(16,185,129,0.4)]" 
+                    : "bg-amber-500 text-black"
                   }`}
                 >
                   {isActive ? (
@@ -579,29 +598,29 @@ export function WatchdogPanel() {
                 <StatCard icon={RefreshCw} label="Uptime" value={watchdogState.uptime} color="emerald" />
               </div>
 
-              <div className="bg-black/60 border border-white/5 p-4 rounded-sm shadow-[inset_0_0_20px_rgba(0,0,0,0.8)] relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-                   <Activity className="w-64 h-64" />
-                </div>
-                <div className="flex items-center gap-2 mb-4 border-b border-white/10 pb-3">
-                  <Radio className="h-4 w-4 text-cyan-400" />
-                  <h3 className="font-bold text-slate-200 font-mono tracking-widest uppercase text-sm">Neural Telemetry Feed</h3>
-                  {linkStatus === 'CONNECTED' && <PulsingDot color="cyan" />}
+              <div className="bg-[#050510]/60 border border-white/5 p-6 rounded-[16px] shadow-[inset_0_0_20px_rgba(0,0,0,0.8)] relative overflow-hidden">
+                <div className="flex items-center gap-2 mb-6 border-b border-white/10 pb-4">
+                  <div className="flex items-center gap-2 text-blue-400">
+                    <Radio className="h-4 w-4" />
+                    <span className="font-bold text-xs uppercase tracking-[0.2em]">((·)) Live Event Feed</span>
+                  </div>
+                  <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse ml-2"></div>
                 </div>
                 <div className="space-y-1.5 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                   {watchdogState.recentEvents.map((event) => (
                     <div 
                       key={event.id}
-                      className="flex items-start gap-4 p-2 bg-gradient-to-r from-white/[0.02] to-transparent border-l-2 hover:bg-white/[0.05] transition-colors"
-                      style={{
-                        borderLeftColor: event.severity === 'critical' ? '#ef4444' : event.severity === 'warning' ? '#f59e0b' : '#06b6d4'
-                      }}
+                      className="flex items-center gap-4 p-4 bg-white/[0.03] border border-white/5 rounded-xl hover:bg-white/[0.06] transition-all mb-3"
                     >
-                      <div className="flex-shrink-0 mt-0.5 opacity-50">
-                        {event.type === 'PATROL' && <Eye className="h-4 w-4 text-cyan-400" />}
-                        {event.type === 'TELEPORT' && <Zap className="h-4 w-4 text-amber-400" />}
-                        {event.type === 'NEUTRALIZE' && <AlertTriangle className="h-4 w-4 text-red-400" />}
-                        {event.type === 'PRISON' && <Lock className="h-4 w-4 text-red-500" />}
+                      <div className={cn(
+                        "w-10 h-10 rounded-full flex items-center justify-center border",
+                        event.type === 'PATROL' ? "bg-blue-500/10 border-blue-500/30 text-blue-400" :
+                        event.type === 'TELEPORT' ? "bg-amber-500/10 border-amber-500/30 text-amber-400" :
+                        "bg-red-500/10 border-red-500/30 text-red-400"
+                      )}>
+                        {event.type === 'PATROL' && <Eye className="h-4 w-4" />}
+                        {event.type === 'TELEPORT' && <Zap className="h-4 w-4" />}
+                        {event.type === 'NEUTRALIZE' && <AlertTriangle className="h-4 w-4" />}
                       </div>
                       <div className="flex-1 min-w-0 flex items-center justify-between">
                         <p className={`text-sm font-mono ${event.severity === 'critical' ? 'text-red-400 font-bold' : 'text-slate-300'}`}>{event.message}</p>
