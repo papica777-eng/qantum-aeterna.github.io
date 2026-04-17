@@ -1,0 +1,55 @@
+digraph DependencyGraph {
+    rankdir=TB;
+    node [shape=box, style=filled];
+    edge [color="#666666"];
+
+    "accessibility" [label="accessibility\n2 files", fillcolor="#e9ecef"];
+    "ai" [label="ai\n4 files", fillcolor="#e9ecef"];
+    "api" [label="api\n3 files", fillcolor="#e9ecef"];
+    "biology" [label="biology\n10 files", fillcolor="#69db7c"];
+    "chronos" [label="chronos\n6 files", fillcolor="#e9ecef"];
+    "cognition" [label="cognition\n12 files", fillcolor="#ffd43b"];
+    "config" [label="config\n3 files", fillcolor="#e9ecef"];
+    "core" [label="core\n6 files", fillcolor="#e9ecef"];
+    "dashboard" [label="dashboard\n3 files", fillcolor="#e9ecef"];
+    "data" [label="data\n4 files", fillcolor="#e9ecef"];
+    "distributed" [label="distributed\n4 files", fillcolor="#e9ecef"];
+    "docs" [label="docs\n1 files", fillcolor="#e9ecef"];
+    "events" [label="events\n3 files", fillcolor="#e9ecef"];
+    "extensibility" [label="extensibility\n3 files", fillcolor="#e9ecef"];
+    "ghost" [label="ghost\n6 files", fillcolor="#e9ecef"];
+    "global-nexus" [label="global-nexus\n1 files", fillcolor="#e9ecef"];
+    "index.ts" [label="index.ts\n1 files", fillcolor="#e9ecef"];
+    "integration" [label="integration\n3 files", fillcolor="#e9ecef"];
+    "licensing" [label="licensing\n1 files", fillcolor="#e9ecef"];
+    "market-reaper.ts" [label="market-reaper.ts\n1 files", fillcolor="#e9ecef"];
+    "math" [label="math\n1 files", fillcolor="#e9ecef"];
+    "oracle" [label="oracle\n1 files", fillcolor="#e9ecef"];
+    "performance" [label="performance\n6 files", fillcolor="#e9ecef"];
+    "physics" [label="physics\n4 files", fillcolor="#74c0fc"];
+    "plugins" [label="plugins\n2 files", fillcolor="#e9ecef"];
+    "reality" [label="reality\n14 files", fillcolor="#e9ecef"];
+    "reporter" [label="reporter\n4 files", fillcolor="#e9ecef"];
+    "saas" [label="saas\n4 files", fillcolor="#e9ecef"];
+    "sales" [label="sales\n1 files", fillcolor="#e9ecef"];
+    "security" [label="security\n8 files", fillcolor="#e9ecef"];
+    "sovereign-market" [label="sovereign-market\n1 files", fillcolor="#e9ecef"];
+    "storage" [label="storage\n4 files", fillcolor="#e9ecef"];
+    "swarm" [label="swarm\n2 files", fillcolor="#e9ecef"];
+    "synthesis" [label="synthesis\n5 files", fillcolor="#e9ecef"];
+    "validation" [label="validation\n4 files", fillcolor="#e9ecef"];
+    "visual" [label="visual\n3 files", fillcolor="#e9ecef"];
+
+    "biology" -> "physics";
+    "biology" -> "cognition";
+    "dashboard" -> "physics";
+    "dashboard" -> "swarm";
+    "global-nexus" -> "swarm";
+    "global-nexus" -> "reality";
+    "global-nexus" -> "security";
+    "global-nexus" -> "docs";
+    "reality" -> "biology";
+    "sovereign-market" -> "biology";
+    "sovereign-market" -> "reality";
+    "swarm" -> "physics";
+}

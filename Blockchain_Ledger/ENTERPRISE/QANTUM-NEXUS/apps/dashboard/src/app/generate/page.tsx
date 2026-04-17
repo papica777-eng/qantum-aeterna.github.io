@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { DashboardLayout } from '@/components/layout/dashboard-layout';
+import DashboardLayout from '@/components/layout/dashboard-layout';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ShieldCheck, 

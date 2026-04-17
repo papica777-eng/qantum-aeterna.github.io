@@ -1,0 +1,73 @@
+{
+  "target": "https://dpengeneering.site",
+  "scanStarted": "2025-12-31T16:49:26.675Z",
+  "httpCheck": {
+    "status": 404,
+    "headers": {
+      "connection": "keep-alive",
+      "content-length": "9115",
+      "server": "GitHub.com",
+      "content-type": "text/html; charset=utf-8",
+      "etag": "\"693afc33-239b\"",
+      "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'; img-src data:; connect-src 'self'",
+      "x-github-request-id": "12B2:284718:A1E9A53:A42A9BC:695552B7",
+      "accept-ranges": "bytes",
+      "date": "Wed, 31 Dec 2025 16:49:26 GMT",
+      "via": "1.1 varnish",
+      "age": "351",
+      "x-served-by": "cache-sof1510028-SOF",
+      "x-cache": "HIT",
+      "x-cache-hits": "1",
+      "x-timer": "S1767199767.543775,VS0,VE1",
+      "vary": "Accept-Encoding",
+      "x-fastly-request-id": "52de339ba79553248b448223fcd0a17d2159a9fd"
+    },
+    "responseTime": 127,
+    "reachable": true
+  },
+  "browserAnalysis": {
+    "title": "Site not found · GitHub Pages",
+    "url": "https://dpengeneering.site/",
+    "meta": {}
+  },
+  "technologies": [],
+  "security": [
+    {
+      "check": "HTTPS",
+      "status": "PASS"
+    },
+    {
+      "check": "X-Frame-Options",
+      "status": "MISSING"
+    },
+    {
+      "check": "Content-Security-Policy",
+      "status": "PASS"
+    },
+    {
+      "check": "Strict-Transport-Security",
+      "status": "MISSING"
+    }
+  ],
+  "performance": {
+    "loadTime": 626,
+    "networkRequests": 1
+  },
+  "screenshots": [
+    "C:\\MisteMind\\data\\scans\\screenshot-1767199767562.png"
+  ],
+  "errors": [],
+  "networkAnalysis": {
+    "totalRequests": 1,
+    "byType": {
+      "document": 1
+    },
+    "consoleLogs": [
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 ()"
+      }
+    ]
+  },
+  "scanCompleted": "2025-12-31T16:49:27.680Z"
+}

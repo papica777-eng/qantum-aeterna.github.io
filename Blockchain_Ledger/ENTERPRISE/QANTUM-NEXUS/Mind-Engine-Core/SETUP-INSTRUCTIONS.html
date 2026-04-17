@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧠 QANTUM - Setup Instructions</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 40px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #7b2cbf, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle { color: #888; margin-bottom: 40px; }
+        .step {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .step-number {
+            background: #7b2cbf;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .step-title { font-size: 1.3rem; }
+        .code-block {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-block code { color: #00ff88; }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #7b2cbf;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .copy-btn:hover { background: #9d4edd; }
+        .copy-btn.copied { background: #00ff88; color: #000; }
+        .note {
+            background: rgba(255,165,0,0.1);
+            border-left: 4px solid #ffa500;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .success {
+            background: rgba(0,255,136,0.1);
+            border-left: 4px solid #00ff88;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .files-list {
+            background: #0d1117;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        .files-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #30363d;
+            list-style: none;
+        }
+        .files-list li:last-child { border-bottom: none; }
+        .highlight { color: #00ff88; }
+        a { color: #7b2cbf; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 QANTUM Server Setup</h1>
+        <p class="subtitle">Инструкции за стартиране на сървъра на стар лаптоп</p>
+
+        <!-- STEP 1 -->
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <div class="step-title">📦 Копирай тази папка на стария лаптоп</div>
+            </div>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <code>c:\MisteMind\PROJECT\PRIVATE\Mind-Engine-Core</code>
+            </div>
+            <p>Копирай цялата папка с USB или по мрежа.</p>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <div class="step-title">💻 Инсталирай Node.js (ако го няма)</div>
+            </div>
+            <p>Изтегли от: <a href="https://nodejs.org" target="_blank" rel="noopener noreferrer">https://nodejs.org</a></p>
+            <p>Избери <strong>LTS версия</strong> (препоръчителна)</p>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <div class="step-title">⌨️ Отвори CMD и изпълни командите</div>
+            </div>
+            
+            <p><strong>Вариант А:</strong> Кликни 2 пъти на <code>START.bat</code></p>
+            
+            <p style="margin: 15px 0;"><strong>Вариант Б:</strong> Ръчно в CMD:</p>
+            
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <code>cd Mind-Engine-Core
+npm install
+npm run build
+node dist/start-server.js</code>
+            </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">4</div>
+                <div class="step-title">🌐 Намери IP адреса на лаптопа</div>
+            </div>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <code>ipconfig</code>
+            </div>
+            <p>Търси <span class="highlight">IPv4 Address</span>: ще е нещо като <code>192.168.1.XXX</code></p>
+        </div>
+
+        <!-- STEP 5 -->
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">5</div>
+                <div class="step-title">🔓 Отвори порта във Firewall</div>
+            </div>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <code>netsh advfirewall firewall add rule name="QAntum" dir=in action=allow protocol=tcp localport=3000</code>
+            </div>
+            <div class="note">
+                ⚠️ Изпълни тази команда като <strong>Administrator</strong>
+            </div>
+        </div>
+
+        <!-- STEP 6 -->
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">6</div>
+                <div class="step-title">✅ Достъпи от друго устройство</div>
+            </div>
+            <p>От твоя PC, телефон или таблет отвори:</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <code>http://192.168.1.XXX:3000</code>
+            </div>
+            <p>Замени <code>XXX</code> с реалния IP от стъпка 4.</p>
+            
+            <div class="success">
+                ✅ <strong>Готово!</strong> Сървърът работи и е достъпен от цялата мрежа.
+            </div>
+        </div>
+
+        <!-- ENDPOINTS -->
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">📚</div>
+                <div class="step-title">API Endpoints</div>
+            </div>
+            <ul class="files-list">
+                <li><code class="highlight">GET /health</code> - Health check</li>
+                <li><code class="highlight">GET /api/dashboard</code> - Dashboard data</li>
+                <li><code class="highlight">GET /api/tests</code> - Test results</li>
+                <li><code class="highlight">POST /api/tests/run</code> - Run tests</li>
+            </ul>
+        </div>
+
+        <!-- AUTO START -->
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">🔄</div>
+                <div class="step-title">Автоматичен старт при boot (по желание)</div>
+            </div>
+            <p>Създай shortcut на <code>START.bat</code> и го сложи в:</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <code>%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup</code>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function copyCode(btn) {
+            const codeBlock = btn.parentElement;
+            const code = codeBlock.querySelector('code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

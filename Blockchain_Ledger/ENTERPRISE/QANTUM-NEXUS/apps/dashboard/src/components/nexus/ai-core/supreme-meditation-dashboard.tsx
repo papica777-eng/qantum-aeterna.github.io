@@ -19,17 +19,22 @@ import {
   type MeditationInsight 
 } from '@/stores/nexus-store';
 
-const severityConfig: Record<InsightSeverity, { color: string; bgColor: string; icon: React.ElementType }> = {
-  [InsightSeverity.INFO]: { color: 'text-blue-400', bgColor: 'bg-blue-500/10 border-blue-500/30', icon: Lightbulb },
-  [InsightSeverity.ADVISORY]: { color: 'text-cyan-400', bgColor: 'bg-cyan-500/10 border-cyan-500/30', icon: Eye },
-  [InsightSeverity.WARNING]: { color: 'text-amber-400', bgColor: 'bg-amber-500/10 border-amber-500/30', icon: AlertTriangle },
-  [InsightSeverity.CRITICAL]: { color: 'text-red-400', bgColor: 'bg-red-500/10 border-red-500/30', icon: Zap },
-  [InsightSeverity.BREAKTHROUGH]: { color: 'text-violet-400', bgColor: 'bg-violet-500/10 border-violet-500/30', icon: Sparkles },
+const severityConfig: Partial<Record<InsightSeverity, { color: string; bgColor: string; icon: React.ElementType }>> = {
+  [InsightSeverity.INFO]:        { color: 'text-blue-400',   bgColor: 'bg-blue-500/10 border-blue-500/30',     icon: Lightbulb },
+  [InsightSeverity.ADVISORY]:    { color: 'text-cyan-400',   bgColor: 'bg-cyan-500/10 border-cyan-500/30',     icon: Eye },
+  [InsightSeverity.WARNING]:     { color: 'text-amber-400',  bgColor: 'bg-amber-500/10 border-amber-500/30',   icon: AlertTriangle },
+  [InsightSeverity.CRITICAL]:    { color: 'text-red-400',    bgColor: 'bg-red-500/10 border-red-500/30',       icon: Zap },
+  [InsightSeverity.BREAKTHROUGH]:{ color: 'text-violet-400', bgColor: 'bg-violet-500/10 border-violet-500/30', icon: Sparkles },
+  [InsightSeverity.LOW]:         { color: 'text-gray-400',   bgColor: 'bg-gray-500/10 border-gray-500/30',     icon: Lightbulb },
+  [InsightSeverity.MEDIUM]:      { color: 'text-yellow-400', bgColor: 'bg-yellow-500/10 border-yellow-500/30', icon: AlertTriangle },
+  [InsightSeverity.HIGH]:        { color: 'text-orange-400', bgColor: 'bg-orange-500/10 border-orange-500/30', icon: Zap },
 };
+
+const DEFAULT_SEVERITY_CONFIG = { color: 'text-gray-400', bgColor: 'bg-gray-500/10 border-gray-500/30', icon: Lightbulb };
 
 function InsightCard({ insight, onAcknowledge }: { insight: MeditationInsight; onAcknowledge: () => void }) {
   const [expanded, setExpanded] = React.useState(false);
-  const config = severityConfig[insight.severity];
+  const config = severityConfig[insight.severity] ?? DEFAULT_SEVERITY_CONFIG;
   const Icon = config.icon;
 
   return (
@@ -73,11 +78,11 @@ function InsightCard({ insight, onAcknowledge }: { insight: MeditationInsight; o
                 exit={{ height: 0, opacity: 0 }}
                 className="mt-3 pt-3 border-t border-white/10"
               >
-                {insight.evidence.length > 0 && (
+                {(insight.evidence?.length ?? 0) > 0 && (
                   <div className="mb-3">
                     <p className="text-xs text-gray-500 mb-1">Evidence:</p>
                     <ul className="text-xs text-gray-400 space-y-1">
-                      {insight.evidence.map((e, i) => (
+                      {insight.evidence!.map((e, i) => (
                         <li key={i} className="flex items-start gap-1">
                           <span className="text-violet-400">•</span>
                           {e}
@@ -87,11 +92,11 @@ function InsightCard({ insight, onAcknowledge }: { insight: MeditationInsight; o
                   </div>
                 )}
                 
-                {insight.recommendations.length > 0 && (
+                {(insight.recommendations?.length ?? 0) > 0 && (
                   <div>
                     <p className="text-xs text-gray-500 mb-1">Recommendations:</p>
                     <ul className="text-xs text-gray-400 space-y-1">
-                      {insight.recommendations.map((r, i) => (
+                      {insight.recommendations!.map((r, i) => (
                         <li key={i} className="flex items-start gap-1">
                           <span className="text-emerald-400">→</span>
                           {r}
@@ -140,7 +145,7 @@ function MeditationStatus() {
         </div>
         
         <button
-          onClick={() => isInMeditation ? stopMeditation() : startMeditation(topic, 7)}
+          onClick={() => isInMeditation ? stopMeditation() : startMeditation()}
           className={cn(
             'px-3 py-1.5 rounded-lg text-xs font-medium transition-colors',
             isInMeditation 
@@ -187,14 +192,17 @@ export function SupremeMeditationDashboard() {
   const { acknowledgeInsight } = useNexusStore();
 
   const sortedInsights = React.useMemo(() => {
-    const severityOrder = {
+    const severityOrder: Partial<Record<InsightSeverity, number>> = {
       [InsightSeverity.BREAKTHROUGH]: 0,
       [InsightSeverity.CRITICAL]: 1,
       [InsightSeverity.WARNING]: 2,
       [InsightSeverity.ADVISORY]: 3,
       [InsightSeverity.INFO]: 4,
+      [InsightSeverity.HIGH]: 1,
+      [InsightSeverity.MEDIUM]: 2,
+      [InsightSeverity.LOW]: 5,
     };
-    return [...insights].sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity]);
+    return [...insights].sort((a, b) => (severityOrder[a.severity] ?? 99) - (severityOrder[b.severity] ?? 99));
   }, [insights]);
 
   return (

@@ -1,0 +1,417 @@
+// Database schema
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// TENANT & AUTH
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model Tenant {
+  id                     String   @id @default(cuid())
+  clerkOrgId             String?  @unique // Linked to Clerk Organization
+  name                   String
+  slug                   String   @unique
+  
+  // Stripe Integration
+  stripeCustomerId       String?  @unique
+  stripeSubscriptionId   String?  @unique
+  stripePriceId          String?
+  subscriptionStatus     SubscriptionStatus @default(INACTIVE)
+  
+  // Plan & Entitlements
+  plan                   Plan     @default(STARTER)
+  testsUsed              Int      @default(0)
+  testsLimit             Int      @default(500)
+  
+  // Feature Flags (Plan-based)
+  ghostModeEnabled       Boolean  @default(false)
+  selfHealingEnabled     Boolean  @default(false)
+  parallelExecutionLimit Int      @default(1)
+  apiAccessEnabled       Boolean  @default(false)
+  ssoEnabled             Boolean  @default(false)
+  
+  // Trial
+  trialEndsAt            DateTime?
+  
+  // Settings
+  settings               Json     @default("{}")
+  
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  
+  // Relations
+  users                  User[]
+  projects               Project[]
+  apiKeys                ApiKey[]
+  invoices               Invoice[]
+  usageRecords           UsageRecord[]
+  
+  @@index([slug])
+  @@index([stripeCustomerId])
+  @@index([clerkOrgId])
+}
+
+model User {
+  id            String   @id @default(cuid())
+  clerkId       String   @unique
+  email         String   @unique
+  name          String?
+  avatarUrl     String?
+  role          Role     @default(MEMBER)
+  
+  tenantId      String
+  tenant        Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relations
+  testRuns      TestRun[]
+  
+  @@index([clerkId])
+  @@index([tenantId])
+}
+
+model ApiKey {
+  id            String   @id @default(cuid())
+  name          String
+  keyHash       String   @unique
+  lastUsedAt    DateTime?
+  expiresAt     DateTime?
+  
+  tenantId      String
+  tenant        Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime @default(now())
+  
+  @@index([keyHash])
+  @@index([tenantId])
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// PROJECTS & TESTS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model Project {
+  id            String   @id @default(cuid())
+  name          String
+  slug          String
+  description   String?
+  baseUrl       String?
+  
+  // Settings
+  settings      Json     @default("{}")
+  
+  tenantId      String
+  tenant        Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relations
+  testSuites    TestSuite[]
+  testRuns      TestRun[]
+  selectors     SelectorKnowledge[]
+  
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+}
+
+model TestSuite {
+  id            String   @id @default(cuid())
+  name          String
+  description   String?
+  
+  projectId     String
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relations
+  tests         Test[]
+  
+  @@index([projectId])
+}
+
+model Test {
+  id            String   @id @default(cuid())
+  name          String
+  description   String?
+  code          String   @db.Text
+  
+  // AI-generated metadata
+  aiGenerated   Boolean  @default(false)
+  naturalLanguage String? @db.Text
+  
+  // Settings
+  timeout       Int      @default(30000)
+  retries       Int      @default(2)
+  ghostMode     Boolean  @default(false)
+  selfHealing   Boolean  @default(true)
+  
+  suiteId       String
+  suite         TestSuite @relation(fields: [suiteId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relations
+  results       TestResult[]
+  
+  @@index([suiteId])
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// TEST EXECUTION
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model TestRun {
+  id            String   @id @default(cuid())
+  status        RunStatus @default(PENDING)
+  
+  // Config
+  browser       Browser  @default(CHROMIUM)
+  parallelism   Int      @default(1)
+  ghostMode     Boolean  @default(false)
+  selfHealing   Boolean  @default(true)
+  
+  // Results summary
+  totalTests    Int      @default(0)
+  passed        Int      @default(0)
+  failed        Int      @default(0)
+  skipped       Int      @default(0)
+  duration      Int?     // milliseconds
+  
+  // Metadata
+  triggeredBy   String?  // 'manual' | 'ci' | 'schedule'
+  commitSha     String?
+  branch        String?
+  
+  projectId     String
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  userId        String?
+  user          User?    @relation(fields: [userId], references: [id])
+  
+  startedAt     DateTime?
+  completedAt   DateTime?
+  createdAt     DateTime @default(now())
+  
+  // Relations
+  results       TestResult[]
+  
+  @@index([projectId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model TestResult {
+  id            String   @id @default(cuid())
+  status        TestStatus @default(PENDING)
+  
+  // Performance
+  duration      Int?     // milliseconds
+  
+  // Error details
+  error         String?  @db.Text
+  errorStack    String?  @db.Text
+  screenshot    String?  // S3 URL
+  
+  // Self-healing info
+  selectorsHealed Int    @default(0)
+  healingDetails Json?
+  
+  // Ghost Protocol info
+  ghostSuccess  Boolean?
+  antiDetectDetails Json?
+  
+  testId        String
+  test          Test     @relation(fields: [testId], references: [id], onDelete: Cascade)
+  
+  runId         String
+  run           TestRun  @relation(fields: [runId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime @default(now())
+  
+  @@index([runId])
+  @@index([testId])
+  @@index([status])
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// SELF-HEALING KNOWLEDGE BASE
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model SelectorKnowledge {
+  id            String   @id @default(cuid())
+  
+  // Original selector
+  originalSelector String @db.Text
+  selectorHash  String
+  
+  // Working alternatives (ranked by success rate)
+  alternatives  Json     // Array of { selector: string, successRate: number, lastUsed: Date }
+  
+  // Statistics
+  healCount     Int      @default(0)
+  successRate   Float    @default(0)
+  lastHealedAt  DateTime?
+  
+  projectId     String
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@unique([projectId, selectorHash])
+  @@index([selectorHash])
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// BILLING
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model Invoice {
+  id            String   @id @default(cuid())
+  stripeInvoiceId String @unique
+  amount        Int      // cents
+  currency      String   @default("usd")
+  status        InvoiceStatus @default(PENDING)
+  
+  // Usage details
+  testsUsed     Int
+  period        DateTime
+  
+  tenantId      String
+  tenant        Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime @default(now())
+  paidAt        DateTime?
+  
+  @@index([tenantId])
+  @@index([status])
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// USAGE TRACKING (for rate limiting)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model UsageRecord {
+  id            String   @id @default(cuid())
+  
+  // What was used
+  testsRun      Int      @default(0)
+  parallelSlots Int      @default(0)
+  ghostModeUsed Boolean  @default(false)
+  selfHealingUsed Boolean @default(false)
+  
+  // Period tracking
+  periodStart   DateTime
+  periodEnd     DateTime
+  
+  tenantId      String
+  tenant        Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime @default(now())
+  
+  @@index([tenantId, periodStart])
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// EXECUTION LOG (for debugging & zombie cleanup)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model ExecutionLog {
+  id            String   @id @default(cuid())
+  
+  sessionId     String   @unique
+  processId     Int?
+  status        ExecutionStatus @default(RUNNING)
+  
+  // Browser info
+  browser       String
+  headless      Boolean  @default(true)
+  
+  // Cleanup tracking
+  startedAt     DateTime @default(now())
+  completedAt   DateTime?
+  cleanedUp     Boolean  @default(false)
+  
+  tenantId      String
+  runId         String?
+  
+  @@index([tenantId])
+  @@index([status])
+  @@index([sessionId])
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ENUMS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+enum Plan {
+  STARTER     // Free - 500 tests
+  PRO         // $49/mo - 10,000 tests
+  TEAM        // $149/mo - 50,000 tests
+  ENTERPRISE  // Custom
+}
+
+enum SubscriptionStatus {
+  INACTIVE
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  UNPAID
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+enum Browser {
+  CHROMIUM
+  FIREFOX
+  WEBKIT
+}
+
+enum RunStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum TestStatus {
+  PENDING
+  RUNNING
+  PASSED
+  FAILED
+  SKIPPED
+}
+
+enum InvoiceStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum ExecutionStatus {
+  RUNNING
+  COMPLETED
+  FAILED
+  ZOMBIE
+  CLEANED
+}

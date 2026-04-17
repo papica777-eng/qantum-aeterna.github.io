@@ -1,0 +1,128 @@
+[
+  {
+    "id": "d21d3077-460e-4fbd-b577-059a743c1639",
+    "created": "2025-12-27T02:38:14.992Z",
+    "lastAccessed": "2025-12-27T02:38:14.992Z",
+    "errorType": "selector_not_found",
+    "errorMessage": "no such element: Unable to locate element: #btn-submit",
+    "errorFingerprint": "0b695dbbae0ad6b9",
+    "context": {
+      "page": "test",
+      "action": "click"
+    },
+    "fix": {
+      "type": "selector",
+      "alternatives": [
+        "[id*=\"submit\"]"
+      ]
+    },
+    "fixCode": null,
+    "timesApplied": 0,
+    "timesSuccessful": 0,
+    "timesFailed": 0,
+    "confidence": 0.5,
+    "version": 1,
+    "evolvedFrom": null,
+    "children": []
+  },
+  {
+    "id": "319a034c-ea5a-41e0-b667-0a0c3b250ed7",
+    "created": "2025-12-27T02:38:14.993Z",
+    "lastAccessed": "2025-12-27T02:38:14.993Z",
+    "errorType": "selector_not_found",
+    "errorMessage": "no such element: Cannot find #login-button",
+    "errorFingerprint": "1b788ec9bcd0ec3a",
+    "context": {
+      "page": "test",
+      "action": "click"
+    },
+    "fix": {
+      "type": "selector",
+      "alternatives": [
+        "[id*=\"login\"]"
+      ]
+    },
+    "fixCode": null,
+    "timesApplied": 0,
+    "timesSuccessful": 0,
+    "timesFailed": 0,
+    "confidence": 0.5,
+    "version": 1,
+    "evolvedFrom": null,
+    "children": []
+  },
+  {
+    "id": "5d1b7f24-e48c-4e14-a551-d686dc3a8c6b",
+    "created": "2025-12-27T02:38:14.993Z",
+    "lastAccessed": "2025-12-27T02:38:14.993Z",
+    "errorType": "selector_not_found",
+    "errorMessage": "no such element: selector \"#save\" not found",
+    "errorFingerprint": "428c71e1f155710c",
+    "context": {
+      "page": "test",
+      "action": "click"
+    },
+    "fix": {
+      "type": "selector",
+      "alternatives": [
+        "button[type=\"submit\"]"
+      ]
+    },
+    "fixCode": null,
+    "timesApplied": 0,
+    "timesSuccessful": 0,
+    "timesFailed": 0,
+    "confidence": 0.5,
+    "version": 1,
+    "evolvedFrom": null,
+    "children": []
+  },
+  {
+    "id": "37c8cb9f-e922-4daa-aa84-e76dae10a87f",
+    "created": "2025-12-27T02:38:14.993Z",
+    "lastAccessed": "2025-12-27T02:38:14.993Z",
+    "errorType": "timeout",
+    "errorMessage": "timeout: waiting for element to be visible",
+    "errorFingerprint": "07ca4389d1c5c5de",
+    "context": {
+      "page": "test",
+      "action": "click"
+    },
+    "fix": {
+      "type": "timing",
+      "waitMs": 5000
+    },
+    "fixCode": null,
+    "timesApplied": 0,
+    "timesSuccessful": 0,
+    "timesFailed": 0,
+    "confidence": 0.5,
+    "version": 1,
+    "evolvedFrom": null,
+    "children": []
+  },
+  {
+    "id": "c7f3aa8c-a32e-4558-887b-32392d99d53b",
+    "created": "2025-12-27T02:38:14.993Z",
+    "lastAccessed": "2025-12-27T02:38:14.993Z",
+    "errorType": "timeout",
+    "errorMessage": "timeout: element not visible after 3000ms",
+    "errorFingerprint": "bb995c52b98c449b",
+    "context": {
+      "page": "test",
+      "action": "click"
+    },
+    "fix": {
+      "type": "timing",
+      "waitMs": 6000
+    },
+    "fixCode": null,
+    "timesApplied": 0,
+    "timesSuccessful": 0,
+    "timesFailed": 0,
+    "confidence": 0.5,
+    "version": 1,
+    "evolvedFrom": null,
+    "children": []
+  }
+]

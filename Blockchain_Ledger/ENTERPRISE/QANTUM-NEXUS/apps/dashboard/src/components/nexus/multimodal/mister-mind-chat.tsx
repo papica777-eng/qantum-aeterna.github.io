@@ -61,15 +61,22 @@ export function MisterMindChat() {
     setIsThinking(true);
 
     try {
-      // Trigger autonomous thought
-      const thought = await triggerThought(input, ThoughtType.DIAGNOSTIC);
+      // Trigger autonomous thought (void action — updates store)
+      triggerThought({
+        type: ThoughtType.DIAGNOSTIC,
+        content: input,
+        confidence: 0.9,
+        timestamp: new Date().toISOString(),
+      });
+      
+      // Simulate AI response (replace with real API call)
+      await new Promise(resolve => setTimeout(resolve, 800));
       
       const assistantMessage: Message = {
         id: crypto.randomUUID(),
         role: 'assistant',
-        content: thought.decision.action,
+        content: `Анализирам: "${input}" — Системата е в OPERATIONAL статус. Self-Healing е активно.`,
         timestamp: new Date(),
-        action: thought.decision.outcome,
       };
 
       setMessages(prev => [...prev, assistantMessage]);

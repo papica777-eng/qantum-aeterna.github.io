@@ -93,7 +93,7 @@ export function LiveFeedPanel() {
               </div>
             ) : (
               displayFeed.map((item) => {
-                const config = feedTypeConfig[item.type];
+                const config = feedTypeConfig[item.type ?? 'alert'] ?? feedTypeConfig['alert'];
                 const Icon = config.icon;
                 const severityBorder = item.severity ? severityColors[item.severity] : '';
                 

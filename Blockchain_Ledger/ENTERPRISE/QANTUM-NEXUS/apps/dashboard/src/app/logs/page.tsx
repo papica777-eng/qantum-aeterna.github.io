@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { WatchdogPanel } from '@/components/dashboard/watchdog-panel';
-import { DashboardLayout } from '@/components/layout/dashboard-layout';
+import DashboardLayout from '@/components/layout/dashboard-layout';
 import { motion } from 'framer-motion';
 
 export default function LogsPage() {

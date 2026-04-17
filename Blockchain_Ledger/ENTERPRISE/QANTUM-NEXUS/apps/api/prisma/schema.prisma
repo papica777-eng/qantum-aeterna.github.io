@@ -1,0 +1,212 @@
+// Complexity: O(1) — static schema definition
+// Prisma Schema — QANTUM NEXUS Enterprise Database Layer
+// Architect: DIMITAR PRODROMOV
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TENANT (Multi-tenancy root)
+// ═══════════════════════════════════════════════════════════════════════════
+
+model Tenant {
+  id           String         @id @default(cuid())
+  name         String
+  plan         Plan           @default(STARTER)
+  stripeId     String?        @unique
+  apiKey       String?        @unique @default(cuid())
+  ghostMode    Boolean        @default(false)
+  selfHealing  Boolean        @default(false)
+  maxRuns      Int            @default(10)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  projects     Project[]
+  healingJobs  HealingJob[]
+  telemetry    Telemetry[]
+  metrics      HealingMetrics[]
+}
+
+enum Plan {
+  STARTER
+  PRO
+  TEAM
+  ENTERPRISE
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PROJECT
+// ═══════════════════════════════════════════════════════════════════════════
+
+model Project {
+  id          String    @id @default(cuid())
+  tenantId    String
+  name        String
+  baseUrl     String
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tenant      Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  suites      Suite[]
+  healingJobs HealingJob[]
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TEST SUITE + TEST
+// ═══════════════════════════════════════════════════════════════════════════
+
+model Suite {
+  id        String   @id @default(cuid())
+  projectId String
+  name      String
+  priority  Int      @default(0)
+  createdAt DateTime @default(now())
+
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tests     Test[]
+}
+
+model Test {
+  id          String   @id @default(cuid())
+  suiteId     String
+  name        String
+  selector    String   // Original selector — tracked for drift
+  action      String   // click | fill | navigate | assert
+  expectedVal String?
+  timeout     Int      @default(30000)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  suite       Suite    @relation(fields: [suiteId], references: [id], onDelete: Cascade)
+  runs        TestRun[]
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TEST RUN + RESULT
+// ═══════════════════════════════════════════════════════════════════════════
+
+model TestRun {
+  id          String     @id @default(cuid())
+  testId      String
+  status      RunStatus  @default(PENDING)
+  ghostMode   Boolean    @default(false)
+  healingUsed Boolean    @default(false)
+  duration    Int?       // ms
+  error       String?
+  screenshot  String?    // URL/path
+  createdAt   DateTime   @default(now())
+  completedAt DateTime?
+
+  test        Test       @relation(fields: [testId], references: [id], onDelete: Cascade)
+  healingJobs HealingJob[]
+}
+
+enum RunStatus {
+  PENDING
+  RUNNING
+  SUCCESS
+  FAILED
+  HEALED     // Failed but autonomously repaired
+  SKIPPED
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// HEALING JOB — Core of The Bridge
+// Maps 1:1 to VortexHealingNexus.HealingResult
+// ═══════════════════════════════════════════════════════════════════════════
+
+model HealingJob {
+  id             String      @id @default(cuid())
+  tenantId       String
+  projectId      String?
+  testRunId      String?
+
+  // Mirror of HealingDomain enum from VortexHealingNexus
+  domain         String      // UI | NETWORK | LOGIC | DATABASE
+
+  // Input
+  originalSelector  String?
+  targetUrl        String?
+  failureError     String?
+
+  // Output from SelfHealingEngine
+  status           HealingStatus @default(PENDING)
+  strategy         String?       // Which of the 15 strategies succeeded
+  healedSelector   String?       // The new working selector
+  attempts         Int           @default(0)
+
+  // VortexHealingNexus LivenessToken
+  livenessToken    String?
+
+  // Metrics
+  duration         Int?          // ms
+  confidence       Float?        // 0.0–1.0
+
+  // Artifact (new selector / code / proxy)
+  artifact         Json?
+
+  // Rollback support
+  rollbackAvailable Boolean     @default(true)
+  rolledBack        Boolean     @default(false)
+
+  createdAt        DateTime    @default(now())
+  completedAt      DateTime?
+
+  tenant     Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  project    Project?  @relation(fields: [projectId], references: [id])
+  testRun    TestRun?  @relation(fields: [testRunId], references: [id])
+}
+
+enum HealingStatus {
+  PENDING
+  RUNNING
+  SUCCESS
+  FAILED
+  ROLLED_BACK
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// HEALING METRICS — Aggregated stats per domain per tenant
+// ═══════════════════════════════════════════════════════════════════════════
+
+model HealingMetrics {
+  id          String   @id @default(cuid())
+  tenantId    String
+  domain      String   // UI | NETWORK | LOGIC | DATABASE
+  attempts    Int      @default(0)
+  successes   Int      @default(0)
+  failures    Int      @default(0)
+  successRate Float    @default(0.0)
+  avgDuration Float    @default(0.0)
+  recordedAt  DateTime @default(now())
+  period      String   @default("daily") // daily | weekly | monthly
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, domain, recordedAt])
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TELEMETRY — Real-time daemon/system events
+// ═══════════════════════════════════════════════════════════════════════════
+
+model Telemetry {
+  id        String   @id @default(cuid())
+  tenantId  String
+  type      String   // DAEMON_STATE | SYSTEM_HEALTH | HEALING_EVENT | GHOST_MODE | LIVENESS_TOKEN
+  severity  String   @default("LOW") // LOW | MEDIUM | HIGH | CRITICAL
+  payload   Json
+  source    String?  // subsystem name
+  createdAt DateTime @default(now())
+
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, type, createdAt])
+}

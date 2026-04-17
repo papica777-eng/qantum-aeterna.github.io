@@ -1,0 +1,71 @@
+# Ignore for npm publish
+
+# 🔒 SOURCE CODE PROTECTION - Keep TypeScript private
+src/
+*.ts
+!*.d.ts
+tsconfig.json
+
+# Large files
+*.gguf
+gemma-7b.ggu.gguf
+Modelfile
+
+# Output directories
+output/
+autonomous_output/
+cloud_output/
+generated_tests/
+bug_reports/
+visual_diffs/
+visual-diffs/
+baselines/
+visual-baselines/
+screenshots/
+traces/
+videos/
+logs/
+Report/
+dist/
+knowledge/
+chronos-data/
+
+# Sales & Marketing
+sales/
+marketing/
+
+# Development
+node_modules/
+.git/
+.github/
+_deprecated/
+
+# Config files
+.env
+.supervisor-memory.json
+.watchdog-state.json
+cognitive_memory.json
+memory.json
+mind_memory.json
+mind_knowledge.json
+
+# Test files
+test/
+*.test.js
+test-*.js
+
+# Docs (keep README)
+docs/
+licenses/
+
+# Examples (optional - remove if you want to include)
+# examples/
+
+# Portfolio
+portfolio-demos/
+
+# Other
+*.log
+*.tmp
+.shadow-envs/
+.chaos-temp/

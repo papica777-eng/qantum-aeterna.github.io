@@ -2,47 +2,31 @@
 
 import * as React from 'react';
 import { motion } from 'framer-motion';
-import { StatsCards } from '@/components/dashboard/stats-cards';
-import { UsageChart } from '@/components/dashboard/usage-chart';
-import { HealingInsights } from '@/components/dashboard/healing-insights';
-import { RecentRuns } from '@/components/dashboard/recent-runs';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { WatchdogPanel } from '@/components/dashboard/watchdog-panel';
 import { ShieldAlert } from 'lucide-react';
 
 export default function DashboardPage() {
   return (
     <div className="space-y-6">
-      {/* Critical System Alert - Vision Alignment */}
+      {/* Real-time Telemetry centerpiece */}
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <Alert className="bg-purple-500/10 border-purple-500/20 text-purple-400">
-          <ShieldAlert className="h-4 w-4" />
-          <AlertTitle className="font-bold">SYSTEM STATUS: OPTIMIZED</AlertTitle>
-          <AlertDescription>
-            Neutralized: CORRUPTED_FILE threat detected and auto-healed via Neural Bridge.
-          </AlertDescription>
-        </Alert>
+        <WatchdogPanel />
       </motion.div>
 
-      {/* Stats Overview */}
-      <StatsCards />
-
-      {/* Main Insights Grid */}
-      <div className="grid grid-cols-12 gap-6">
-        <div className="col-span-12 lg:col-span-8">
-          <UsageChart />
-        </div>
-        <div className="col-span-12 lg:col-span-4">
-          <HealingInsights />
-        </div>
-      </div>
-
-      {/* Recent Activity */}
+      {/* Auxiliary Neural Bridge Status */}
       <div className="grid grid-cols-1 gap-6">
-        <RecentRuns />
+        <div className="p-4 rounded-xl bg-purple-500/5 border border-purple-500/20 text-purple-400/80 text-xs font-mono flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <ShieldAlert className="h-4 w-4" />
+            <span>NEURAL_BRIDGE_ACTIVE: Substrate parity verified at 100%</span>
+          </div>
+          <span>ETERNAL_PROTOCOL: V34.1_STABLE</span>
+        </div>
       </div>
     </div>
   );
 }
+

@@ -1,0 +1,157 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#  🚀 QANTUM - CI/CD Automation Pipeline
+#  Professional QA Automation Framework
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: QANTUM CI/CD Suite
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  qa-automation:
+    name: 🧪 QA Automation Suite
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [20]
+
+    steps:
+      # ─────────────────────────────────────────────────────────────────────────
+      #  Step 1: Checkout Repository
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      # ─────────────────────────────────────────────────────────────────────────
+      #  Step 2: Setup Node.js Environment
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: 🟢 Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      # ─────────────────────────────────────────────────────────────────────────
+      #  Step 3: Install Dependencies
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      # ─────────────────────────────────────────────────────────────────────────
+      #  Step 4: Setup Chrome Browser
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: 🌐 Setup Chrome Browser
+        uses: browser-actions/setup-chrome@latest
+        with:
+          chrome-version: stable
+
+      # ─────────────────────────────────────────────────────────────────────────
+      #  Step 5: Create Environment Configuration
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: 🔐 Configure Environment
+        run: |
+          echo "BASE_URL=${{ secrets.BASE_URL }}" >> .env
+          echo "SEARCH_ENGINE_URL=${{ secrets.SEARCH_ENGINE_URL }}" >> .env
+          echo "HEADLESS=true" >> .env
+          echo "BROWSER=chrome" >> .env
+          echo "TIMEOUT=30000" >> .env
+
+      # ─────────────────────────────────────────────────────────────────────────
+      #  Step 6: Run API Tests (Fast Feedback)
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: 🔌 Run API Contract Tests
+        run: npm test -- --grep "API"
+        continue-on-error: false
+
+      # ─────────────────────────────────────────────────────────────────────────
+      #  Step 7: Run Full Test Suite
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: 🧪 Run Full Automation Suite
+        run: npm test
+        env:
+          CI: true
+
+      # ─────────────────────────────────────────────────────────────────────────
+      #  Step 8: Upload Test Report as Artifact
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: 📊 Upload Test Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qantum-test-report
+          path: Report/
+          retention-days: 30
+
+      # ─────────────────────────────────────────────────────────────────────────
+      #  Step 9: Upload Screenshots on Failure
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: 📸 Upload Failure Screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-screenshots
+          path: screenshots/
+          retention-days: 7
+
+      # ─────────────────────────────────────────────────────────────────────────
+      #  Step 10: Test Summary
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: 📋 Generate Test Summary
+        if: always()
+        run: |
+          echo "## 🧪 Test Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Node.js | ${{ matrix.node-version }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| OS | Ubuntu Latest |" >> $GITHUB_STEP_SUMMARY
+          echo "| Browser | Chrome Stable |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📊 **Full report available in Artifacts**" >> $GITHUB_STEP_SUMMARY
+
+      # ─────────────────────────────────────────────────────────────────────────
+      #  Step 11: Discord Notification on Success (Optional - requires DISCORD_WEBHOOK secret)
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: 🔔 Notify Discord on Success
+        if: success() && env.DISCORD_WEBHOOK != ''
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+            "username": "QANTUM Bot",
+            "avatar_url": "https://cdn-icons-png.flaticon.com/512/1548/1548784.png",
+            "embeds": [{
+              "title": "✅ QA PIPELINE PASSED",
+              "color": 3066993,
+              "description": "All tests in the **QANTUM Framework** finished successfully! 🚀\n\n**Repository:** ${{ github.repository }}\n**Branch:** ${{ github.ref_name }}\n**Commit:** ${{ github.sha }}\n**Tests:** 20+ Passed\n**Status:** ✅ Stable",
+              "footer": { "text": "Build triggered by GitHub Actions • ${{ github.event_name }}" },
+              "timestamp": "${{ github.event.head_commit.timestamp }}"
+            }]
+          }' ${{ secrets.DISCORD_WEBHOOK }}
+
+      # ─────────────────────────────────────────────────────────────────────────
+      #  Step 12: Discord Notification on Failure (Optional - requires DISCORD_WEBHOOK secret)
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: 🚨 Notify Discord on Failure
+        if: failure() && env.DISCORD_WEBHOOK != ''
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+            "username": "QANTUM Bot",
+            "avatar_url": "https://cdn-icons-png.flaticon.com/512/1548/1548784.png",
+            "embeds": [{
+              "title": "❌ QA PIPELINE FAILED",
+              "color": 15158332,
+              "description": "⚠️ **Attention!** One or more tests failed in the QANTUM Framework!\n\n**Repository:** ${{ github.repository }}\n**Branch:** ${{ github.ref_name }}\n**Commit:** ${{ github.sha }}\n\n📸 Check the artifacts for failure screenshots!",
+              "footer": { "text": "Build triggered by GitHub Actions • ${{ github.event_name }}" },
+              "timestamp": "${{ github.event.head_commit.timestamp }}"
+            }]
+          }' ${{ secrets.DISCORD_WEBHOOK }}

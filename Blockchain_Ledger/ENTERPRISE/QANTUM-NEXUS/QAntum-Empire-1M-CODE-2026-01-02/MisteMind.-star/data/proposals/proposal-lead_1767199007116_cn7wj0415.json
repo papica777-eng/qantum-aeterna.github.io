@@ -1,0 +1,14 @@
+{
+  "lead_id": "lead_1767199007116_cn7wj0415",
+  "lead_name": "PadulaRenato",
+  "lead_source": "GitHub",
+  "priority_score": 80,
+  "template_used": "testing_upgrade",
+  "email": "PadulaRenato@github.placeholder",
+  "subject": "⚡ Make VNT_TS_PW_GHERKIN_Template's Playwright tests 100x faster",
+  "body": "Hi PadulaRenato,\n\nI saw you're using Playwright in **VNT_TS_PW_GHERKIN_Template** - great choice! \n\nBut are your tests:\n- ❌ Slow in CI/CD pipelines?\n- ❌ Flaky with random failures?\n- ❌ Blocked by anti-bot detection on some sites?\n\n**QAntum Prime** solves all three:\n\n1. **Parallel Swarm Execution** - Run 100 tests simultaneously across 5 regions\n2. **Self-Healing Selectors** - AI automatically fixes broken selectors\n3. **Ghost Protocol v2** - Stealth mode that makes Playwright undetectable\n\nHere's a real example:\n```\nBefore QAntum: 45 minutes for 200 tests\nAfter QAntum: 27 seconds (100x faster)\n```\n\n**Free Demo**: I can set up QAntum on your repo in 15 minutes. Interested?\n\nBest,\nQAntum Prime\nhttps://papica777-eng.github.io/QAntumPage/",
+  "generated_at": "2025-12-31T17:07:32.270Z",
+  "status": "pending",
+  "tracking_pixel": "https://papica777-eng.github.io/QAntumPage/track?lid=lead_1767199007116_cn7wj0415",
+  "cta_link": "https://papica777-eng.github.io/QAntumPage/pricing.html"
+}

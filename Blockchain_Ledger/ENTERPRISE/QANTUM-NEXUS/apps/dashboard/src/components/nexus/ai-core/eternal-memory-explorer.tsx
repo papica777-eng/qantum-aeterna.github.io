@@ -37,9 +37,9 @@ function VectorMatchCard({ match, index }: { match: VectorMatch; index: number }
           </div>
           <div>
             <p className="text-sm font-medium text-white truncate max-w-[200px]">
-              {match.filePath.split('/').pop()}
+              {match.filePath?.split('/').pop() ?? 'Unknown file'}
             </p>
-            <p className="text-xs text-gray-500">{match.project}</p>
+            <p className="text-xs text-gray-500">{match.project ?? match.namespace}</p>
           </div>
         </div>
         
@@ -77,7 +77,7 @@ function VectorMatchCard({ match, index }: { match: VectorMatch; index: number }
       {/* File path */}
       <div className="flex items-center gap-2 mt-3 text-xs text-gray-500">
         <Folder className="h-3 w-3" />
-        <span className="truncate">{match.filePath}</span>
+        <span className="truncate">{match.filePath ?? match.namespace ?? 'unknown'}</span>
       </div>
     </motion.div>
   );
@@ -96,7 +96,7 @@ export function EternalMemoryExplorer() {
     
     setIsSearching(true);
     try {
-      const matches = await searchMemory(query, topK);
+      const matches = await searchMemory(query);
       setResults(matches);
     } catch (error) {
       console.error('Search failed:', error);

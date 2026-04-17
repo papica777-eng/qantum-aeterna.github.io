@@ -1,0 +1,49 @@
+╔══════════════════════════════════════════════════════════════════════════╗
+║                    DEPENDENCY GRAPH VISUALIZATION                        ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║   📦 physics         (  4 files)                                         ║
+║   📦 biology         ( 10 files) → [physics, cognition]                  ║
+║   📦 cognition       ( 12 files)                                         ║
+║   📦 accessibility   (  2 files)                                         ║
+║   📦 ai              (  4 files)                                         ║
+║   📦 api             (  3 files)                                         ║
+║   📦 chronos         (  6 files)                                         ║
+║   📦 config          (  3 files)                                         ║
+║   📦 core            (  6 files)                                         ║
+║   📦 dashboard       (  3 files) → [physics, swarm]                      ║
+║   📦 data            (  4 files)                                         ║
+║   📦 distributed     (  4 files)                                         ║
+║   📦 docs            (  1 files)                                         ║
+║   📦 events          (  3 files)                                         ║
+║   📦 extensibility   (  3 files)                                         ║
+║   📦 ghost           (  6 files)                                         ║
+║   📦 global-nexus    (  1 files) → [swarm, reality, security, docs]      ║
+║   📦 index.ts        (  1 files)                                         ║
+║   📦 integration     (  3 files)                                         ║
+║   📦 licensing       (  1 files)                                         ║
+║   📦 market-reaper.ts (  1 files)                                        ║
+║   📦 math            (  1 files)                                         ║
+║   📦 oracle          (  1 files)                                         ║
+║   📦 performance     (  6 files)                                         ║
+║   📦 plugins         (  2 files)                                         ║
+║   📦 reality         ( 14 files) → [biology]                             ║
+║   📦 reporter        (  4 files)                                         ║
+║   📦 saas            (  4 files)                                         ║
+║   📦 sales           (  1 files)                                         ║
+║   📦 security        (  8 files)                                         ║
+║   📦 sovereign-market (  1 files) → [biology, reality]                   ║
+║   📦 storage         (  4 files)                                         ║
+║   📦 swarm           (  2 files) → [physics]                             ║
+║   📦 synthesis       (  5 files)                                         ║
+║   📦 validation      (  4 files)                                         ║
+║   📦 visual          (  3 files)                                         ║
+║                                                                          ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  🚨 LAYER VIOLATIONS                                                     ║
+║                                                                          ║
+║  ❌ index.ts (biology) → ContextInjector.ts (cognition)                 ║
+║  ❌ SelfCorrectionLoop.ts (biology) → ContextInjector.ts (cognition)    ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  🟢 Health Score: [████████████████████████████████████████████████░░] 96%      ║
+╚══════════════════════════════════════════════════════════════════════════╝

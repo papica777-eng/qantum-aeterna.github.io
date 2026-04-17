@@ -1,0 +1,55 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                    🤖 АВТОМАТИЗИРАНИ СКРИПТОВЕ                            ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║  📁 scripts/                        43 файла (1,176 KB)                   ║
+║  📁 scripts/archive/                10 файла                              ║
+║  📁 scripts/ci/                     4 файла (YML workflows)               ║
+║  📁 scripts/sales-autopilot/        4 файла                               ║
+║  📁 scripts/nerve-templates/        8 файла                               ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                    🦇 BAT/PS1 СКРИПТОВЕ                                   ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║  GUARDIAN-CONTROL.bat               3.89 KB                               ║
+║  QANTUM-DAEMON.bat                  0.11 KB                               ║
+║  QANTUM-STOP.bat                    0.11 KB                               ║
+║  QANTUM.bat                         1.71 KB                               ║
+║  UPDATE-STATS.bat                   1.50 KB                               ║
+║  PROJECT/PRIVATE/scripts/           6 BAT файла                           ║
+║  rebrand-qantum-bilingual.ps1       12.92 KB                              ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                    🧠 DAEMONS & GUARDIANS                                 ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║  qantum-daemon.js                   9 KB                                  ║
+║  eternal-guardian.js                37 KB                                 ║
+║  eternal-watchdog.js                26.56 KB                              ║
+║  unified-guardian.js                36.12 KB                              ║
+║  supreme-daemon.ts                  8 KB                                  ║
+║  MegaSupremeDaemon.ts               41.59 KB ✅                           ║
+║  SupremeDaemon.ts                   25.95 KB ✅                           ║
+║  QAntumConsole.ts                   32.61 KB ✅                           ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                    📓 БЕЛЕЖНИЦИ (LOGS/NOTES)                              ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║  CHANGE-LOG-LIVE.md                 14.58 KB                              ║
+║  CHANGELOG.md                       5.78 KB                               ║
+║  docs/SESSION-LOG-2026-01-02.md     8.05 KB                               ║
+║  docs/archive/DUAL-TODO-2026.md     12.92 KB                              ║
+║  AUTOMATION-ROADMAP.md              6 KB                                  ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                    ⚡ AUTO-* МОДУЛИ                                        ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║  auto-documenter.ts                 21.94 KB                              ║
+║  auto-sync-daemon.js                19.52 KB                              ║
+║  auto-test-factory.ts               5 KB                                  ║
+║  auto-deploy-pipeline.ts            3 KB                                  ║
+║  auto-patcher.ts                    9 KB                                  ║
+║  auto-watch.ts                      6 KB                                  ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                    🎯 СПЕЦИАЛНИ RUNNERS                                   ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║  atomic-runner.js                   30.5 KB                               ║
+║  integrated-runner.js               31.96 KB                              ║
+║  new-year-passive-runner.ts         12.5 KB                               ║
+║  real-ghost-runner.js               22.54 KB                              ║
+║  paper-mode-runner.js               20.1 KB                               ║
+╚═══════════════════════════════════════════════════════════════════════════╝

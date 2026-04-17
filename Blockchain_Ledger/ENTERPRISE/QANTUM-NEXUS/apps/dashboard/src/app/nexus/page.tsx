@@ -1,8 +1,3 @@
-/**
- * NEXUS MAIN DASHBOARD PAGE
- * Production-ready integration of all AI Core modules
- */
-
 'use client';
 
 import * as React from 'react';
@@ -21,6 +16,8 @@ import {
   useHealingEvents,
   DaemonState
 } from '@/stores/nexus-store';
+
+import DashboardLayout from '@/components/layout/dashboard-layout';
 
 // AI Core Components
 import { AutonomousThoughtVisualizer } from '@/components/nexus/ai-core/autonomous-thought-visualizer';
@@ -79,123 +76,71 @@ export default function NexusPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0a0a0f] via-[#0d0d18] to-[#0a0a0f]">
-      {/* Ambient Background Effects */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-violet-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl" />
-      </div>
-
-      {/* Header */}
-      <header className="relative border-b border-violet-500/10 bg-[#0d0d14]/90 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-[1920px] mx-auto px-8 py-5">
-          <div className="flex items-center justify-between">
-            {/* Logo & Title */}
-            <div className="flex items-center gap-5">
-              <motion.div 
-                className="relative p-3 rounded-2xl bg-gradient-to-br from-violet-600 to-cyan-500 shadow-lg shadow-violet-500/25"
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 400 }}
-              >
-                <Network className="h-7 w-7 text-white" />
-                <div className="absolute -top-1 -right-1 h-3 w-3 bg-emerald-400 rounded-full animate-pulse" />
-              </motion.div>
-              <div>
-                <h1 className="text-2xl font-black tracking-tight bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
-                  QANTUM NEXUS
-                </h1>
-                <p className="text-sm text-gray-500 font-medium">Neural Operations Center  v34.1</p>
-              </div>
+    <DashboardLayout>
+      <div className="space-y-6">
+        {/* Hub Header Integration */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-2xl bg-gradient-to-r from-violet-600/10 to-transparent border border-violet-500/20">
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-xl bg-violet-600 shadow-lg shadow-violet-600/20">
+              <Network className="h-6 w-6 text-white" />
             </div>
+            <div>
+              <h2 className="text-xl font-bold text-white tracking-tight">NEXUS CORE MODULE</h2>
+              <p className="text-sm text-slate-400">Neural Integration v34.1 • ALPHA_ACCESS</p>
+            </div>
+          </div>
 
-            {/* System Status Bar */}
-            <div className="flex items-center gap-4">
-              {/* Health Indicator */}
-              <div className={cn(
-                'flex items-center gap-3 px-5 py-2.5 rounded-xl border backdrop-blur-sm',
+          <div className="flex items-center gap-3">
+             <div className={cn(
+                'flex items-center gap-3 px-4 py-2 rounded-lg border backdrop-blur-sm',
                 getStatusBg()
               )}>
-                <div className="flex items-center gap-2">
-                  <div className={cn(
-                    'w-2.5 h-2.5 rounded-full',
-                    systemHealth.overall >= 80 ? 'bg-emerald-400 animate-pulse' :
-                    systemHealth.overall >= 50 ? 'bg-amber-400' : 'bg-red-400 animate-pulse'
-                  )} />
-                  <span className={cn('text-sm font-semibold', getStatusColor())}>
-                    {systemHealth.overall >= 80 ? 'HEALTHY' : 
-                     systemHealth.overall >= 50 ? 'DEGRADED' : 'CRITICAL'}
-                  </span>
-                </div>
-                <div className="w-px h-4 bg-white/10" />
+                <span className={cn('text-xs font-bold', getStatusColor())}>
+                  {systemHealth.overall >= 80 ? 'HEALTHY' : 
+                   systemHealth.overall >= 50 ? 'DEGRADED' : 'CRITICAL'}
+                </span>
                 <span className="text-sm font-bold text-white">
                   {systemHealth.overall}%
                 </span>
               </div>
-
-              {/* Connection Status */}
-              <motion.div 
-                className={cn(
-                  'flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold border',
+              <div className={cn(
+                  'flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold border',
                   isConnected
                     ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
                     : 'bg-red-500/10 border-red-500/30 text-red-400'
-                )}
-                animate={{ opacity: isConnected ? 1 : [1, 0.5, 1] }}
-                transition={{ duration: 2, repeat: isConnected ? 0 : Infinity }}
-              >
-                <div className={cn(
-                  'w-2 h-2 rounded-full',
-                  isConnected ? 'bg-emerald-400' : 'bg-red-400'
-                )} />
-                {isConnected ? 'CONNECTED' : 'DISCONNECTED'}
-              </motion.div>
-
-              {/* Settings */}
-              <motion.button 
-                className="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-violet-500/10 hover:border-violet-500/30 transition-all"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Settings className="h-5 w-5 text-gray-400" />
-              </motion.button>
-            </div>
+                )}>
+                {isConnected ? 'LIVE' : 'OFFLINE'}
+              </div>
           </div>
-
-          {/* Navigation Tabs */}
-          <nav className="flex gap-2 mt-6 -mb-px overflow-x-auto pb-px">
-            {TABS.map((tab) => (
-              <motion.button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={cn(
-                  'flex items-center gap-2.5 px-5 py-3 rounded-t-xl text-sm font-medium transition-all whitespace-nowrap',
-                  activeTab === tab.id
-                    ? 'bg-gradient-to-b from-violet-500/20 to-transparent text-violet-300 border-t border-x border-violet-500/30'
-                    : 'text-gray-500 hover:text-white hover:bg-white/5'
-                )}
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <tab.icon className={cn(
-                  'h-4 w-4',
-                  activeTab === tab.id ? 'text-violet-400' : ''
-                )} />
-                <span>{tab.label}</span>
-              </motion.button>
-            ))}
-          </nav>
         </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="relative max-w-[1920px] mx-auto px-8 py-8">
+        {/* Navigation Tabs */}
+        <nav className="flex gap-2 overflow-x-auto pb-2 noscrollbar">
+          {TABS.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                'flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm font-medium transition-all whitespace-nowrap border',
+                activeTab === tab.id
+                  ? 'bg-violet-600 text-white border-violet-500 shadow-lg shadow-violet-600/20'
+                  : 'text-slate-400 border-slate-800 hover:text-white hover:bg-slate-800/50'
+              )}
+            >
+              <tab.icon className="h-4 w-4" />
+              <span>{tab.label}</span>
+            </button>
+          ))}
+        </nav>
+
+        {/* Main Hub Content */}
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
           >
             {activeTab === 'overview' && <OverviewTab />}
             {activeTab === 'thoughts' && <AutonomousThoughtVisualizer />}
@@ -205,11 +150,11 @@ export default function NexusPage() {
             {activeTab === 'healing' && <HealingTab />}
           </motion.div>
         </AnimatePresence>
-      </main>
 
-      {/* Mister Mind Chat Widget */}
-      <MisterMindChat />
-    </div>
+        {/* Mister Mind Chat Widget */}
+        <MisterMindChat />
+      </div>
+    </DashboardLayout>
   );
 }
 
@@ -254,7 +199,7 @@ function OverviewTab() {
   return (
     <div className="space-y-8">
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, i) => (
           <motion.div
             key={stat.label}
@@ -262,19 +207,18 @@ function OverviewTab() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
             className={cn(
-              'relative p-6 rounded-2xl border border-white/10 overflow-hidden',
-              'bg-gradient-to-br from-white/5 to-transparent',
+              'relative p-6 rounded-2xl border border-white/5 overflow-hidden',
+              'bg-[#0d0d12]',
               'hover:border-violet-500/30 transition-all group'
             )}
           >
-            <div className={cn('absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-br', stat.bg, 'to-transparent')} />
             <div className="relative">
               <div className="flex items-center justify-between mb-4">
                 <stat.icon className={cn('h-6 w-6', stat.color)} />
-                <Sparkles className="h-4 w-4 text-white/20" />
+                <Sparkles className="h-4 w-4 text-white/10" />
               </div>
-              <p className="text-3xl font-black text-white mb-1">{stat.value}</p>
-              <p className="text-sm text-gray-500">{stat.label}</p>
+              <p className="text-3xl font-black text-white mb-1 tracking-tight">{stat.value}</p>
+              <p className="text-xs uppercase tracking-widest text-slate-500 font-bold">{stat.label}</p>
             </div>
           </motion.div>
         ))}
@@ -282,13 +226,10 @@ function OverviewTab() {
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-12 gap-6">
-        {/* Left Column - 8 cols */}
         <div className="col-span-12 lg:col-span-8 space-y-6">
           <LiveFeedPanel />
           <AutonomousThoughtVisualizer />
         </div>
-
-        {/* Right Column - 4 cols */}
         <div className="col-span-12 lg:col-span-4 space-y-6">
           <MegaDaemonConsole />
           <NeuralCoreFeed />

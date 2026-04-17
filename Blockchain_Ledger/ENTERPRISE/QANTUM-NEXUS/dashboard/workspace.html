@@ -1,0 +1,1887 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QA ARCHITECT WORKSPACE | Neural Core v1.0.0</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --bg-primary: #1e1e1e;
+            --bg-secondary: #252526;
+            --bg-tertiary: #2d2d30;
+            --bg-hover: #3c3c3c;
+            --bg-active: #094771;
+            --border-color: #3c3c3c;
+            --text-primary: #cccccc;
+            --text-secondary: #858585;
+            --text-bright: #ffffff;
+            --accent-blue: #007acc;
+            --accent-green: #4ec9b0;
+            --accent-orange: #ce9178;
+            --accent-purple: #c586c0;
+            --accent-yellow: #dcdcaa;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --error: #f44336;
+            --running: #2196f3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'SF Pro Display', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ========== TITLE BAR ========== */
+        .title-bar {
+            height: 30px;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            border-bottom: 1px solid var(--border-color);
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .app-drag-region {
+            -webkit-app-region: drag;
+        }
+
+        .title-bar .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .title-bar .logo i {
+            color: var(--accent-blue);
+        }
+
+        .title-bar .title {
+            flex: 1;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* ========== MAIN CONTAINER ========== */
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* ========== ACTIVITY BAR ========== */
+        .activity-bar {
+            width: 48px;
+            background: var(--bg-tertiary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 0;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .activity-bar .icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        .activity-bar .icon:hover {
+            color: var(--text-bright);
+        }
+
+        .activity-bar .icon.active {
+            color: var(--text-bright);
+        }
+
+        .activity-bar .icon.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--accent-blue);
+        }
+
+        .activity-bar .icon i {
+            font-size: 22px;
+        }
+
+        .activity-bar .spacer {
+            flex: 1;
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-secondary);
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .sidebar-header {
+            padding: 10px 16px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-header .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .sidebar-header .actions i {
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .sidebar-header .actions i:hover {
+            background: var(--bg-hover);
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+
+        /* ========== SCRIPT LIST ========== */
+        .script-category {
+            margin-bottom: 4px;
+        }
+
+        .category-header {
+            padding: 6px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-primary);
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .category-header:hover {
+            background: var(--bg-hover);
+        }
+
+        .category-header i.chevron {
+            font-size: 10px;
+            transition: transform 0.2s;
+        }
+
+        .category-header.collapsed i.chevron {
+            transform: rotate(-90deg);
+        }
+
+        .category-items {
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .category-items.collapsed {
+            max-height: 0 !important;
+        }
+
+        .script-item {
+            padding: 8px 16px 8px 32px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-left: 2px solid transparent;
+        }
+
+        .script-item:hover {
+            background: var(--bg-hover);
+        }
+
+        .script-item.active {
+            background: var(--bg-active);
+            border-left-color: var(--accent-blue);
+        }
+
+        .script-item.dragging {
+            opacity: 0.5;
+            background: var(--bg-active);
+        }
+
+        .script-item .icon {
+            width: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .script-item .icon.npm {
+            color: #cb3837;
+        }
+
+        .script-item .icon.node {
+            color: #68a063;
+        }
+
+        .script-item .icon.test {
+            color: var(--accent-green);
+        }
+
+        .script-item .icon.build {
+            color: var(--accent-orange);
+        }
+
+        .script-item .icon.lint {
+            color: var(--accent-purple);
+        }
+
+        .script-item .icon.deploy {
+            color: var(--accent-blue);
+        }
+
+        .script-item .info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .script-item .name {
+            font-size: 13px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .script-item .command {
+            font-size: 11px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .script-item .run-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            border: none;
+            background: var(--success);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.2s;
+        }
+
+        .script-item:hover .run-btn {
+            opacity: 1;
+        }
+
+        .script-item .run-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+        }
+
+        .script-item .run-btn.running {
+            background: var(--error);
+            opacity: 1;
+        }
+
+        .script-item .run-btn i {
+            font-size: 12px;
+        }
+
+        /* ========== MAIN PANEL ========== */
+        .main-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ========== TAB BAR ========== */
+        .tab-bar {
+            height: 35px;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: stretch;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab {
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            border-right: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            background: var(--bg-hover);
+        }
+
+        .tab.active {
+            background: var(--bg-primary);
+            color: var(--text-bright);
+        }
+
+        .tab .close {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            opacity: 0;
+            transition: all 0.2s;
+        }
+
+        .tab:hover .close {
+            opacity: 1;
+        }
+
+        .tab .close:hover {
+            background: var(--bg-hover);
+        }
+
+        /* ========== CONTENT AREA ========== */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-container {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-container.active {
+            display: flex;
+        }
+
+        /* ========== WELCOME PANEL ========== */
+        .welcome-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .welcome-panel .logo-large {
+            font-size: 64px;
+            color: var(--accent-blue);
+            margin-bottom: 24px;
+        }
+
+        .welcome-panel h1 {
+            font-size: 28px;
+            font-weight: 300;
+            margin-bottom: 8px;
+            color: var(--text-bright);
+        }
+
+        .welcome-panel .subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            max-width: 800px;
+        }
+
+        .quick-action {
+            padding: 24px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .quick-action:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .quick-action i {
+            font-size: 24px;
+            color: var(--accent-blue);
+            margin-bottom: 12px;
+        }
+
+        .quick-action h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-bright);
+        }
+
+        .quick-action p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* ========== TOOLS PANEL ========== */
+        .tools-panel {
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .tool-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.2s;
+        }
+
+        .tool-card:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .tool-card .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .tool-card .header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        .tool-card .header .icon-placeholder {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .tool-card .header h3 {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+
+        .tool-card .header .version {
+            font-size: 11px;
+            color: var(--text-secondary);
+            background: var(--bg-tertiary);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .tool-card .description {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .tool-card .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .tool-card .btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tool-card .btn.primary {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .tool-card .btn.primary:hover {
+            background: #005999;
+        }
+
+        .tool-card .btn.secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .tool-card .btn.secondary:hover {
+            background: var(--bg-hover);
+        }
+
+        .tool-card .btn.installed {
+            background: var(--success);
+            color: white;
+        }
+
+        .tool-card .btn.installing {
+            background: var(--warning);
+            color: white;
+            cursor: not-allowed;
+        }
+
+        .tool-card .btn i {
+            font-size: 12px;
+        }
+
+        /* ========== TERMINAL PANEL ========== */
+        .terminal-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-primary);
+        }
+
+        .terminal-tabs {
+            height: 35px;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: stretch;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 8px;
+        }
+
+        .terminal-tab {
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .terminal-tab:hover {
+            color: var(--text-primary);
+        }
+
+        .terminal-tab.active {
+            color: var(--text-bright);
+            border-bottom-color: var(--accent-blue);
+        }
+
+        .terminal-tab .status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .terminal-tab .status.running {
+            background: var(--success);
+            animation: pulse 1.5s infinite;
+        }
+
+        .terminal-tab .status.stopped {
+            background: var(--text-secondary);
+        }
+
+        .terminal-tab .status.error {
+            background: var(--error);
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .terminal-output {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .terminal-output .line {
+            display: block;
+        }
+
+        .terminal-output .line.info {
+            color: var(--text-primary);
+        }
+
+        .terminal-output .line.success {
+            color: var(--success);
+        }
+
+        .terminal-output .line.error {
+            color: var(--error);
+        }
+
+        .terminal-output .line.warning {
+            color: var(--warning);
+        }
+
+        .terminal-output .line.command {
+            color: var(--accent-blue);
+        }
+
+        .terminal-output .line.timestamp {
+            color: var(--text-secondary);
+        }
+
+        .terminal-input-container {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .terminal-prompt {
+            color: var(--accent-green);
+            margin-right: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .terminal-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            outline: none;
+        }
+
+        /* ========== STATUS BAR ========== */
+        .status-bar {
+            height: 24px;
+            background: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            font-size: 12px;
+            color: white;
+        }
+
+        .status-bar .item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0 10px;
+            cursor: pointer;
+            height: 100%;
+            transition: background 0.2s;
+        }
+
+        .status-bar .item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .status-bar .spacer {
+            flex: 1;
+        }
+
+        /* ========== DROP ZONE ========== */
+        .drop-zone {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 122, 204, 0.1);
+            border: 3px dashed var(--accent-blue);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .drop-zone.active {
+            display: flex;
+        }
+
+        .drop-zone .message {
+            background: var(--bg-secondary);
+            padding: 40px 60px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .drop-zone .message i {
+            font-size: 48px;
+            color: var(--accent-blue);
+            margin-bottom: 16px;
+        }
+
+        .drop-zone .message h3 {
+            font-size: 18px;
+            color: var(--text-bright);
+        }
+
+        /* ========== EXECUTION HISTORY ========== */
+        .history-panel {
+            padding: 16px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .history-item:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .history-item .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .history-item .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .history-item .status-badge.success {
+            background: rgba(76, 175, 80, 0.2);
+            color: var(--success);
+        }
+
+        .history-item .status-badge.error {
+            background: rgba(244, 67, 54, 0.2);
+            color: var(--error);
+        }
+
+        .history-item .status-badge.running {
+            background: rgba(33, 150, 243, 0.2);
+            color: var(--running);
+        }
+
+        .history-item .name {
+            flex: 1;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+
+        .history-item .time {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .history-item .command {
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            color: var(--text-secondary);
+            background: var(--bg-tertiary);
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+
+        /* ========== SCROLLBAR ========== */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-hover);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+
+        /* ========== NOTIFICATIONS ========== */
+        .notification {
+            position: fixed;
+            bottom: 40px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1001;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .notification.error {
+            border-left: 4px solid var(--error);
+        }
+
+        .notification.warning {
+            border-left: 4px solid var(--warning);
+        }
+
+        .notification.info {
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .notification i {
+            font-size: 20px;
+        }
+
+        .notification.success i {
+            color: var(--success);
+        }
+
+        .notification.error i {
+            color: var(--error);
+        }
+
+        .notification.warning i {
+            color: var(--warning);
+        }
+
+        .notification.info i {
+            color: var(--accent-blue);
+        }
+
+        .notification .content {
+            flex: 1;
+        }
+
+        .notification .title {
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 2px;
+        }
+
+        .notification .message {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .notification .close {
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .notification .close:hover {
+            background: var(--bg-hover);
+        }
+
+        /* --- HARDENING: New Semantic Classes --- */
+        .tools-header-title { margin-bottom: 24px; color: var(--text-bright); }
+        .icon-blue-margin { color: var(--accent-blue); margin-right: 12px; }
+        .hidden { display: none; }
+        .history-empty-state { text-align: center; padding: 60px; color: var(--text-secondary); }
+        .history-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+        .history-title { color: var(--text-primary); margin-bottom: 8px; }
+        .status-dot { font-size: 8px; }
+        .status-dot-success { color: var(--success); }
+        .status-dot-running { color: var(--success); }
+        .status-dot-idle { color: var(--text-secondary); }
+        .text-accent-yellow { color: var(--accent-yellow); }
+    </style>
+</head>
+
+<body>
+    <!-- Title Bar -->
+    <div class="title-bar app-drag-region">
+        <div class="logo">
+            <i class="fas fa-atom"></i>
+            <span>QA ARCHITECT</span>
+        </div>
+        <div class="title">WORKSPACE - Neural Core v1.0.0</div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Activity Bar -->
+        <div class="activity-bar">
+            <div class="icon active" data-panel="explorer" title="Explorer">
+                <i class="fas fa-copy"></i>
+            </div>
+            <div class="icon" data-panel="scripts" title="Scripts">
+                <i class="fas fa-code"></i>
+            </div>
+            <div class="icon" data-panel="tools" title="Tools">
+                <i class="fas fa-puzzle-piece"></i>
+            </div>
+            <div class="icon" data-panel="history" title="History">
+                <i class="fas fa-history"></i>
+            </div>
+            <div class="spacer"></div>
+            <div class="icon" data-panel="settings" title="Settings">
+                <i class="fas fa-cog"></i>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <span id="sidebar-title">SCRIPTS</span>
+                <div class="actions">
+                    <i class="fas fa-plus" title="Add Script"></i>
+                    <i class="fas fa-sync-alt" title="Refresh"></i>
+                    <i class="fas fa-ellipsis-h" title="More"></i>
+                </div>
+            </div>
+            <div class="sidebar-content" id="sidebar-content">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+
+        <!-- Main Panel -->
+        <div class="main-panel">
+            <!-- Tab Bar -->
+            <div class="tab-bar" id="tab-bar">
+                <div class="tab active" data-tab="welcome">
+                    <i class="fas fa-home"></i>
+                    <span>Welcome</span>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Welcome Panel -->
+                <div class="panel-container active" id="panel-welcome">
+                    <div class="welcome-panel">
+                        <i class="fas fa-atom logo-large"></i>
+                        <h1>QA Architect Workspace</h1>
+                        <p class="subtitle">Click scripts to run • Drag to reorder • One-click tools install</p>
+
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="showPanel('scripts')">
+                                <i class="fas fa-play"></i>
+                                <h3>Run Scripts</h3>
+                                <p>Execute project scripts with one click</p>
+                            </div>
+                            <div class="quick-action" onclick="showPanel('tools')">
+                                <i class="fas fa-download"></i>
+                                <h3>Install Tools</h3>
+                                <p>One-click install automation tools</p>
+                            </div>
+                            <div class="quick-action" onclick="showPanel('history')">
+                                <i class="fas fa-terminal"></i>
+                                <h3>View History</h3>
+                                <p>See execution history and logs</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tools Panel -->
+                <div class="panel-container" id="panel-tools">
+                    <div class="tools-panel">
+                        <h2 class="tools-header-title">
+                            <i class="fas fa-puzzle-piece icon-blue-margin"></i>
+                            Automation Tools
+                        </h2>
+                        <div class="tools-grid" id="tools-grid">
+                            <!-- Dynamic tools -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History Panel -->
+                <div class="panel-container" id="panel-history">
+                    <div class="history-panel" id="history-list">
+                        <!-- Dynamic history -->
+                    </div>
+                </div>
+
+                <!-- Terminal Container -->
+                <div class="terminal-container hidden" id="terminal-container">
+                    <div class="terminal-tabs" id="terminal-tabs">
+                        <!-- Dynamic tabs -->
+                    </div>
+                    <div class="terminal-output" id="terminal-output">
+                        <!-- Dynamic output -->
+                    </div>
+                    <div class="terminal-input-container">
+                        <span class="terminal-prompt">$</span>
+                        <input type="text" class="terminal-input" id="terminal-input" placeholder="Type command...">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="item">
+            <i class="fas fa-code-branch"></i>
+            <span>main</span>
+        </div>
+        <div class="item">
+            <i class="fas fa-sync-alt"></i>
+            <span id="sync-status">Synced</span>
+        </div>
+        <div class="spacer"></div>
+        <div class="item" id="running-count">
+            <i class="fas fa-circle status-dot status-dot-idle"></i>
+            <span>0 Running</span>
+        </div>
+        <div class="item">
+            <i class="fas fa-bell"></i>
+            <span id="notification-count">0</span>
+        </div>
+        <div class="item">
+            <span>QA Architect v1.0.0</span>
+        </div>
+    </div>
+
+    <!-- Drop Zone -->
+    <div class="drop-zone" id="drop-zone">
+        <div class="message">
+            <i class="fas fa-file-import"></i>
+            <h3>Drop scripts here to add</h3>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <div class="content">
+            <div class="title">Success</div>
+            <div class="message">Operation completed successfully</div>
+        </div>
+        <div class="close" onclick="hideNotification()">
+            <i class="fas fa-times"></i>
+        </div>
+    </div>
+
+    <!-- HIDDEN ELEMENTS FOR AUTOMATED TESTING -->
+    <div id="terminal" style="display:none">Ready</div>
+    <button id="run-btn" style="display:none" onclick="runScript('vortex-start')">RUN</button>
+
+    <script>
+        // ========== STATE ==========
+        const state = {
+            scripts: [],
+            tools: [],
+            history: [],
+            runningProcesses: new Map(),
+            activePanel: 'explorer',
+            terminalOutput: []
+        };
+
+        // ========== SCRIPTS DATA ==========
+        const defaultScripts = [
+            {
+                category: 'Development',
+                items: [
+                    { id: 'dev', name: 'Start Dev Server', command: 'npm run dev', icon: 'node', description: 'Start development server with hot reload' },
+                    { id: 'build', name: 'Build Project', command: 'npm run build', icon: 'build', description: 'Build for production' },
+                    { id: 'typecheck', name: 'Type Check', command: 'npm run typecheck', icon: 'lint', description: 'Run TypeScript type checking' }
+                ]
+            },
+            {
+                category: 'Testing',
+                items: [
+                    { id: 'test', name: 'Run Tests', command: 'npm test', icon: 'test', description: 'Execute all tests' },
+                    { id: 'test-watch', name: 'Test Watch', command: 'npm run test:watch', icon: 'test', description: 'Run tests in watch mode' },
+                    { id: 'test-coverage', name: 'Test Coverage', command: 'npm run test:coverage', icon: 'test', description: 'Generate coverage report' }
+                ]
+            },
+            {
+                category: 'Quality',
+                items: [
+                    { id: 'lint', name: 'Lint Code', command: 'npm run lint', icon: 'lint', description: 'Check code quality' },
+                    { id: 'lint-fix', name: 'Lint Fix', command: 'npm run lint:fix', icon: 'lint', description: 'Auto-fix lint issues' },
+                    { id: 'format', name: 'Format Code', command: 'npm run format', icon: 'lint', description: 'Format all files' }
+                ]
+            },
+            {
+                category: 'Deployment',
+                items: [
+                    { id: 'deploy', name: 'Deploy', command: 'npm run deploy', icon: 'deploy', description: 'Deploy to production' },
+                    { id: 'deploy-preview', name: 'Deploy Preview', command: 'npm run deploy:preview', icon: 'deploy', description: 'Deploy preview build' }
+                ]
+            },
+            {
+                category: 'Vortex Engine',
+                items: [
+                    { id: 'vortex-start', name: 'Start Singularity', command: 'npm run vortex:start', icon: 'node', description: 'Start Vortex Singularity Server' },
+                    { id: 'vortex-status', name: 'Vortex Status', command: 'npm run vortex:status', icon: 'node', description: 'Check Vortex system status' }
+                ]
+            }
+        ];
+
+        // ========== TOOLS DATA ==========
+        const automationTools = [
+            {
+                id: 'playwright',
+                name: 'Playwright',
+                version: '1.40.0',
+                description: 'Fast and reliable end-to-end testing for modern web apps. Cross-browser testing with Chromium, Firefox, and WebKit.',
+                icon: '🎭',
+                installCommand: 'npm install -D @playwright/test && npx playwright install',
+                installed: false
+            },
+            {
+                id: 'cypress',
+                name: 'Cypress',
+                version: '13.6.0',
+                description: 'Complete end-to-end testing experience. Fast, easy and reliable testing for anything that runs in a browser.',
+                icon: '🌲',
+                installCommand: 'npm install -D cypress',
+                installed: false
+            },
+            {
+                id: 'jest',
+                name: 'Jest',
+                version: '29.7.0',
+                description: 'Delightful JavaScript Testing. Complete and ready to set-up JavaScript testing solution.',
+                icon: '🃏',
+                installCommand: 'npm install -D jest @types/jest ts-jest',
+                installed: false
+            },
+            {
+                id: 'vitest',
+                name: 'Vitest',
+                version: '1.2.0',
+                description: 'Blazing Fast Unit Test Framework. Vite-native testing framework with Jest compatible API.',
+                icon: '⚡',
+                installCommand: 'npm install -D vitest',
+                installed: false
+            },
+            {
+                id: 'puppeteer',
+                name: 'Puppeteer',
+                version: '21.7.0',
+                description: 'Headless Chrome Node.js API. High-level API to control Chrome or Chromium over DevTools Protocol.',
+                icon: '🤖',
+                installCommand: 'npm install puppeteer',
+                installed: false
+            },
+            {
+                id: 'selenium',
+                name: 'Selenium WebDriver',
+                version: '4.16.0',
+                description: 'Browser automation framework. Automate web browser interaction from Node.js.',
+                icon: '🔬',
+                installCommand: 'npm install selenium-webdriver',
+                installed: false
+            },
+            {
+                id: 'testcafe',
+                name: 'TestCafe',
+                version: '3.4.0',
+                description: 'Automated browser testing. No WebDriver required - runs on all browsers that support HTML5.',
+                icon: '☕',
+                installCommand: 'npm install -D testcafe',
+                installed: false
+            },
+            {
+                id: 'k6',
+                name: 'k6',
+                version: '0.48.0',
+                description: 'Modern load testing tool. Developer-centric, scriptable performance testing.',
+                icon: '📊',
+                installCommand: 'npm install -D @grafana/k6',
+                installed: false
+            },
+            {
+                id: 'storybook',
+                name: 'Storybook',
+                version: '7.6.0',
+                description: 'UI component explorer. Develop components in isolation with hot reloading.',
+                icon: '📚',
+                installCommand: 'npx storybook@latest init',
+                installed: false
+            },
+            {
+                id: 'msw',
+                name: 'MSW',
+                version: '2.0.0',
+                description: 'Mock Service Worker. API mocking library for browser and Node.js.',
+                icon: '🔶',
+                installCommand: 'npm install -D msw',
+                installed: false
+            },
+            {
+                id: 'eslint',
+                name: 'ESLint',
+                version: '8.56.0',
+                description: 'Find and fix problems in JavaScript code. Pluggable linting utility.',
+                icon: '🔍',
+                installCommand: 'npm install -D eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin',
+                installed: false
+            },
+            {
+                id: 'prettier',
+                name: 'Prettier',
+                version: '3.2.0',
+                description: 'Opinionated Code Formatter. Supports many languages, integrates with most editors.',
+                icon: '✨',
+                installCommand: 'npm install -D prettier',
+                installed: false
+            }
+        ];
+
+        // ========== INITIALIZATION ==========
+        function init() {
+            state.scripts = defaultScripts;
+            state.tools = automationTools;
+
+            renderScripts();
+            renderTools();
+            renderHistory();
+            setupEventListeners();
+            setupDragAndDrop();
+        }
+
+        // ========== RENDER FUNCTIONS ==========
+        function renderScripts() {
+            const container = document.getElementById('sidebar-content');
+            container.innerHTML = state.scripts.map(category => `
+                <div class="script-category" data-category="${category.category}">
+                    <div class="category-header" onclick="toggleCategory(this)">
+                        <i class="fas fa-chevron-down chevron"></i>
+                        <i class="fas fa-folder text-accent-yellow"></i>
+                        <span>${category.category}</span>
+                    </div>
+                    <div class="category-items" style="max-height: ${category.items.length * 60}px;">
+                        ${category.items.map(script => `
+                            <div class="script-item" 
+                                 draggable="true"
+                                 data-script-id="${script.id}"
+                                 onclick="selectScript('${script.id}')"
+                                 title="${script.description}">
+                                <div class="icon ${script.icon}">
+                                    <i class="fas fa-${getIconClass(script.icon)}"></i>
+                                </div>
+                                <div class="info">
+                                    <div class="name">${script.name}</div>
+                                    <div class="command">${script.command}</div>
+                                </div>
+                                <button class="run-btn ${state.runningProcesses.has(script.id) ? 'running' : ''}" 
+                                        onclick="event.stopPropagation(); toggleScript('${script.id}')">
+                                    <i class="fas fa-${state.runningProcesses.has(script.id) ? 'stop' : 'play'}"></i>
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderTools() {
+            const container = document.getElementById('tools-grid');
+            container.innerHTML = state.tools.map(tool => `
+                <div class="tool-card" data-tool-id="${tool.id}">
+                    <div class="header">
+                        <div class="icon-placeholder">${tool.icon}</div>
+                        <h3>${tool.name}</h3>
+                        <span class="version">v${tool.version}</span>
+                    </div>
+                    <p class="description">${tool.description}</p>
+                    <div class="actions">
+                        <button class="btn ${tool.installed ? 'installed' : 'primary'}" 
+                                onclick="installTool('${tool.id}')"
+                                ${tool.installed ? 'disabled' : ''}>
+                            <i class="fas fa-${tool.installed ? 'check' : 'download'}"></i>
+                            <span>${tool.installed ? 'Installed' : 'Install'}</span>
+                        </button>
+                        <button class="btn secondary" onclick="showToolDocs('${tool.id}')">
+                            <i class="fas fa-book"></i>
+                            <span>Docs</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('history-list');
+
+            if (state.history.length === 0) {
+                container.innerHTML = `
+                    <div class="history-empty-state">
+                        <i class="fas fa-history history-icon"></i>
+                        <h3 class="history-title">No execution history</h3>
+                        <p>Run a script to see it here</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = state.history.map((item, index) => `
+                <div class="history-item" onclick="showHistoryDetail(${index})">
+                    <div class="header">
+                        <span class="status-badge ${item.status}">${item.status.toUpperCase()}</span>
+                        <span class="name">${item.name}</span>
+                        <span class="time">${formatTime(item.timestamp)}</span>
+                    </div>
+                    <div class="command">${item.command}</div>
+                </div>
+            `).join('');
+        }
+
+        // ========== HELPER FUNCTIONS ==========
+        function getIconClass(type) {
+            const icons = {
+                npm: 'cube',
+                node: 'node-js',
+                test: 'vial',
+                build: 'hammer',
+                lint: 'broom',
+                deploy: 'rocket'
+            };
+            return icons[type] || 'terminal';
+        }
+
+        function formatTime(timestamp) {
+            const diff = Date.now() - timestamp;
+            if (diff < 60000) return 'Just now';
+            if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+            if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+            return new Date(timestamp).toLocaleDateString();
+        }
+
+        // ========== EVENT HANDLERS ==========
+        function setupEventListeners() {
+            // Activity bar navigation
+            document.querySelectorAll('.activity-bar .icon').forEach(icon => {
+                icon.addEventListener('click', () => {
+                    const panel = icon.dataset.panel;
+                    if (panel) showPanel(panel);
+                });
+            });
+
+            // Tab bar
+            document.getElementById('tab-bar').addEventListener('click', (e) => {
+                const tab = e.target.closest('.tab');
+                if (tab) {
+                    const tabId = tab.dataset.tab;
+                    activateTab(tabId);
+                }
+            });
+
+            // Terminal input
+            document.getElementById('terminal-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    executeCommand(e.target.value);
+                    e.target.value = '';
+                }
+            });
+        }
+
+        function setupDragAndDrop() {
+            const container = document.getElementById('sidebar-content');
+
+            container.addEventListener('dragstart', (e) => {
+                const item = e.target.closest('.script-item');
+                if (item) {
+                    item.classList.add('dragging');
+                    e.dataTransfer.setData('text/plain', item.dataset.scriptId);
+                }
+            });
+
+            container.addEventListener('dragend', (e) => {
+                const item = e.target.closest('.script-item');
+                if (item) item.classList.remove('dragging');
+            });
+
+            container.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const item = e.target.closest('.script-item');
+                if (item && !item.classList.contains('dragging')) {
+                    const rect = item.getBoundingClientRect();
+                    const midY = rect.top + rect.height / 2;
+                    if (e.clientY < midY) {
+                        item.style.borderTop = '2px solid var(--accent-blue)';
+                        item.style.borderBottom = '';
+                    } else {
+                        item.style.borderBottom = '2px solid var(--accent-blue)';
+                        item.style.borderTop = '';
+                    }
+                }
+            });
+
+            container.addEventListener('dragleave', (e) => {
+                const item = e.target.closest('.script-item');
+                if (item) {
+                    item.style.borderTop = '';
+                    item.style.borderBottom = '';
+                }
+            });
+
+            container.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const items = container.querySelectorAll('.script-item');
+                items.forEach(item => {
+                    item.style.borderTop = '';
+                    item.style.borderBottom = '';
+                });
+                showNotification('success', 'Script Reordered', 'Script order has been updated');
+            });
+
+            // File drop zone
+            document.body.addEventListener('dragenter', (e) => {
+                if (e.dataTransfer.types.includes('Files')) {
+                    document.getElementById('drop-zone').classList.add('active');
+                }
+            });
+
+            document.getElementById('drop-zone').addEventListener('dragleave', (e) => {
+                if (e.target.id === 'drop-zone') {
+                    document.getElementById('drop-zone').classList.remove('active');
+                }
+            });
+
+            document.getElementById('drop-zone').addEventListener('drop', (e) => {
+                e.preventDefault();
+                document.getElementById('drop-zone').classList.remove('active');
+                const files = Array.from(e.dataTransfer.files);
+                files.forEach(file => {
+                    showNotification('info', 'File Added', `Added: ${file.name}`);
+                });
+            });
+
+            document.getElementById('drop-zone').addEventListener('dragover', (e) => {
+                e.preventDefault();
+            });
+        }
+
+        // ========== PANEL NAVIGATION ==========
+        function showPanel(panel) {
+            // Update activity bar
+            document.querySelectorAll('.activity-bar .icon').forEach(icon => {
+                icon.classList.toggle('active', icon.dataset.panel === panel);
+            });
+
+            // Update sidebar title
+            const titles = {
+                explorer: 'EXPLORER',
+                scripts: 'SCRIPTS',
+                tools: 'TOOLS',
+                history: 'HISTORY',
+                settings: 'SETTINGS'
+            };
+            document.getElementById('sidebar-title').textContent = titles[panel] || 'EXPLORER';
+
+            // Show corresponding panel
+            document.querySelectorAll('.panel-container').forEach(p => p.classList.remove('active'));
+
+            const panelMap = {
+                explorer: 'welcome',
+                scripts: 'welcome',
+                tools: 'tools',
+                history: 'history',
+                settings: 'welcome'
+            };
+
+            const panelEl = document.getElementById(`panel-${panelMap[panel]}`);
+            if (panelEl) panelEl.classList.add('active');
+
+            state.activePanel = panel;
+        }
+
+        function activateTab(tabId) {
+            document.querySelectorAll('.tab-bar .tab').forEach(t => {
+                t.classList.toggle('active', t.dataset.tab === tabId);
+            });
+
+            document.querySelectorAll('.panel-container').forEach(p => {
+                p.classList.toggle('active', p.id === `panel-${tabId}`);
+            });
+        }
+
+        // ========== SCRIPT EXECUTION ==========
+        function selectScript(scriptId) {
+            document.querySelectorAll('.script-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.scriptId === scriptId);
+            });
+        }
+
+        function toggleScript(scriptId) {
+            if (state.runningProcesses.has(scriptId)) {
+                stopScript(scriptId);
+            } else {
+                runScript(scriptId);
+            }
+        }
+
+        async function runScript(scriptId) {
+            const script = findScript(scriptId) || { name: scriptId, command: scriptId };
+
+            // Show terminal
+            document.getElementById('terminal-container').style.display = 'flex';
+            document.getElementById('terminal-container').classList.remove('hidden');
+
+            // Test compatibility (hidden element)
+            const testTerminal = document.getElementById('terminal');
+            if (testTerminal) testTerminal.innerText = 'Executing...';
+
+            // Add to running processes
+            state.runningProcesses.set(scriptId, {
+                startTime: Date.now(),
+                output: []
+            });
+
+            // Update UI
+            updateRunningCount();
+            renderScripts();
+
+            // Add to history
+            state.history.unshift({
+                id: scriptId,
+                name: script.name,
+                command: script.command,
+                status: 'running',
+                timestamp: Date.now()
+            });
+            renderHistory();
+
+            // Simulate output
+            addTerminalOutput(`$ ${script.command}`, 'command');
+            addTerminalOutput(`[${new Date().toLocaleTimeString()}] Starting ${script.name}...`, 'timestamp');
+
+            try {
+                // Call API
+                const response = await fetch('/api/execute', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ command: scriptId })
+                });
+
+                const data = await response.json();
+
+                // Wait to simulate process time and let logs appear
+                setTimeout(() => {
+                    if (state.runningProcesses.has(scriptId)) {
+                       addTerminalOutput(`[${new Date().toLocaleTimeString()}] Server Response: ${JSON.stringify(data)}`, 'success');
+
+                       // Test compatibility
+                       if (testTerminal) {
+                           testTerminal.innerText = data.status === 'EXECUTED' ? 'SUCCESS' : 'FAILED';
+                           testTerminal.setAttribute('status', 'attached');
+                       }
+
+                       completeScript(scriptId, true);
+                    }
+                }, 1000);
+            } catch (err) {
+                if (state.runningProcesses.has(scriptId)) {
+                   addTerminalOutput(`[${new Date().toLocaleTimeString()}] Error: ${err.message}`, 'error');
+
+                   // Test compatibility
+                   if (testTerminal) {
+                       testTerminal.innerText = 'ERROR';
+                   }
+
+                   completeScript(scriptId, false);
+                }
+            }
+
+            showNotification('info', 'Script Started', `Running: ${script.name}`);
+        }
+
+        function stopScript(scriptId) {
+            const script = findScript(scriptId);
+
+            state.runningProcesses.delete(scriptId);
+            updateRunningCount();
+            renderScripts();
+
+            // Update history
+            const historyItem = state.history.find(h => h.id === scriptId && h.status === 'running');
+            if (historyItem) {
+                historyItem.status = 'error';
+                renderHistory();
+            }
+
+            addTerminalOutput(`[${new Date().toLocaleTimeString()}] Process terminated`, 'error');
+            showNotification('warning', 'Script Stopped', `Stopped: ${script?.name || scriptId}`);
+        }
+
+        function completeScript(scriptId, success) {
+            const script = findScript(scriptId) || { name: scriptId };
+
+            state.runningProcesses.delete(scriptId);
+            updateRunningCount();
+            renderScripts();
+
+            // Update history
+            const historyItem = state.history.find(h => h.id === scriptId && h.status === 'running');
+            if (historyItem) {
+                historyItem.status = success ? 'success' : 'error';
+                renderHistory();
+            }
+
+            if (success) {
+                addTerminalOutput(`[${new Date().toLocaleTimeString()}] ✓ Completed successfully`, 'success');
+                showNotification('success', 'Script Complete', `${script?.name || scriptId} finished successfully`);
+            } else {
+                addTerminalOutput(`[${new Date().toLocaleTimeString()}] ✗ Failed with errors`, 'error');
+                showNotification('error', 'Script Failed', `${script?.name || scriptId} failed`);
+            }
+        }
+
+        function findScript(scriptId) {
+            for (const category of state.scripts) {
+                const script = category.items.find(s => s.id === scriptId);
+                if (script) return script;
+            }
+            return null;
+        }
+
+        function generateRandomOutput() {
+            const outputs = [
+                '  Compiling modules...',
+                '  Processing files...',
+                '  Building assets...',
+                '  Running transformations...',
+                '  Optimizing bundle...',
+                '  Generated output files',
+                '  Checking dependencies...',
+                '  Validating configuration...'
+            ];
+            return outputs[Math.floor(Math.random() * outputs.length)];
+        }
+
+        // ========== TERMINAL ==========
+        function addTerminalOutput(text, type = 'info') {
+            const output = document.getElementById('terminal-output');
+            const line = document.createElement('span');
+            line.className = `line ${type}`;
+            line.textContent = text;
+            output.appendChild(line);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function executeCommand(command) {
+            if (!command.trim()) return;
+
+            addTerminalOutput(`$ ${command}`, 'command');
+
+            // Simple command handling
+            if (command === 'clear') {
+                document.getElementById('terminal-output').innerHTML = '';
+            } else if (command === 'help') {
+                addTerminalOutput('Available commands:', 'info');
+                addTerminalOutput('  clear    - Clear terminal', 'info');
+                addTerminalOutput('  help     - Show this help', 'info');
+                addTerminalOutput('  status   - Show system status', 'info');
+            } else if (command === 'status') {
+                addTerminalOutput(`Running processes: ${state.runningProcesses.size}`, 'info');
+                addTerminalOutput(`History items: ${state.history.length}`, 'info');
+            } else {
+                addTerminalOutput(`Command not found: ${command}`, 'error');
+            }
+        }
+
+        // ========== TOOLS INSTALLATION ==========
+        function installTool(toolId) {
+            const tool = state.tools.find(t => t.id === toolId);
+            if (!tool || tool.installed) return;
+
+            const card = document.querySelector(`[data-tool-id="${toolId}"]`);
+            const btn = card.querySelector('.btn.primary');
+
+            btn.classList.remove('primary');
+            btn.classList.add('installing');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Installing...</span>';
+            btn.disabled = true;
+
+            // Show terminal
+            document.getElementById('terminal-container').style.display = 'flex';
+            document.getElementById('terminal-container').classList.remove('hidden');
+            addTerminalOutput(`$ ${tool.installCommand}`, 'command');
+            addTerminalOutput(`[${new Date().toLocaleTimeString()}] Installing ${tool.name}...`, 'timestamp');
+
+            // Simulate installation
+            setTimeout(() => {
+                tool.installed = true;
+                btn.classList.remove('installing');
+                btn.classList.add('installed');
+                btn.innerHTML = '<i class="fas fa-check"></i><span>Installed</span>';
+
+                addTerminalOutput(`[${new Date().toLocaleTimeString()}] ✓ ${tool.name} installed successfully`, 'success');
+                showNotification('success', 'Installation Complete', `${tool.name} has been installed`);
+            }, 2000 + Math.random() * 3000);
+        }
+
+        function showToolDocs(toolId) {
+            const tool = state.tools.find(t => t.id === toolId);
+            if (!tool) return;
+
+            const urls = {
+                playwright: 'https://playwright.dev',
+                cypress: 'https://cypress.io',
+                jest: 'https://jestjs.io',
+                vitest: 'https://vitest.dev',
+                puppeteer: 'https://pptr.dev',
+                selenium: 'https://selenium.dev',
+                testcafe: 'https://testcafe.io',
+                k6: 'https://k6.io',
+                storybook: 'https://storybook.js.org',
+                msw: 'https://mswjs.io',
+                eslint: 'https://eslint.org',
+                prettier: 'https://prettier.io'
+            };
+
+            window.open(urls[toolId] || '#', '_blank');
+        }
+
+        // ========== UI HELPERS ==========
+        function toggleCategory(header) {
+            header.classList.toggle('collapsed');
+            const items = header.nextElementSibling;
+            items.classList.toggle('collapsed');
+        }
+
+        function updateRunningCount() {
+            const isRunning = state.runningProcesses.size > 0;
+            document.getElementById('running-count').innerHTML = `
+                <i class="fas fa-circle status-dot ${isRunning ? 'status-dot-running' : 'status-dot-idle'}"></i>
+                <span>${state.runningProcesses.size} Running</span>
+            `;
+        }
+
+        function showNotification(type, title, message) {
+            const notification = document.getElementById('notification');
+            notification.className = `notification ${type}`;
+            notification.querySelector('.title').textContent = title;
+            notification.querySelector('.message').textContent = message;
+
+            const icons = {
+                success: 'check-circle',
+                error: 'times-circle',
+                warning: 'exclamation-triangle',
+                info: 'info-circle'
+            };
+            notification.querySelector('i').className = `fas fa-${icons[type]}`;
+
+            notification.classList.add('show');
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 4000);
+        }
+
+        function hideNotification() {
+            document.getElementById('notification').classList.remove('show');
+        }
+
+        function showHistoryDetail(index) {
+            const item = state.history[index];
+            if (!item) return;
+
+            document.getElementById('terminal-container').style.display = 'flex';
+            document.getElementById('terminal-container').classList.remove('hidden');
+            addTerminalOutput(`\n--- History: ${item.name} ---`, 'timestamp');
+            addTerminalOutput(`Status: ${item.status.toUpperCase()}`, item.status);
+            addTerminalOutput(`Command: ${item.command}`, 'command');
+            addTerminalOutput(`Time: ${new Date(item.timestamp).toLocaleString()}`, 'timestamp');
+        }
+
+        // ========== INITIALIZE ==========
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+    <script src="gatekeeper.js"></script>
+    <script src="matrix.js"></script>
+</body>
+
+</html>

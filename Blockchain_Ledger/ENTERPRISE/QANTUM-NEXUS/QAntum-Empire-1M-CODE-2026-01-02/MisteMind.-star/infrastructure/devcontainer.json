@@ -1,0 +1,38 @@
+{
+    "name": "QANTUM v15.1 - Cloud Environment",
+    "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+    
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "20"
+        },
+        "ghcr.io/devcontainers/features/common-utils:2": {}
+    },
+    
+    "postCreateCommand": "npm install && npx playwright install chromium",
+    
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode"
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "bash"
+            }
+        }
+    },
+    
+    "forwardPorts": [3000, 8080],
+    
+    "remoteEnv": {
+        "HEADLESS": "true",
+        "LITE_MODE": "true"
+    },
+    
+    "hostRequirements": {
+        "cpus": 4,
+        "memory": "8gb",
+        "storage": "32gb"
+    }
+}

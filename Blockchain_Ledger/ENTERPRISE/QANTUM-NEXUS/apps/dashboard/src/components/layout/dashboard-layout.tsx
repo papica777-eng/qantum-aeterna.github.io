@@ -12,6 +12,7 @@ import {
   Terminal,
   Sparkles,
   Wand2,
+  Zap,
   Menu,
   X,
   FileCode,
@@ -28,7 +29,9 @@ const navigation = [
   { name: 'AI Generator', href: '/generate', icon: Sparkles },
   { name: 'Self-Healing', href: '/healing', icon: Wand2 },
   { name: 'Logs', href: '/logs', icon: Terminal },
+  { name: 'Nexus Hub', href: '/nexus', icon: Zap },
 ];
+
 
 const bottomNav = [
   { name: 'Billing', href: '/billing', icon: CreditCard },

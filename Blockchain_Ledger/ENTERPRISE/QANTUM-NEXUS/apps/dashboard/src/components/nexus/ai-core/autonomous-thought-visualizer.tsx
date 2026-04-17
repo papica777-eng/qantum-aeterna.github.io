@@ -21,23 +21,33 @@ import {
 } from '@/stores/nexus-store';
 
 const thoughtTypeConfig: Record<ThoughtType, { color: string; icon: React.ElementType; label: string }> = {
-  [ThoughtType.STRATEGIC]: { color: 'from-violet-500 to-purple-500', icon: Target, label: 'Strategic' },
-  [ThoughtType.TACTICAL]: { color: 'from-blue-500 to-cyan-500', icon: GitBranch, label: 'Tactical' },
-  [ThoughtType.REACTIVE]: { color: 'from-amber-500 to-orange-500', icon: Zap, label: 'Reactive' },
-  [ThoughtType.PREDICTIVE]: { color: 'from-emerald-500 to-green-500', icon: Eye, label: 'Predictive' },
-  [ThoughtType.DIAGNOSTIC]: { color: 'from-rose-500 to-red-500', icon: Activity, label: 'Diagnostic' },
-  [ThoughtType.CREATIVE]: { color: 'from-pink-500 to-fuchsia-500', icon: Sparkles, label: 'Creative' },
-  [ThoughtType.CORRECTIVE]: { color: 'from-yellow-500 to-amber-500', icon: AlertTriangle, label: 'Corrective' },
-  [ThoughtType.EVOLUTIONARY]: { color: 'from-indigo-500 to-violet-500', icon: Brain, label: 'Evolutionary' },
+  [ThoughtType.STRATEGIC]:    { color: 'from-violet-500 to-purple-500', icon: Target,        label: 'Strategic' },
+  [ThoughtType.TACTICAL]:     { color: 'from-blue-500 to-cyan-500',   icon: GitBranch,    label: 'Tactical' },
+  [ThoughtType.REACTIVE]:     { color: 'from-amber-500 to-orange-500',icon: Zap,          label: 'Reactive' },
+  [ThoughtType.PREDICTIVE]:   { color: 'from-emerald-500 to-green-500',icon: Eye,          label: 'Predictive' },
+  [ThoughtType.DIAGNOSTIC]:   { color: 'from-rose-500 to-red-500',   icon: Activity,     label: 'Diagnostic' },
+  [ThoughtType.CREATIVE]:     { color: 'from-pink-500 to-fuchsia-500',icon: Sparkles,     label: 'Creative' },
+  [ThoughtType.CORRECTIVE]:   { color: 'from-yellow-500 to-amber-500',icon: AlertTriangle,label: 'Corrective' },
+  [ThoughtType.EVOLUTIONARY]: { color: 'from-indigo-500 to-violet-500',icon: Brain,        label: 'Evolutionary' },
+  [ThoughtType.PLAN]:         { color: 'from-cyan-500 to-blue-500',   icon: Target,       label: 'Plan' },
+  [ThoughtType.ACTION]:       { color: 'from-green-500 to-teal-500',  icon: Zap,          label: 'Action' },
+  [ThoughtType.REFLECTION]:   { color: 'from-purple-500 to-pink-500', icon: Eye,           label: 'Reflection' },
+  [ThoughtType.HEALING]:      { color: 'from-teal-500 to-cyan-500',   icon: Activity,     label: 'Healing' },
+  [ThoughtType.DECISION]:     { color: 'from-orange-500 to-red-500',  icon: Brain,        label: 'Decision' },
+  [ThoughtType.ANALYSIS]:     { color: 'from-slate-500 to-gray-500',  icon: GitBranch,    label: 'Analysis' },
 };
 
-const outcomeColors: Record<DecisionOutcome, string> = {
-  [DecisionOutcome.EXECUTE]: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
-  [DecisionOutcome.DEFER]: 'text-amber-400 bg-amber-500/10 border-amber-500/30',
-  [DecisionOutcome.ESCALATE]: 'text-orange-400 bg-orange-500/10 border-orange-500/30',
-  [DecisionOutcome.REJECT]: 'text-red-400 bg-red-500/10 border-red-500/30',
+const outcomeColors: Partial<Record<DecisionOutcome, string>> = {
+  [DecisionOutcome.EXECUTE]:     'text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
+  [DecisionOutcome.DEFER]:       'text-amber-400 bg-amber-500/10 border-amber-500/30',
+  [DecisionOutcome.ESCALATE]:    'text-orange-400 bg-orange-500/10 border-orange-500/30',
+  [DecisionOutcome.REJECT]:      'text-red-400 bg-red-500/10 border-red-500/30',
   [DecisionOutcome.INVESTIGATE]: 'text-blue-400 bg-blue-500/10 border-blue-500/30',
-  [DecisionOutcome.ADAPT]: 'text-violet-400 bg-violet-500/10 border-violet-500/30',
+  [DecisionOutcome.ADAPT]:       'text-violet-400 bg-violet-500/10 border-violet-500/30',
+  [DecisionOutcome.APPROVED]:    'text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
+  [DecisionOutcome.REJECTED]:    'text-red-400 bg-red-500/10 border-red-500/30',
+  [DecisionOutcome.DEFERRED]:    'text-amber-400 bg-amber-500/10 border-amber-500/30',
+  [DecisionOutcome.ESCALATED]:   'text-orange-400 bg-orange-500/10 border-orange-500/30',
 };
 
 function ThoughtCard({ thought, isActive }: { thought: ThoughtNode; isActive: boolean }) {
@@ -74,18 +84,22 @@ function ThoughtCard({ thought, isActive }: { thought: ThoughtNode; isActive: bo
             </div>
             <span className="text-xs text-gray-500 uppercase tracking-wider">{config.label}</span>
           </div>
-          <span className={cn('text-xs px-2 py-0.5 rounded-full border', outcomeColors[thought.decision.outcome])}>
-            {thought.decision.outcome}
-          </span>
+          {thought.outcome && (
+            <span className={cn('text-xs px-2 py-0.5 rounded-full border', outcomeColors[thought.outcome] ?? 'text-gray-400')}>
+              {thought.outcome}
+            </span>
+          )}
         </div>
         
-        {/* Query */}
-        <p className="text-sm text-white mb-3 line-clamp-2">{thought.query}</p>
+        {/* Content */}
+        <p className="text-sm text-white mb-3 line-clamp-2">{thought.query ?? thought.content}</p>
         
         {/* Decision */}
-        <div className="p-2 rounded-lg bg-violet-500/5 border border-violet-500/10">
-          <p className="text-xs text-violet-300 font-medium">{thought.decision.action}</p>
-        </div>
+        {thought.decision && (
+          <div className="p-2 rounded-lg bg-violet-500/5 border border-violet-500/10">
+            <p className="text-xs text-violet-300 font-medium">{thought.decision}</p>
+          </div>
+        )}
         
         {/* Footer */}
         <div className="flex items-center justify-between mt-3 text-xs text-gray-500">
@@ -169,7 +183,7 @@ export function AutonomousThoughtVisualizer() {
             <Zap className="h-5 w-5 text-violet-400 mt-0.5" />
             <div className="flex-1">
               <p className="text-sm text-white font-medium mb-1">Active Decision</p>
-              <p className="text-sm text-gray-400">{activeThought.decision.justification}</p>
+              <p className="text-sm text-gray-400">{activeThought.decision ?? activeThought.content}</p>
             </div>
           </div>
         </div>

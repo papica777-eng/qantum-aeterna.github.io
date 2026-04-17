@@ -1,0 +1,220 @@
+[
+  {
+    "id": "lead_1767199007115_nsqw3shd4",
+    "source": "GitHub",
+    "source_id": "github_mannercode",
+    "name": "mannercode",
+    "type": "Organization",
+    "profile_url": "https://github.com/mannercode",
+    "repo_name": "mannercode/nest-msa",
+    "repo_url": "https://github.com/mannercode/nest-msa",
+    "repo_description": "NestJS Microservices (MSA) example with fully parallel Jest tests, Dockerized setup, NATS messaging, MongoDB & Redis, and automated E2E testing.",
+    "stars": 19,
+    "language": "TypeScript",
+    "discovered_at": "2025-12-31T16:36:47.115Z",
+    "query_matched": "e2e+testing+setup",
+    "score": 75,
+    "status": "new",
+    "enriched_at": "2025-12-31T17:07:23.627Z",
+    "analysis": {
+      "problems": [
+        {
+          "type": "no_e2e",
+          "message": "No E2E testing framework detected",
+          "severity": "critical",
+          "solution": "QAntum provides full E2E coverage out of the box"
+        }
+      ],
+      "opportunities": [
+        {
+          "type": "unit_testing",
+          "message": "Has unit tests but may lack E2E - QAntum fills the gap",
+          "value": "medium"
+        },
+        {
+          "type": "active_development",
+          "message": "Actively maintained - high conversion potential",
+          "value": "high"
+        }
+      ],
+      "recommended_pitch": "No E2E testing detected in mannercode/nest-msa. QAntum Prime provides full coverage with Ghost Protocol stealth and Oracle predictive analytics.",
+      "priority_score": 120
+    }
+  },
+  {
+    "id": "lead_1767199007115_kidstzp8m",
+    "source": "GitHub",
+    "source_id": "github_dot-do",
+    "name": "dot-do",
+    "type": "Organization",
+    "profile_url": "https://github.com/dot-do",
+    "repo_name": "dot-do/test.mdx",
+    "repo_url": "https://github.com/dot-do/test.mdx",
+    "repo_description": "Test repository for todo.mdx e2e tests - beads setup, sample issues, workflow testing",
+    "stars": 0,
+    "language": null,
+    "discovered_at": "2025-12-31T16:36:47.115Z",
+    "query_matched": "e2e+testing+setup",
+    "score": 70,
+    "status": "new",
+    "enriched_at": "2025-12-31T17:07:25.456Z",
+    "analysis": {
+      "problems": [
+        {
+          "type": "no_ci",
+          "message": "No CI/CD pipeline detected",
+          "severity": "high",
+          "solution": "QAntum includes pre-built GitHub Actions for automated testing"
+        },
+        {
+          "type": "many_issues",
+          "message": "63 open issues - may indicate testing gaps",
+          "severity": "medium",
+          "solution": "QAntum Oracle can predict bugs before they become issues"
+        }
+      ],
+      "opportunities": [],
+      "recommended_pitch": "Organization with 0 stars - enterprise pitch",
+      "priority_score": 110
+    }
+  },
+  {
+    "id": "lead_1767199015698_c46vzo778",
+    "source": "RemoteOK",
+    "source_id": "remoteok_1129350",
+    "company": "CloudWalk",
+    "position": "Internal Controls &amp; Policy Adherence Testing Analyst",
+    "location": "United States",
+    "url": "https://remoteOK.com/remote-jobs/remote-internal-controls-amp-policy-adherence-testing-analyst-cloudwalk-1129350",
+    "company_logo": "",
+    "tags": [
+      "testing",
+      "analyst",
+      "design",
+      "technical",
+      "support",
+      "test",
+      "financial",
+      "operations",
+      "operational",
+      "engineering",
+      "digital nomad"
+    ],
+    "salary_min": 0,
+    "salary_max": 0,
+    "discovered_at": "2025-12-31T16:36:55.698Z",
+    "status": "new",
+    "priority": "high",
+    "enriched_at": "2025-12-31T17:07:31.259Z",
+    "analysis": {
+      "problems": [],
+      "opportunities": [
+        {
+          "type": "hiring",
+          "message": "Actively hiring for Internal Controls &amp; Policy Adherence Testing Analyst",
+          "value": "high"
+        }
+      ],
+      "recommended_pitch": "You're hiring a Internal Controls &amp; Policy Adherence Testing Analyst. QAntum Prime is the AI QA agent that works 24/7 with 0.08ms failover - faster and cheaper than a human hire.",
+      "priority_score": 90
+    }
+  },
+  {
+    "id": "lead_1767199007116_cn7wj0415",
+    "source": "GitHub",
+    "source_id": "github_PadulaRenato",
+    "name": "PadulaRenato",
+    "type": "User",
+    "profile_url": "https://github.com/PadulaRenato",
+    "repo_name": "PadulaRenato/VNT_TS_PW_GHERKIN_Template",
+    "repo_url": "https://github.com/PadulaRenato/VNT_TS_PW_GHERKIN_Template",
+    "repo_description": "Template Padrão para testes E2E de Playwright com Typescript utilizando estrutura Gherkin e Page Object. A estrutura de pastas comporta Queries no banco, global Setup e teardown",
+    "stars": 1,
+    "language": "TypeScript",
+    "discovered_at": "2025-12-31T16:36:47.116Z",
+    "query_matched": "e2e+testing+setup",
+    "score": 55,
+    "status": "new",
+    "enriched_at": "2025-12-31T17:07:29.779Z",
+    "analysis": {
+      "problems": [
+        {
+          "type": "no_ci",
+          "message": "No CI/CD pipeline detected",
+          "severity": "high",
+          "solution": "QAntum includes pre-built GitHub Actions for automated testing"
+        }
+      ],
+      "opportunities": [
+        {
+          "type": "playwright_user",
+          "message": "Uses Playwright - can benefit from Ghost Protocol stealth",
+          "value": "high"
+        }
+      ],
+      "recommended_pitch": "",
+      "priority_score": 80
+    }
+  },
+  {
+    "id": "lead_1767199007116_ed6s94ixu",
+    "source": "GitHub",
+    "source_id": "github_DevBecaRB",
+    "name": "DevBecaRB",
+    "type": "User",
+    "profile_url": "https://github.com/DevBecaRB",
+    "repo_name": "DevBecaRB/Tests-E2E-With-Playwright",
+    "repo_url": "https://github.com/DevBecaRB/Tests-E2E-With-Playwright",
+    "repo_description": "Study project on **E2E test automation with Playwright**. Contains practical examples, experiments, and best practices to learn modern testing concepts, covering setup, test cases, UI validation, navigation, and CI/CD integration. Continuously evolving with new scenarios.",
+    "stars": 0,
+    "language": "TypeScript",
+    "discovered_at": "2025-12-31T16:36:47.116Z",
+    "query_matched": "e2e+testing+setup",
+    "score": 55,
+    "status": "new",
+    "enriched_at": "2025-12-31T17:07:28.342Z",
+    "analysis": {
+      "problems": [
+        {
+          "type": "no_e2e",
+          "message": "No E2E testing framework detected",
+          "severity": "critical",
+          "solution": "QAntum provides full E2E coverage out of the box"
+        },
+        {
+          "type": "no_ci",
+          "message": "No CI/CD pipeline detected",
+          "severity": "high",
+          "solution": "QAntum includes pre-built GitHub Actions for automated testing"
+        }
+      ],
+      "opportunities": [],
+      "recommended_pitch": "No E2E testing detected in DevBecaRB/Tests-E2E-With-Playwright. QAntum Prime provides full coverage with Ghost Protocol stealth and Oracle predictive analytics.",
+      "priority_score": 75
+    }
+  },
+  {
+    "id": "lead_1767199007115_n9yi6v3rh",
+    "source": "GitHub",
+    "source_id": "github_thechaoticengineer",
+    "name": "thechaoticengineer",
+    "type": "User",
+    "profile_url": "https://github.com/thechaoticengineer",
+    "repo_name": "thechaoticengineer/CloudScribe",
+    "repo_url": "https://github.com/thechaoticengineer/CloudScribe",
+    "repo_description": "Microservices notes app on Azure AKS. Keycloak/EntraID auth, Testcontainers, Playwright    E2E. Complete test environment setup showcase.",
+    "stars": 0,
+    "language": "C#",
+    "discovered_at": "2025-12-31T16:36:47.115Z",
+    "query_matched": "e2e+testing+setup",
+    "score": 50,
+    "status": "new",
+    "enriched_at": "2025-12-31T17:07:26.920Z",
+    "analysis": {
+      "problems": [],
+      "opportunities": [],
+      "recommended_pitch": "",
+      "priority_score": 50
+    }
+  }
+]

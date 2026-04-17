@@ -1,0 +1,711 @@
+{
+  "generated": "2025-12-31T14:37:21.148Z",
+  "version": "v27.1.0-IMMORTAL",
+  "totals": {
+    "files": 1145,
+    "lines": 715861,
+    "size": 23993647,
+    "folders": 68
+  },
+  "byExtension": {
+    ".json": {
+      "files": 177,
+      "lines": 211466,
+      "size": 5824815
+    },
+    ".md": {
+      "files": 124,
+      "lines": 35672,
+      "size": 1185354
+    },
+    ".html": {
+      "files": 36,
+      "lines": 30540,
+      "size": 1212867
+    },
+    ".js": {
+      "files": 157,
+      "lines": 72596,
+      "size": 2816711
+    },
+    ".ts": {
+      "files": 650,
+      "lines": 364641,
+      "size": 12932663
+    },
+    ".css": {
+      "files": 1,
+      "lines": 946,
+      "size": 21237
+    }
+  },
+  "byCategory": {
+    "data": {
+      "files": 177,
+      "lines": 211466
+    },
+    "docs": {
+      "files": 161,
+      "lines": 67158
+    },
+    "code": {
+      "files": 807,
+      "lines": 437237
+    }
+  },
+  "topFolders": [
+    {
+      "path": "c:\\MisteMind",
+      "files": 914,
+      "lines": 622688,
+      "size": 20648902,
+      "breakdown": {
+        ".json": {
+          "files": 107,
+          "lines": 200522
+        },
+        ".md": {
+          "files": 97,
+          "lines": 27446
+        },
+        ".html": {
+          "files": 27,
+          "lines": 21196
+        },
+        ".js": {
+          "files": 147,
+          "lines": 69752
+        },
+        ".ts": {
+          "files": 535,
+          "lines": 302826
+        },
+        ".css": {
+          "files": 1,
+          "lines": 946
+        }
+      }
+    },
+    {
+      "path": "c:\\MisteMind\\PROJECT",
+      "files": 620,
+      "lines": 464718,
+      "size": 15122023,
+      "breakdown": {
+        ".js": {
+          "files": 64,
+          "lines": 24540
+        },
+        ".md": {
+          "files": 47,
+          "lines": 12194
+        },
+        ".json": {
+          "files": 73,
+          "lines": 190213
+        },
+        ".ts": {
+          "files": 419,
+          "lines": 224862
+        },
+        ".html": {
+          "files": 16,
+          "lines": 11963
+        },
+        ".css": {
+          "files": 1,
+          "lines": 946
+        }
+      }
+    },
+    {
+      "path": "c:\\MisteMind\\PROJECT\\PRIVATE",
+      "files": 601,
+      "lines": 458510,
+      "size": 14925965,
+      "breakdown": {
+        ".js": {
+          "files": 64,
+          "lines": 24540
+        },
+        ".md": {
+          "files": 40,
+          "lines": 10781
+        },
+        ".json": {
+          "files": 70,
+          "lines": 190146
+        },
+        ".ts": {
+          "files": 418,
+          "lines": 224648
+        },
+        ".html": {
+          "files": 8,
+          "lines": 7449
+        },
+        ".css": {
+          "files": 1,
+          "lines": 946
+        }
+      }
+    },
+    {
+      "path": "c:\\MisteMind\\TRAINING",
+      "files": 200,
+      "lines": 104028,
+      "size": 3672971,
+      "breakdown": {
+        ".md": {
+          "files": 23,
+          "lines": 4287
+        },
+        ".js": {
+          "files": 75,
+          "lines": 43590
+        },
+        ".json": {
+          "files": 7,
+          "lines": 623
+        },
+        ".html": {
+          "files": 6,
+          "lines": 6338
+        },
+        ".ts": {
+          "files": 89,
+          "lines": 49190
+        }
+      }
+    },
+    {
+      "path": "c:\\MisteMind\\TRAINING\\training-framework",
+      "files": 188,
+      "lines": 103748,
+      "size": 3663244,
+      "breakdown": {
+        ".json": {
+          "files": 4,
+          "lines": 533
+        },
+        ".md": {
+          "files": 17,
+          "lines": 4248
+        },
+        ".js": {
+          "files": 72,
+          "lines": 43439
+        },
+        ".html": {
+          "files": 6,
+          "lines": 6338
+        },
+        ".ts": {
+          "files": 89,
+          "lines": 49190
+        }
+      }
+    },
+    {
+      "path": "c:\\QAntumQATool",
+      "files": 231,
+      "lines": 93173,
+      "size": 3344745,
+      "breakdown": {
+        ".json": {
+          "files": 70,
+          "lines": 10944
+        },
+        ".md": {
+          "files": 27,
+          "lines": 8226
+        },
+        ".html": {
+          "files": 9,
+          "lines": 9344
+        },
+        ".js": {
+          "files": 10,
+          "lines": 2844
+        },
+        ".ts": {
+          "files": 115,
+          "lines": 61815
+        }
+      }
+    },
+    {
+      "path": "c:\\QAntumQATool\\src",
+      "files": 77,
+      "lines": 41444,
+      "size": 1407038,
+      "breakdown": {
+        ".ts": {
+          "files": 75,
+          "lines": 41031
+        },
+        ".json": {
+          "files": 2,
+          "lines": 413
+        }
+      }
+    },
+    {
+      "path": "c:\\MisteMind\\src",
+      "files": 25,
+      "lines": 27882,
+      "size": 919228,
+      "breakdown": {
+        ".ts": {
+          "files": 25,
+          "lines": 27882
+        }
+      }
+    },
+    {
+      "path": "c:\\QAntumQATool\\scripts",
+      "files": 25,
+      "lines": 12160,
+      "size": 523017,
+      "breakdown": {
+        ".js": {
+          "files": 4,
+          "lines": 897
+        },
+        ".ts": {
+          "files": 21,
+          "lines": 11263
+        }
+      }
+    },
+    {
+      "path": "c:\\MisteMind\\docs",
+      "files": 24,
+      "lines": 9429,
+      "size": 284831,
+      "breakdown": {
+        ".md": {
+          "files": 14,
+          "lines": 6879
+        },
+        ".html": {
+          "files": 4,
+          "lines": 1934
+        },
+        ".js": {
+          "files": 6,
+          "lines": 616
+        }
+      }
+    },
+    {
+      "path": "c:\\MisteMind\\data",
+      "files": 23,
+      "lines": 8572,
+      "size": 269469,
+      "breakdown": {
+        ".json": {
+          "files": 22,
+          "lines": 8444
+        },
+        ".md": {
+          "files": 1,
+          "lines": 128
+        }
+      }
+    },
+    {
+      "path": "c:\\QAntumQATool\\tests",
+      "files": 17,
+      "lines": 8439,
+      "size": 343968,
+      "breakdown": {
+        ".ts": {
+          "files": 14,
+          "lines": 7493
+        },
+        ".js": {
+          "files": 3,
+          "lines": 946
+        }
+      }
+    },
+    {
+      "path": "c:\\MisteMind\\src\\biology",
+      "files": 6,
+      "lines": 7699,
+      "size": 257378,
+      "breakdown": {
+        ".ts": {
+          "files": 6,
+          "lines": 7699
+        }
+      }
+    },
+    {
+      "path": "c:\\QAntumQATool\\docs",
+      "files": 18,
+      "lines": 7517,
+      "size": 214455,
+      "breakdown": {
+        ".md": {
+          "files": 15,
+          "lines": 5195
+        },
+        ".ts": {
+          "files": 2,
+          "lines": 1414
+        },
+        ".html": {
+          "files": 1,
+          "lines": 908
+        }
+      }
+    },
+    {
+      "path": "c:\\QAntumQATool\\app",
+      "files": 6,
+      "lines": 6975,
+      "size": 290458,
+      "breakdown": {
+        ".html": {
+          "files": 6,
+          "lines": 6975
+        }
+      }
+    },
+    {
+      "path": "c:\\QAntumQATool\\src\\enterprise",
+      "files": 8,
+      "lines": 6603,
+      "size": 250046,
+      "breakdown": {
+        ".ts": {
+          "files": 8,
+          "lines": 6603
+        }
+      }
+    },
+    {
+      "path": "c:\\MisteMind\\PROJECT\\PUBLIC",
+      "files": 18,
+      "lines": 6086,
+      "size": 193305,
+      "breakdown": {
+        ".md": {
+          "files": 6,
+          "lines": 1291
+        },
+        ".ts": {
+          "files": 1,
+          "lines": 214
+        },
+        ".html": {
+          "files": 8,
+          "lines": 4514
+        },
+        ".json": {
+          "files": 3,
+          "lines": 67
+        }
+      }
+    },
+    {
+      "path": "c:\\QAntumQATool\\src\\swarm",
+      "files": 17,
+      "lines": 4813,
+      "size": 143622,
+      "breakdown": {
+        ".ts": {
+          "files": 17,
+          "lines": 4813
+        }
+      }
+    },
+    {
+      "path": "c:\\QAntumQATool\\src\\bastion",
+      "files": 10,
+      "lines": 4741,
+      "size": 138033,
+      "breakdown": {
+        ".ts": {
+          "files": 10,
+          "lines": 4741
+        }
+      }
+    },
+    {
+      "path": "c:\\MisteMind\\src\\reality",
+      "files": 4,
+      "lines": 4661,
+      "size": 150243,
+      "breakdown": {
+        ".ts": {
+          "files": 4,
+          "lines": 4661
+        }
+      }
+    }
+  ],
+  "topFiles": [
+    {
+      "path": "c:\\MisteMind\\PROJECT\\PRIVATE\\Mind-Engine-Core\\.ascension-backup\\2025-12-30T19-06-20-229Z\\brain-map.json",
+      "lines": 90483,
+      "size": 2404600,
+      "extension": ".json",
+      "category": "data",
+      "lastModified": "2025-12-30T17:15:09.508Z"
+    },
+    {
+      "path": "c:\\MisteMind\\PROJECT\\PRIVATE\\Mind-Engine-Core\\brain-map.json",
+      "lines": 90483,
+      "size": 2404407,
+      "extension": ".json",
+      "category": "data",
+      "lastModified": "2025-12-30T19:06:20.584Z"
+    },
+    {
+      "path": "c:\\QAntumQATool\\package-lock.json",
+      "lines": 6074,
+      "size": 212474,
+      "extension": ".json",
+      "category": "data",
+      "lastModified": "2025-12-31T13:44:42.530Z"
+    },
+    {
+      "path": "c:\\MisteMind\\TRAINING\\training-framework\\src\\index.ts",
+      "lines": 4527,
+      "size": 153867,
+      "extension": ".ts",
+      "category": "code",
+      "lastModified": "2025-12-29T19:32:01.795Z"
+    },
+    {
+      "path": "c:\\QAntumQATool\\src\\index.ts",
+      "lines": 4527,
+      "size": 153933,
+      "extension": ".ts",
+      "category": "code",
+      "lastModified": "2025-12-31T12:58:26.572Z"
+    },
+    {
+      "path": "c:\\MisteMind\\PROJECT\\PRIVATE\\Mind-Engine-Core\\.ascension-backup\\2025-12-30T19-06-20-229Z\\package-lock.json",
+      "lines": 3250,
+      "size": 122052,
+      "extension": ".json",
+      "category": "data",
+      "lastModified": "2025-12-30T16:52:10.293Z"
+    },
+    {
+      "path": "c:\\MisteMind\\PROJECT\\PRIVATE\\Mind-Engine-Core\\package-lock.json",
+      "lines": 3250,
+      "size": 125491,
+      "extension": ".json",
+      "category": "data",
+      "lastModified": "2025-12-30T19:06:20.587Z"
+    },
+    {
+      "path": "c:\\MisteMind\\data\\app-data\\chronos-data\\credit_history.json",
+      "lines": 2563,
+      "size": 89084,
+      "extension": ".json",
+      "category": "data",
+      "lastModified": "2025-12-29T19:32:01.626Z"
+    },
+    {
+      "path": "c:\\MisteMind\\data\\chronos-data\\credit_history.json",
+      "lines": 2563,
+      "size": 89084,
+      "extension": ".json",
+      "category": "data",
+      "lastModified": "2025-12-29T19:32:01.626Z"
+    },
+    {
+      "path": "c:\\MisteMind\\PROJECT\\PRIVATE\\Mind-Engine-Core\\public\\index.html",
+      "lines": 2311,
+      "size": 115637,
+      "extension": ".html",
+      "category": "docs",
+      "lastModified": "2025-12-30T19:24:18.017Z"
+    },
+    {
+      "path": "c:\\MisteMind\\TRAINING\\training-framework\\app\\index.html",
+      "lines": 2311,
+      "size": 115648,
+      "extension": ".html",
+      "category": "docs",
+      "lastModified": "2025-12-29T19:32:01.749Z"
+    },
+    {
+      "path": "c:\\QAntumQATool\\app\\index.html",
+      "lines": 2311,
+      "size": 115648,
+      "extension": ".html",
+      "category": "docs",
+      "lastModified": "2025-12-31T12:58:26.537Z"
+    },
+    {
+      "path": "c:\\MisteMind\\src\\biology\\evolution\\MarketBlueprint.ts",
+      "lines": 1815,
+      "size": 52837,
+      "extension": ".ts",
+      "category": "code",
+      "lastModified": "2025-12-30T23:00:34.291Z"
+    },
+    {
+      "path": "c:\\MisteMind\\PROJECT\\PRIVATE\\Mind-Engine-Core\\.ascension-backup\\2025-12-30T19-06-20-229Z\\MASTER-PLAN.md",
+      "lines": 1594,
+      "size": 44577,
+      "extension": ".md",
+      "category": "docs",
+      "lastModified": "2025-12-29T23:10:23.894Z"
+    },
+    {
+      "path": "c:\\MisteMind\\PROJECT\\PRIVATE\\Mind-Engine-Core\\MASTER-PLAN.md",
+      "lines": 1594,
+      "size": 44569,
+      "extension": ".md",
+      "category": "docs",
+      "lastModified": "2025-12-30T19:06:20.587Z"
+    },
+    {
+      "path": "c:\\MisteMind\\PROJECT\\PRIVATE\\Mind-Engine-Core\\.ascension-backup\\2025-12-30T19-06-20-229Z\\src\\swarm\\swarm-orchestrator.ts",
+      "lines": 1583,
+      "size": 61872,
+      "extension": ".ts",
+      "category": "code",
+      "lastModified": "2025-12-30T18:33:37.351Z"
+    },
+    {
+      "path": "c:\\MisteMind\\PROJECT\\PRIVATE\\Mind-Engine-Core\\.purge-backup\\2025-12-30T19-06-20-663Z\\src\\swarm\\swarm-orchestrator.ts",
+      "lines": 1583,
+      "size": 61874,
+      "extension": ".ts",
+      "category": "code",
+      "lastModified": "2025-12-30T19:06:20.559Z"
+    },
+    {
+      "path": "c:\\MisteMind\\PROJECT\\PRIVATE\\Mind-Engine-Core\\src\\swarm\\swarm-orchestrator.ts",
+      "lines": 1583,
+      "size": 61956,
+      "extension": ".ts",
+      "category": "code",
+      "lastModified": "2025-12-30T21:58:11.342Z"
+    },
+    {
+      "path": "c:\\MisteMind\\docs\\MASTER-API-REFERENCE.md",
+      "lines": 1554,
+      "size": 37877,
+      "extension": ".md",
+      "category": "docs",
+      "lastModified": "2025-12-29T19:32:01.644Z"
+    },
+    {
+      "path": "c:\\MisteMind\\src\\biology\\evolution\\HiveMind.ts",
+      "lines": 1481,
+      "size": 47118,
+      "extension": ".ts",
+      "category": "code",
+      "lastModified": "2025-12-30T23:44:28.262Z"
+    },
+    {
+      "path": "c:\\MisteMind\\TRAINING\\training-framework\\src\\enterprise\\i18n-manager.ts",
+      "lines": 1457,
+      "size": 52360,
+      "extension": ".ts",
+      "category": "code",
+      "lastModified": "2025-12-29T19:32:01.788Z"
+    },
+    {
+      "path": "c:\\QAntumQATool\\src\\enterprise\\i18n-manager.ts",
+      "lines": 1457,
+      "size": 52360,
+      "extension": ".ts",
+      "category": "code",
+      "lastModified": "2025-12-31T12:58:26.565Z"
+    },
+    {
+      "path": "c:\\MisteMind\\src\\sales\\SelfHealingSales.ts",
+      "lines": 1452,
+      "size": 47078,
+      "extension": ".ts",
+      "category": "code",
+      "lastModified": "2025-12-30T23:05:11.419Z"
+    },
+    {
+      "path": "c:\\MisteMind\\src\\swarm\\mesh\\NexusOrchestrator.ts",
+      "lines": 1442,
+      "size": 42751,
+      "extension": ".ts",
+      "category": "code",
+      "lastModified": "2025-12-30T23:10:55.086Z"
+    },
+    {
+      "path": "c:\\MisteMind\\PROJECT\\PRIVATE\\Mind-Engine-Core\\src\\oracle\\report-generator.ts",
+      "lines": 1386,
+      "size": 48143,
+      "extension": ".ts",
+      "category": "code",
+      "lastModified": "2025-12-30T20:29:44.664Z"
+    },
+    {
+      "path": "c:\\MisteMind\\TRAINING\\training-framework\\src\\enterprise\\dashboard-server.ts",
+      "lines": 1376,
+      "size": 49843,
+      "extension": ".ts",
+      "category": "code",
+      "lastModified": "2025-12-29T19:32:01.788Z"
+    },
+    {
+      "path": "c:\\QAntumQATool\\src\\enterprise\\dashboard-server.ts",
+      "lines": 1376,
+      "size": 49843,
+      "extension": ".ts",
+      "category": "code",
+      "lastModified": "2025-12-31T12:58:26.565Z"
+    },
+    {
+      "path": "c:\\MisteMind\\PROJECT\\PRIVATE\\Mind-Engine-Core\\src\\future-practices\\virtual-material-sync.ts",
+      "lines": 1363,
+      "size": 43272,
+      "extension": ".ts",
+      "category": "code",
+      "lastModified": "2025-12-30T19:06:20.730Z"
+    },
+    {
+      "path": "c:\\MisteMind\\PROJECT\\PRIVATE\\Mind-Engine-Core\\.ascension-backup\\2025-12-30T19-06-20-229Z\\src\\future-practices\\virtual-material-sync.ts",
+      "lines": 1362,
+      "size": 43209,
+      "extension": ".ts",
+      "category": "code",
+      "lastModified": "2025-12-30T18:34:22.401Z"
+    },
+    {
+      "path": "c:\\MisteMind\\PROJECT\\PRIVATE\\Mind-Engine-Core\\.purge-backup\\2025-12-30T19-06-20-663Z\\src\\future-practices\\virtual-material-sync.ts",
+      "lines": 1362,
+      "size": 43211,
+      "extension": ".ts",
+      "category": "code",
+      "lastModified": "2025-12-30T19:06:20.538Z"
+    }
+  ],
+  "privateStats": {
+    "files": 602,
+    "lines": 458878,
+    "folders": [
+      "api-sensei",
+      "licenses",
+      "Mind-Engine-Core",
+      "QAntumQATool",
+      "QA-Framework",
+      "README.md",
+      "scripts",
+      "test",
+      "utils"
+    ]
+  },
+  "publicStats": {
+    "files": 543,
+    "lines": 256983
+  }
+}

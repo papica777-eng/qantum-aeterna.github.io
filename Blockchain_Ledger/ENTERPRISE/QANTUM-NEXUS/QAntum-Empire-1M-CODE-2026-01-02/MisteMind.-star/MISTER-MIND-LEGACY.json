@@ -1,0 +1,40 @@
+{
+  "locCount": {
+    "timestamp": "2026-01-01T21:44:29.612Z",
+    "verified": true,
+    "method": "scripts/count-loc.js",
+    "projects": {
+      "core": {
+        "path": "C:\\MisteMind",
+        "files": 975,
+        "totalLines": 539222,
+        "codeLines": 412224,
+        "comments": 67031,
+        "blank": 59967
+      },
+      "shield": {
+        "path": "C:\\MrMindQATool",
+        "files": 567,
+        "totalLines": 207851,
+        "codeLines": 146077,
+        "comments": 41930,
+        "blank": 19844
+      },
+      "voice": {
+        "path": "C:\\MisterMindPage",
+        "files": 10,
+        "totalLines": 6832,
+        "codeLines": 5513,
+        "comments": 356,
+        "blank": 963
+      }
+    },
+    "totals": {
+      "files": 1552,
+      "totalLines": 753905,
+      "codeLines": 563814,
+      "comments": 109317,
+      "blank": 80774
+    }
+  }
+}

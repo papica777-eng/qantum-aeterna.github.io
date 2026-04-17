@@ -1,0 +1,32 @@
+# ╔═══════════════════════════════════════════════════════════════════╗
+# ║  🧠 MISTEMIND - VS CODE IGNORE FILE                                ║
+# ╚═══════════════════════════════════════════════════════════════════╝
+
+# === BUILD ===
+dist/
+out/
+coverage/
+
+# === DEPENDENCIES ===
+node_modules/
+
+# === PYTHON ===
+.venv/
+__pycache__/
+*.pyc
+
+# === DATA (HEAVY) ===
+data/vectors/
+data/models/
+data/checkpoints/
+data/hive-mind/
+data/knowledge/
+data/autonomous-thought/
+
+# === LOGS ===
+*.log
+audit-results/
+
+# === TEMP ===
+.tsbuildinfo
+*.vsix

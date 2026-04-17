@@ -1,0 +1,27 @@
+{
+  "version": "28.1.0-SUPREME",
+  "timestamp": "2025-12-31T23:04:18.291Z",
+  "activeModule": "biology",
+  "primaryContext": "./src/biology",
+  "dependencies": [
+    "./src/math",
+    "./src/physics",
+    "./src/chemistry",
+    "./src/security"
+  ],
+  "readOnlyMap": "./data/supreme-meditation/meditation-result.json",
+  "enforceAstOnLargeFiles": true,
+  "maxContextLines": 15000,
+  "symbolRegistryPath": "./data/supreme-meditation/meditation-result.json",
+  "rules": [
+    "🎯 FOCUS: biology (Layer 4: BIOLOGY)",
+    "📦 PRIMARY: ./src/biology (~9917 lines)",
+    "🔗 DEPENDENCIES: math, physics, chemistry, security",
+    "⛔ FORBIDDEN: Imports from higher layers (reality, economy, sales, saas, swarm, oracle, dashboard)",
+    "✅ Assimilator First: Run scripts/assimilator.ts before any change",
+    "✅ Context Anchoring: Stay within biology unless symbol missing",
+    "✅ Memory Grouping: Use AST skeleton for adjacent modules",
+    "✅ Validation: Run verifyGeneratedCode() after every change",
+    "🛡️ If symbol not in registry = HALLUCINATION → fix immediately"
+  ]
+}

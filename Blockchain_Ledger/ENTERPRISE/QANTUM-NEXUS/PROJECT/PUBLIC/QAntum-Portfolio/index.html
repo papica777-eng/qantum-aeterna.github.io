@@ -1,0 +1,370 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dimitar Prodromov | QAntum Empire Portfolio</title>
+    <meta name="description"
+        content="Principal Engineer specializing in AI-Powered QA & Security. 437K+ LOC. TypeScript Expert.">
+    <meta property="og:title" content="Dimitar Prodromov - QAntum Empire">
+    <meta property="og:description" content="AI-Powered Quality Assurance & Security Solutions">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #8b5cf6;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --accent: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, var(--dark) 0%, #1e293b 100%);
+            color: var(--light);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(37, 99, 235, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1.25rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: #94a3b8;
+            margin-top: 0.5rem;
+        }
+
+        .projects {
+            margin: 4rem 0;
+        }
+
+        .projects h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .project:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .project-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .project h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .project p {
+            color: #94a3b8;
+            margin-bottom: 1rem;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: rgba(37, 99, 235, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #93c5fd;
+        }
+
+        .skills {
+            margin: 4rem 0;
+        }
+
+        .skills h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .skill-bars {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .skill-bar {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #64748b;
+        }
+
+        .cta {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 2rem;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .cta:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1> Dimitar Prodromov</h1>
+        <p class="subtitle">Principal Engineer / Architect | AI-Powered QA & Security</p>
+        <a href="https://github.com/papica777-eng" class="cta">View GitHub</a>
+    </header>
+
+    <div class="container">
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">15.7M+</div>
+                <div class="stat-label">Lines of Code</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">2,545</div>
+                <div class="stat-label">Total Assets</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">Sovereign</div>
+                <div class="stat-label">System Status</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">1,007,159</div>
+                <div class="stat-label">AI Vectors</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">RTX 4050</div>
+                <div class="stat-label">Hardware Bound</div>
+            </div>
+        </div>
+
+        <section class="projects">
+            <h2> Flagship Projects</h2>
+            <div class="project-grid">
+                <div class="project" style="border: 2px solid var(--accent);">
+                    <div class="project-icon">🔗</div>
+                    <h3>Sovereign MCP Bridge</h3>
+                    <p>Early-adoption implementation of <strong>Model Context Protocol</strong> for automated QA
+                        diagnostics. Bridges LLMs with local system power for RTO/RPO anomaly detection.</p>
+                    <div class="tech-tags">
+                        <span class="tag">MCP SDK</span>
+                        <span class="tag">TypeScript</span>
+                        <span class="tag">System Diagnostics</span>
+                        <span class="tag">AI Integration</span>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-icon">🌪️</div>
+                    <h3>Vortex AI Engine</h3>
+                    <p>Sovereign High-Frequency AI Core (70MB Neural Power) managing 15.7M LOC and self-healing
+                        infrastructure. </p>
+                    <div class="tech-tags">
+                        <span class="tag">Vortex AI</span>
+                        <span class="tag">Gemini Ultra 1.5</span>
+                        <span class="tag">Pinecone Bridge</span>
+                        <span class="tag">RTX 4050</span>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-icon">💀</div>
+                    <h3>ARMED REAPER [PRO]</h3>
+                    <p>High-Frequency Algorithmic Trading with RSI Strategy, Process Guard, and CSV Ledger verification.
+                        Win Rate: ~65%.</p>
+                    <div class="tech-tags">
+                        <span class="tag">Algo Trading</span>
+                        <span class="tag">RSI Logic</span>
+                        <span class="tag">Process Guard</span>
+                        <span class="tag">Node.js</span>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-icon"></div>
+                    <h3>QAntum Extension</h3>
+                    <p>Professional VS Code extension for integrated testing with real-time AI suggestions.</p>
+                    <div class="tech-tags">
+                        <span class="tag">VS Code API</span>
+                        <span class="tag">TypeScript</span>
+                        <span class="tag">WebSocket</span>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-icon"></div>
+                    <h3>QAntum SAAS</h3>
+                    <p>Enterprise Testing-as-a-Service platform with multi-tenant architecture and real-time analytics.
+                    </p>
+                    <div class="tech-tags">
+                        <span class="tag">Next.js 14</span>
+                        <span class="tag">Prisma</span>
+                        <span class="tag">Redis</span>
+                        <span class="tag">Stripe</span>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-icon"></div>
+                    <h3>GhostShield</h3>
+                    <p>Enterprise-grade stealth security with Ghost Protocol, Cloudflare bypass, and neural vault
+                        encryption.</p>
+                    <div class="tech-tags">
+                        <span class="tag">Security</span>
+                        <span class="tag">Puppeteer</span>
+                        <span class="tag">AES-256</span>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-icon"></div>
+                    <h3>ChronoSync SDK</h3>
+                    <p>Time-travel state management for debugging complex workflows with full history.</p>
+                    <div class="tech-tags">
+                        <span class="tag">TypeScript</span>
+                        <span class="tag">Event Sourcing</span>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-icon"></div>
+                    <h3>Bug Bounty Research</h3>
+                    <p>Real-world security testing on Revolut and OWASP Juice Shop with documented vulnerabilities.</p>
+                    <div class="tech-tags">
+                        <span class="tag">Penetration Testing</span>
+                        <span class="tag">Security Audit</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="skills">
+            <h2> Technical Skills</h2>
+            <div class="skill-bars">
+                <div class="skill-bar">
+                    <div class="skill-name"><span>TypeScript/JavaScript</span><span>98%</span></div>
+                    <div class="bar">
+                        <div class="bar-fill" style="width: 98%"></div>
+                    </div>
+                </div>
+                <div class="skill-bar">
+                    <div class="skill-name"><span>AI/ML Integration</span><span>95%</span></div>
+                    <div class="bar">
+                        <div class="bar-fill" style="width: 95%"></div>
+                    </div>
+                </div>
+                <div class="skill-bar">
+                    <div class="skill-name"><span>Security Testing</span><span>92%</span></div>
+                    <div class="bar">
+                        <div class="bar-fill" style="width: 92%"></div>
+                    </div>
+                </div>
+                <div class="skill-bar">
+                    <div class="skill-name"><span>React/Next.js</span><span>90%</span></div>
+                    <div class="bar">
+                        <div class="bar-fill" style="width: 90%"></div>
+                    </div>
+                </div>
+                <div class="skill-bar">
+                    <div class="skill-name"><span>Node.js/DevOps</span><span>88%</span></div>
+                    <div class="bar">
+                        <div class="bar-fill" style="width: 88%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>"Built with Persistence. Engineered for Eternity."</p>
+        <p style="margin-top: 1rem;"> 2026 Dimitar Prodromov | QAntum Empire</p>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,42 @@
+# QANTUM Docker Ignore
+
+# Dependencies
+node_modules/
+
+# Output directories
+output/
+visual_diffs/
+bug_reports/
+autonomous_output/
+cloud_output/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+*.code-workspace
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temp files
+*.tmp
+*.temp
+
+# Batch files (Windows only)
+*.bat
+
+# Python files (not needed in container)
+*.py
+__pycache__/
+
+# Large model files
+*.gguf
+Modelfile

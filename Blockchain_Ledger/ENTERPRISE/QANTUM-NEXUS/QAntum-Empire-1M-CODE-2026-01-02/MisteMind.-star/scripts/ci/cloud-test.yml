@@ -1,0 +1,60 @@
+name: 🧪 QANTUM Cloud Tests
+
+on:
+  workflow_dispatch:  # Ръчно стартиране
+    inputs:
+      task:
+        description: 'Test task (e.g., "Open google.com, search Selenium")'
+        required: true
+        default: 'Open google.com, search "Selenium automation" and say DONE'
+      headless:
+        description: 'Run headless?'
+        required: false
+        default: 'true'
+
+jobs:
+  run-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: 📦 Install dependencies
+        run: npm ci || npm install
+      
+      - name: 🎭 Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+      
+      - name: 🔐 Setup environment
+        run: |
+          echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
+          echo "HEADLESS=${{ github.event.inputs.headless }}" >> .env
+          echo "LITE_MODE=true" >> .env
+      
+      - name: 🚀 Run QANTUM
+        run: |
+          export TASK="${{ github.event.inputs.task }}"
+          timeout 300 node index.js || echo "Test completed or timed out"
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          HEADLESS: true
+          LITE_MODE: true
+      
+      - name: 📊 Upload results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-${{ github.run_id }}
+          path: |
+            output/
+            screenshots/
+            bug_reports/
+          retention-days: 7

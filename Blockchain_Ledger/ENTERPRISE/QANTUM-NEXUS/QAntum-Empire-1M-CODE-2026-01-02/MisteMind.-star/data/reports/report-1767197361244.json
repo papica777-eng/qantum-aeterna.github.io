@@ -1,0 +1,54 @@
+{
+  "generatedAt": "2025-12-31T16:09:21.244Z",
+  "stats": {
+    "leadsFound": 3,
+    "offersGenerated": 3,
+    "startedAt": "2025-12-31T16:09:21.202Z"
+  },
+  "runtime": "0 minutes",
+  "leadsCount": 3,
+  "topLeads": [
+    {
+      "id": "lead_1767197361242_0",
+      "company": "TechFlow Solutions",
+      "domain": "techflow.io",
+      "email": "contact@techflow.io",
+      "industry": "saas",
+      "score": 85,
+      "status": "new",
+      "discoveredAt": "2025-12-31T16:09:21.242Z",
+      "notes": [
+        "Auto-discovered",
+        "High potential"
+      ]
+    },
+    {
+      "id": "lead_1767197361242_1",
+      "company": "HealthTech Pro",
+      "domain": "healthtechpro.com",
+      "email": "contact@healthtechpro.com",
+      "industry": "healthcare",
+      "score": 88,
+      "status": "new",
+      "discoveredAt": "2025-12-31T16:09:21.242Z",
+      "notes": [
+        "Auto-discovered",
+        "High potential"
+      ]
+    },
+    {
+      "id": "lead_1767197361242_2",
+      "company": "FinanceHub",
+      "domain": "financehub.com",
+      "email": "contact@financehub.com",
+      "industry": "fintech",
+      "score": 73,
+      "status": "new",
+      "discoveredAt": "2025-12-31T16:09:21.242Z",
+      "notes": [
+        "Auto-discovered",
+        "High potential"
+      ]
+    }
+  ]
+}

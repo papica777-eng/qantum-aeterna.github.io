@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { DashboardLayout } from '@/components/layout/dashboard-layout';
+import DashboardLayout from '@/components/layout/dashboard-layout';
 import { SelfHealingWatcher } from '@/components/nexus/operations/self-healing-watcher';
 import { HealingInsights } from '@/components/dashboard/healing-insights';
 import { motion } from 'framer-motion';
