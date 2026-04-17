@@ -34,11 +34,11 @@ export default function DashboardPage() {
             <span className="absolute -top-1 -right-1 w-[18px] h-[18px] bg-[var(--q-error)] rounded-full text-[11px] font-semibold flex items-center justify-center">3</span>
           </button>
           <button 
-            onClick={handleRunPrediction}
+            onClick={() => window.location.href = '/generate'}
             className="px-6 py-3 rounded-[10px] text-[14px] font-medium transition-all duration-200 flex items-center gap-2 bg-gradient-to-br from-[var(--q-primary)] to-[var(--q-primary-dark)] text-white hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(139,92,246,0.4)] border-none"
           >
             <span>🔮</span>
-            Run Prediction
+            Run Security Audit
           </button>
         </div>
       </header>
@@ -57,7 +57,7 @@ export default function DashboardPage() {
         <div className="bg-[var(--q-bg-card)] border border-[var(--q-border)] rounded-[16px] p-6">
           <div className="flex justify-between items-center mb-5">
             <h3 className="text-[18px] font-semibold">Recent Activity</h3>
-            <a href="#" className="text-[var(--q-primary)] font-medium text-[14px] hover:underline">View All →</a>
+            <a href="/logs" className="text-[var(--q-primary)] font-medium text-[14px] hover:underline">View All →</a>
           </div>
           <div className="flex flex-col gap-4">
             <ActivityItem icon="✅" color="success" title="Prediction completed - 3 high-risk tests identified" time="2 minutes ago" />
@@ -123,10 +123,10 @@ export default function DashboardPage() {
             <h3 className="text-[18px] font-semibold">Quick Actions</h3>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <QuickAction icon="🔮" label="New Prediction" onClick={handleRunPrediction} />
-            <QuickAction icon="📊" label="View Reports" />
-            <QuickAction icon="🔗" label="API Docs" />
-            <QuickAction icon="💬" label="Get Support" />
+            <QuickAction icon="🔮" label="New Audit" onClick={() => window.location.href = '/generate'} />
+            <QuickAction icon="📊" label="View Reports" onClick={() => window.location.href = '/runs'} />
+            <QuickAction icon="🔗" label="API Projects" onClick={() => window.location.href = '/projects'} />
+            <QuickAction icon="🩺" label="System Health" onClick={() => window.location.href = '/healing'} />
           </div>
         </div>
       </div>
