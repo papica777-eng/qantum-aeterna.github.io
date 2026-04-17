@@ -55,6 +55,8 @@ const priorityColors = {
   high: 'bg-red-500/10 text-red-400 border-red-500/20',
   medium: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
   low: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+};
+
 export default function TestsPage() {
   const suitesStore = useStore((state) => state.testCases);
   const runTest = useStore((state) => state.runTest);
