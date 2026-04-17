@@ -141,17 +141,17 @@ export default function ApiSenseiPage() {
                         className="w-full bg-[var(--q-bg-input)] border border-[var(--q-border)] rounded-[10px] py-3 pl-4 pr-12 text-[15px] font-mono text-[var(--q-text-primary)] focus:outline-none focus:border-[var(--q-primary)] transition-colors"
                         disabled={isProbing}
                       />
-                      <Zap className={`absolute right-4 top-3 h-5 w-5 ${isProbing ? 'text-[var(--q-warning)] animate-pulse' : 'text-[var(--q-text-muted)]'}`} />
+                      <Zap className={`absolute right-4 top-3 h-5 w-5 ${isProbing ? 'text-[var(--q-warning)]' : 'text-[var(--q-text-muted)]'}`} />
                     </div>
                   </div>
 
                   <button 
                     type="submit"
                     disabled={isProbing || !url.trim()}
-                    className="w-full h-[52px] rounded-[10px] font-bold text-[15px] border-none text-white transition-all bg-gradient-to-r from-[var(--q-primary)] to-[var(--q-primary-dark)] hover:-translate-y-0.5 hover:shadow-[0_10px_20px_rgba(139,92,246,0.3)] disabled:opacity-50 disabled:hover:translate-y-0 disabled:shadow-none flex items-center justify-center gap-2 mt-2"
+                    className="w-full h-[52px] rounded-[10px] font-bold text-[15px] border-none text-white transition-all bg-[var(--q-primary)] hover:bg-[var(--q-primary-dark)] shadow-md disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
                   >
                     {isProbing ? (
-                      <><Loader2 className="h-5 w-5 animate-spin" /> PROBING SUBSTRATE...</>
+                      <><Loader2 className="h-5 w-5 animate-spin" /> ANALYZING TARGET...</>
                     ) : (
                       "EXECUTE AUDIT"
                     )}
@@ -162,18 +162,18 @@ export default function ApiSenseiPage() {
               {/* Status Tracker */}
               {isProbing && (
                 <div className="bg-[var(--q-bg-card)] border border-[var(--q-border)] rounded-[16px] p-6 shadow-xl animate-in fade-in slide-in-from-bottom-4">
-                  <h3 className="text-[14px] font-bold uppercase tracking-wider text-[var(--q-text-muted)] mb-4">Neural Scan Sequence</h3>
+                  <h3 className="text-[14px] font-bold uppercase tracking-wider text-[var(--q-text-muted)] mb-4">Diagnostic Sequence</h3>
                   <div className="space-y-4">
                     {steps.map((step, index) => (
                       <div key={index} className="flex items-center gap-3">
                          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-colors ${
                            index < probeStep ? 'bg-[var(--q-success)] text-white' : 
-                           index === probeStep ? 'bg-[var(--q-primary)] text-white animate-pulse' : 
+                           index === probeStep ? 'bg-[var(--q-primary)] text-white' : 
                            'bg-[var(--q-bg-input)] text-[var(--q-text-muted)]'
                          }`}>
                            {index < probeStep ? '✓' : index + 1}
                          </div>
-                         <span className={`text-[14px] font-mono ${index <= probeStep ? 'text-[var(--q-text-primary)]' : 'text-[var(--q-text-muted)]'}`}>
+                         <span className={`text-[14px] font-medium ${index <= probeStep ? 'text-[var(--q-text-primary)]' : 'text-[var(--q-text-muted)]'}`}>
                            {step}
                          </span>
                       </div>

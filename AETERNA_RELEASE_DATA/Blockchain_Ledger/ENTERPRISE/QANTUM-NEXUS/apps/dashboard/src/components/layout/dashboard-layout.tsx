@@ -11,25 +11,24 @@ const navigationGroups = [
     title: 'Main',
     items: [
       { name: 'Dashboard', href: '/', icon: '📊' },
-      { name: 'Predictions', href: '/predictions', icon: '🔮', badge: '3' },
-      { name: 'Test Results', href: '/tests', icon: '🧪' },
-      { name: 'Analytics', href: '/analytics', icon: '📈' },
+      { name: 'Projects', href: '/projects', icon: '📁', badge: '3' },
+      { name: 'Test Cases', href: '/tests', icon: '🧪' },
+      { name: 'Test Runs', href: '/runs', icon: '▶️' },
     ]
   },
   {
     title: 'Pro Features',
     items: [
-      { name: 'Chronos Engine', href: '/chronos', icon: '⏰' },
       { name: 'API Sensei', href: '/generate', icon: '🥋' },
-      { name: 'Reports', href: '/runs', icon: '📋' },
+      { name: 'Self-Healing', href: '/healing', icon: '🧬' },
+      { name: 'Logs & Metrics', href: '/logs', icon: '📋' },
     ]
   },
   {
     title: 'Account',
     items: [
-      { name: 'License', href: '/license', icon: '🔑' },
+      { name: 'Billing', href: '/billing', icon: '💳' },
       { name: 'Settings', href: '/settings', icon: '⚙️' },
-      { name: 'Help & Support', href: '/healing', icon: '❓' },
     ]
   }
 ];

@@ -81,7 +81,7 @@ export default function DashboardPage() {
           </div>
           <div className="flex justify-between text-[14px] text-[var(--q-text-secondary)]">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[var(--q-success)] animate-pulse-dot"></span>
+              <span className="w-2 h-2 rounded-full bg-[var(--q-success)]"></span>
               Active
             </div>
             <div>Renews: Jan 28, 2026</div>
