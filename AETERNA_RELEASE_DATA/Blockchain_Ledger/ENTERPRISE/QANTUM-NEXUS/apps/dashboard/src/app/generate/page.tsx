@@ -2,113 +2,286 @@
 
 import { useState } from 'react';
 import DashboardLayout from "@/components/layout/dashboard-layout";
-import { useStore } from "@/stores/nexus-store";
-import { Loader2, TerminalSquare, Copy, Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Loader2, Globe, ShieldCheck, Zap, Server, ChevronRight, FileDown } from "lucide-react";
+import { PdfReport } from "@/components/dashboard/pdf-report";
 
-export default function GeneratePage() {
-  const generateTest = useStore((state) => state.generateTest);
-  const [prompt, setPrompt] = useState("");
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [output, setOutput] = useState("");
-  const [copied, setCopied] = useState(false);
+export default function ApiSenseiPage() {
+  const [url, setUrl] = useState("");
+  const [isProbing, setIsProbing] = useState(false);
+  const [probeStep, setProbeStep] = useState(0);
+  const [result, setResult] = useState<any>(null);
+  
+  // For the PDF component
+  const [reportData, setReportData] = useState({ timestamp: "", uuid: "" });
 
-  const handleManifest = async () => {
-    if (!prompt.trim()) return;
-    setIsGenerating(true);
-    setOutput("");
+  const steps = [
+    "Resolving DNS & Host...",
+    "Validating SSL/TLS Certificate...",
+    "Pinging Endpoints & TTFB...",
+    "Analyzing Security Headers...",
+    "Finalizing Telemetry Report..."
+  ];
+
+  const handleAudit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!url.trim() || !url.includes('.')) return;
     
-    // Call the mock generator in store
-    const result = await generateTest(prompt);
-    
-    setOutput(result);
-    setIsGenerating(false);
+    // Ensure protocol for display purposes
+    const targetUrl = url.startsWith('http') ? url : `https://${url}`;
+    setUrl(targetUrl);
+    setResult(null);
+    setIsProbing(true);
+    setProbeStep(0);
+
+    // Mock progress visual sequence while fetching
+    const progressTimer = setInterval(() => {
+        setProbeStep((prev) => {
+            if (prev < steps.length - 1) return prev + 1;
+            return prev;
+        });
+    }, 800);
+
+    try {
+      const response = await fetch('/api/audit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url: targetUrl })
+      });
+
+      const data = await response.json();
+      
+      clearInterval(progressTimer);
+      setProbeStep(steps.length - 1); // jump to end
+
+      const newUuid = crypto.randomUUID().toUpperCase();
+      const newTimestamp = new Date().toISOString();
+      setReportData({ timestamp: newTimestamp, uuid: newUuid });
+
+      if (!response.ok) {
+         // Create a failure result based on the real error
+         setResult({
+           dns: 'FAIL',
+           ttfb: 'FAIL',
+           ssl: 'FAIL',
+           secHeaders: 'UNREACHABLE',
+           grade: 'F',
+           endpoints: [
+             { path: 'CONNECTION', status: 'ERR', time: data.error || 'Connection Refused' }
+           ]
+         });
+      } else {
+         // Valid result from backend
+         setResult(data);
+      }
+    } catch (err: any) {
+       clearInterval(progressTimer);
+       setResult({
+          dns: 'FAIL', ttfb: 'FAIL', ssl: 'FAIL', secHeaders: 'ERROR', grade: 'F',
+          endpoints: [{ path: 'CRITICAL_FAULT', status: 500, time: err.message }]
+       });
+    } finally {
+       setIsProbing(false);
+    }
   };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(output);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handlePrintPDF = () => {
+    window.print();
   };
 
   return (
-    <DashboardLayout>
-      <div className="flex flex-col flex-1 h-[calc(100vh-2rem)] overflow-hidden">
-        <div className="flex flex-col space-y-2 mb-4">
-          <h1 className="text-3xl font-bold tracking-tight">AI Asset Generator</h1>
-          <p className="text-muted-foreground">
-            Generate new Micro-SaaS logic nodes and autonomous agents.
-          </p>
-        </div>
-        
-        <div className="flex flex-col md:flex-row gap-6 flex-1 min-h-0">
+    <>
+      {/* Hidden PDF component strictly for printing via window.print() overlay */}
+      {result && (
+        <PdfReport 
+          url={url} 
+          result={result} 
+          timestamp={reportData.timestamp} 
+          uuid={reportData.uuid} 
+        />
+      )}
+
+      {/* Main Dashboard (Hidden during print) */}
+      <div className="print:hidden">
+        <DashboardLayout>
           
-          {/* Left panel - prompt */}
-          <div className="flex flex-col space-y-6 w-full md:w-1/3 bg-slate-900/50 border border-slate-800 rounded-3xl p-6">
-            <div className="w-16 h-16 bg-gradient-to-br from-violet-600 to-cyan-600 rounded-2xl rotate-3 flex items-center justify-center shadow-lg mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v8"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m8 22 4-10 4 10"/><path d="M12 18H8"/><path d="M12 18h4"/></svg>
-            </div>
+          <div className="flex justify-between items-center mb-8">
             <div>
-              <h2 className="text-2xl font-bold mb-2">Prompt Substrate</h2>
-              <p className="text-sm text-muted-foreground">Describe the required integration or test case flow. The swarm will generate the corresponding logic node and test mapping.</p>
-            </div>
-            
-            <textarea 
-              className="flex-1 w-full bg-black/40 border border-slate-700 rounded-xl p-4 resize-none outline-none focus:ring-2 focus:ring-violet-500 font-mono text-sm"
-              placeholder="e.g. Test user login flow handling incorrect passwords and lockouts..."
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-            />
-            
-            <Button 
-              className="w-full h-14 bg-gradient-to-r from-violet-600 to-cyan-600 hover:from-violet-700 hover:to-cyan-700 text-lg font-bold disabled:opacity-50"
-              onClick={handleManifest}
-              disabled={isGenerating || !prompt.trim()}
-            >
-              {isGenerating ? (
-                <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Manifesting...</>
-              ) : "Manifest Node"}
-            </Button>
-          </div>
-
-          {/* Right panel - output */}
-          <div className="flex-1 flex flex-col bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden relative">
-            <div className="h-12 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4">
-               <div className="flex items-center gap-2 text-slate-400">
-                  <TerminalSquare className="h-4 w-4" />
-                  <span className="text-sm font-mono text-slate-400">generated_node.ts</span>
-               </div>
-               {output && (
-                 <Button variant="ghost" size="sm" onClick={handleCopy} className="h-8 group">
-                   {copied ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4 text-slate-400 group-hover:text-white" />}
-                   <span className="ml-2 text-xs">{copied ? 'Copied' : 'Copy'}</span>
-                 </Button>
-               )}
-            </div>
-            
-            <div className="flex-1 p-4 overflow-auto">
-              {!output && !isGenerating && (
-                 <div className="h-full flex flex-col items-center justify-center text-slate-600">
-                    <TerminalSquare className="h-12 w-12 mb-4 opacity-50" />
-                    <p className="font-mono text-sm">Awaiting neural compilation...</p>
-                 </div>
-              )}
-              {isGenerating && (
-                 <div className="h-full flex flex-col items-center justify-center text-violet-400">
-                    <Loader2 className="h-12 w-12 mb-4 animate-spin" />
-                    <p className="font-mono text-sm animate-pulse">Synthesizing substrate pathways...</p>
-                 </div>
-              )}
-              {output && !isGenerating && (
-                <pre className="font-mono text-sm text-cyan-50 leading-relaxed overflow-x-auto whitespace-pre-wrap">
-                  {output}
-                </pre>
-              )}
+              <h1 className="text-[28px] font-bold">API Sensei</h1>
+              <p className="text-[var(--q-text-secondary)] mt-1">
+                Deep-probe websites and APIs. Generate unforgeable PDF proofs.
+              </p>
             </div>
           </div>
 
-        </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            {/* Left Panel: Initialization */}
+            <div className="lg:col-span-5 flex flex-col gap-6">
+              
+              <div className="bg-[var(--q-bg-card)] border border-[var(--q-border)] rounded-[16px] p-6 shadow-xl relative overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--q-primary)] to-[var(--q-info)]" />
+                
+                <h2 className="text-[20px] font-bold mb-4 flex items-center gap-2">
+                  <Globe className="text-[var(--q-primary)] h-6 w-6" /> Target Auditor
+                </h2>
+                
+                <form onSubmit={handleAudit} className="space-y-4">
+                  <div>
+                    <label className="block text-[13px] text-[var(--q-text-muted)] font-medium mb-1 uppercase tracking-wider">
+                      Target URL / Endpoint
+                    </label>
+                    <div className="relative">
+                      <input 
+                        type="text" 
+                        value={url}
+                        onChange={(e) => setUrl(e.target.value)}
+                        placeholder="e.g. api.aeterna.cloud"
+                        className="w-full bg-[var(--q-bg-input)] border border-[var(--q-border)] rounded-[10px] py-3 pl-4 pr-12 text-[15px] font-mono text-[var(--q-text-primary)] focus:outline-none focus:border-[var(--q-primary)] transition-colors"
+                        disabled={isProbing}
+                      />
+                      <Zap className={`absolute right-4 top-3 h-5 w-5 ${isProbing ? 'text-[var(--q-warning)] animate-pulse' : 'text-[var(--q-text-muted)]'}`} />
+                    </div>
+                  </div>
+
+                  <button 
+                    type="submit"
+                    disabled={isProbing || !url.trim()}
+                    className="w-full h-[52px] rounded-[10px] font-bold text-[15px] border-none text-white transition-all bg-gradient-to-r from-[var(--q-primary)] to-[var(--q-primary-dark)] hover:-translate-y-0.5 hover:shadow-[0_10px_20px_rgba(139,92,246,0.3)] disabled:opacity-50 disabled:hover:translate-y-0 disabled:shadow-none flex items-center justify-center gap-2 mt-2"
+                  >
+                    {isProbing ? (
+                      <><Loader2 className="h-5 w-5 animate-spin" /> PROBING SUBSTRATE...</>
+                    ) : (
+                      "EXECUTE AUDIT"
+                    )}
+                  </button>
+                </form>
+              </div>
+
+              {/* Status Tracker */}
+              {isProbing && (
+                <div className="bg-[var(--q-bg-card)] border border-[var(--q-border)] rounded-[16px] p-6 shadow-xl animate-in fade-in slide-in-from-bottom-4">
+                  <h3 className="text-[14px] font-bold uppercase tracking-wider text-[var(--q-text-muted)] mb-4">Neural Scan Sequence</h3>
+                  <div className="space-y-4">
+                    {steps.map((step, index) => (
+                      <div key={index} className="flex items-center gap-3">
+                         <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-colors ${
+                           index < probeStep ? 'bg-[var(--q-success)] text-white' : 
+                           index === probeStep ? 'bg-[var(--q-primary)] text-white animate-pulse' : 
+                           'bg-[var(--q-bg-input)] text-[var(--q-text-muted)]'
+                         }`}>
+                           {index < probeStep ? '✓' : index + 1}
+                         </div>
+                         <span className={`text-[14px] font-mono ${index <= probeStep ? 'text-[var(--q-text-primary)]' : 'text-[var(--q-text-muted)]'}`}>
+                           {step}
+                         </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+            </div>
+
+            {/* Right Panel: Results */}
+            <div className="lg:col-span-7">
+              {!result && !isProbing ? (
+                <div className="h-full min-h-[400px] border-2 border-dashed border-[var(--q-border)] rounded-[16px] flex flex-col items-center justify-center text-[var(--q-text-muted)] p-8 text-center bg-[var(--q-bg-card)] opacity-50">
+                   <Server className="h-16 w-16 mb-4 opacity-30" />
+                   <p className="text-[18px] font-medium text-[var(--q-text-secondary)]">Awaiting Target Parameters</p>
+                   <p className="text-[14px] mt-2 max-w-[400px]">Enter a domain or API endpoint on the left to initiate a full diagnostic sequence and generate a verified PDF proof.</p>
+                </div>
+              ) : result ? (
+                <div className="bg-[var(--q-bg-card)] border border-[var(--q-border)] rounded-[16px] p-0 shadow-xl overflow-hidden animate-in zoom-in-95 duration-500">
+                   
+                   {/* Top Result Banner */}
+                   <div className="bg-gradient-to-r from-[var(--q-success)] to-emerald-600 p-8 text-white flex justify-between items-center">
+                     <div>
+                       <div className="text-[48px] font-black leading-none drop-shadow-md">{result.grade}</div>
+                       <div className="text-[14px] font-semibold tracking-wider uppercase opacity-90 mt-2">Target Certified</div>
+                     </div>
+                     <ShieldCheck className="h-20 w-20 opacity-30 mix-blend-overlay" />
+                   </div>
+
+                   {/* Data Grid */}
+                   <div className="p-8">
+                      <div className="flex justify-between items-center mb-6">
+                        <h3 className="text-[20px] font-bold">Telemetry Breakdown</h3>
+                        <div className="text-[12px] font-mono text-[var(--q-text-muted)] bg-[var(--q-bg-input)] px-3 py-1 rounded-full border border-[var(--q-border)]">
+                          {reportData.timestamp}
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                        <div className="p-4 bg-[var(--q-bg-input)] rounded-[12px] border border-[var(--q-border)]">
+                          <div className="text-[11px] text-[var(--q-text-muted)] uppercase font-semibold mb-1">DNS</div>
+                          <div className="text-[20px] font-mono font-bold text-[var(--q-text-primary)]">{result.dns}</div>
+                        </div>
+                        <div className="p-4 bg-[var(--q-bg-input)] rounded-[12px] border border-[var(--q-border)]">
+                          <div className="text-[11px] text-[var(--q-text-muted)] uppercase font-semibold mb-1">TTFB</div>
+                          <div className="text-[20px] font-mono font-bold text-[var(--q-info)]">{result.ttfb}</div>
+                        </div>
+                        <div className="p-4 bg-[var(--q-bg-input)] rounded-[12px] border border-[var(--q-border)]">
+                          <div className="text-[11px] text-[var(--q-text-muted)] uppercase font-semibold mb-1">SSL/TLS</div>
+                          <div className="text-[20px] font-mono font-bold text-[var(--q-success)]">{result.ssl}</div>
+                        </div>
+                        <div className="p-4 bg-[var(--q-bg-input)] rounded-[12px] border border-[var(--q-border)]">
+                          <div className="text-[11px] text-[var(--q-text-muted)] uppercase font-semibold mb-1">Headers</div>
+                          <div className="text-[14px] font-mono font-bold text-[var(--q-warning)] truncate">{result.secHeaders}</div>
+                        </div>
+                      </div>
+
+                      <div className="mb-8">
+                        <h4 className="text-[14px] font-bold uppercase text-[var(--q-text-muted)] mb-3">Endpoint Map</h4>
+                        <div className="border border-[var(--q-border)] rounded-[10px] overflow-hidden">
+                           {result.endpoints.map((ep: any, idx: number) => (
+                             <div key={idx} className="flex justify-between items-center p-3 border-b border-[var(--q-border)] last:border-0 bg-[var(--q-bg-input)]">
+                               <div className="font-mono text-[14px]">{ep.path}</div>
+                               <div className="flex gap-4 items-center">
+                                 <span className="font-mono text-[13px] text-[var(--q-text-secondary)]">{ep.time}</span>
+                                 <span className={`px-2 py-1 rounded-[4px] text-[11px] font-bold ${ep.status === 200 ? 'bg-[var(--q-success)]/20 text-[var(--q-success)]' : 'bg-[var(--q-error)]/20 text-[var(--q-error)]'}`}>
+                                   HTTP {ep.status}
+                                 </span>
+                               </div>
+                             </div>
+                           ))}
+                        </div>
+                      </div>
+                   </div>
+
+                   {/* Actions Footer */}
+                   <div className="bg-[var(--q-bg-input)] border-t border-[var(--q-border)] p-6 flex justify-between items-center">
+                     <div className="text-[12px] font-mono text-[var(--q-text-muted)]">
+                       HASH: {reportData.uuid.split('-')[0]}
+                     </div>
+                     <button 
+                       onClick={handlePrintPDF}
+                       className="bg-[var(--q-text-primary)] text-[var(--q-bg-dark)] hover:bg-[var(--q-primary-light)] px-5 py-2.5 rounded-[8px] font-bold text-[14px] flex items-center gap-2 transition-colors"
+                     >
+                       <FileDown className="h-4 w-4" /> Download PDF Proof
+                     </button>
+                   </div>
+                </div>
+              ) : (
+                <div className="h-full border border-[var(--q-border)] rounded-[16px] bg-[var(--q-bg-card)] overflow-hidden flex flex-col relative">
+                  <div className="absolute top-0 right-0 p-8 opacity-10">
+                    <Zap className="w-64 h-64 text-[var(--q-primary)] animate-pulse" />
+                  </div>
+                  <div className="flex-1 p-8 flex flex-col justify-end">
+                     <div className="text-[18px] font-mono text-[var(--q-primary)] mb-2">Analyzing Node:</div>
+                     <div className="text-[32px] font-bold truncate text-white">{url}</div>
+                  </div>
+                  <div className="h-2 w-full bg-[var(--q-bg-input)]">
+                     <div className="h-full bg-gradient-to-r from-[var(--q-primary)] to-[var(--q-info)] transition-all ease-out duration-300" style={{ width: `${((probeStep + 1) / steps.length) * 100}%` }} />
+                  </div>
+                </div>
+              )}
+            </div>
+
+          </div>
+        </DashboardLayout>
       </div>
-    </DashboardLayout>
+    </>
   );
 }

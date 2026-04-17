@@ -13,7 +13,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary-shadcn: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -28,11 +28,27 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
+    --border-shadcn: 214.3 31.8% 91.4%;
+    --input-shadcn: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+
+    /* QAntum V2 Custom Variables */
+    --q-primary: #8b5cf6;
+    --q-primary-dark: #7c3aed;
+    --q-primary-light: #a78bfa;
+    --q-success: #10b981;
+    --q-error: #ef4444;
+    --q-warning: #f59e0b;
+    --q-info: #3b82f6;
+    --q-bg-dark: #0f0f23;
+    --q-bg-card: #1a1a2e;
+    --q-bg-input: #16213e;
+    --q-text-primary: #ffffff;
+    --q-text-secondary: #a0aec0;
+    --q-text-muted: #64748b;
+    --q-border: #2d3748;
   }
 
   .dark {
@@ -45,7 +61,7 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
+    --primary-shadcn: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
     --secondary: 217.2 32.6% 17.5%;
@@ -60,9 +76,25 @@
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
+    --border-shadcn: 217.2 32.6% 17.5%;
+    --input-shadcn: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    /* QAntum V2 Custom Variables */
+    --q-primary: #8b5cf6;
+    --q-primary-dark: #7c3aed;
+    --q-primary-light: #a78bfa;
+    --q-success: #10b981;
+    --q-error: #ef4444;
+    --q-warning: #f59e0b;
+    --q-info: #3b82f6;
+    --q-bg-dark: #0f0f23;
+    --q-bg-card: #1a1a2e;
+    --q-bg-input: #16213e;
+    --q-text-primary: #ffffff;
+    --q-text-secondary: #a0aec0;
+    --q-text-muted: #64748b;
+    --q-border: #2d3748;
   }
 }
 
@@ -71,6 +103,17 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-[var(--q-bg-dark)] text-[var(--q-text-primary)];
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
+}
+
+/* Animations */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease infinite;
 }
