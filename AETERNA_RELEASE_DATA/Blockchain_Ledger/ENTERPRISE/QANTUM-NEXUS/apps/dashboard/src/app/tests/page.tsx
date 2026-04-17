@@ -55,16 +55,15 @@ const priorityColors = {
   high: 'bg-red-500/10 text-red-400 border-red-500/20',
   medium: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
   low: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-};
-
 export default function TestsPage() {
-  const suitesStore = useStore((state) => state.testCases) || [];
-  const [suites, setSuites] = useState(suitesStore);
+  const suitesStore = useStore((state) => state.testCases);
+  const runTest = useStore((state) => state.runTest);
+  const [suites, setSuites] = useState(suitesStore || []);
   const [selectedTests, setSelectedTests] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
 
   // Sync state
-  if (suitesStore !== suites) setSuites(suitesStore);
+  if (suitesStore !== suites) setSuites(suitesStore || []);
 
   const toggleSuite = (suiteId: string) => {
     setSuites(prev => prev.map(suite => 
@@ -76,6 +75,13 @@ export default function TestsPage() {
     setSelectedTests(prev => 
       prev.includes(testId) ? prev.filter(id => id !== testId) : [...prev, testId]
     );
+  };
+  
+  const handleRunSelected = () => {
+    if (selectedTests.length > 0) {
+      runTest(selectedTests);
+      setSelectedTests([]);
+    }
   };
 
   const totalTests = suites.reduce((acc, suite) => acc + suite.tests.length, 0);
@@ -226,7 +232,7 @@ export default function TestsPage() {
         {selectedTests.length > 0 && (
           <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-800 border border-slate-700 rounded-lg p-4 shadow-xl flex items-center gap-4">
             <span className="text-sm">{selectedTests.length} tests selected</span>
-            <Button size="sm" className="bg-green-600 hover:bg-green-700">
+            <Button size="sm" className="bg-green-600 hover:bg-green-700" onClick={handleRunSelected}>
               <Play className="h-4 w-4 mr-2" />
               Run Selected
             </Button>
