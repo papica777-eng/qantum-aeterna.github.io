@@ -241,32 +241,32 @@ function OverviewTab() {
 
   const stats = [
     { 
-      label: 'System Health', 
+      label: 'Neural Sync', 
       value: `${systemHealth?.overall ?? 100}%`, 
       icon: Activity,
-      color: (systemHealth?.overall ?? 100) >= 80 ? 'text-emerald-400' : 'text-amber-400',
-      bg: 'from-emerald-500/20'
-    },
-    { 
-      label: 'Daemon Status', 
-      value: daemonStatus?.state ?? 'ACTIVE', 
-      icon: Shield,
-      color: 'text-violet-400',
+      color: (systemHealth?.overall ?? 100) >= 80 ? 'text-violet-400' : 'text-amber-400',
       bg: 'from-violet-500/20'
     },
     { 
-      label: 'Vectors', 
-      value: (pineconeStats?.totalVectors ?? 52573).toLocaleString(), 
-      icon: Database,
+      label: 'Daemon Orchestration', 
+      value: daemonStatus?.state ?? 'STABLE', 
+      icon: Shield,
       color: 'text-cyan-400',
       bg: 'from-cyan-500/20'
     },
     { 
-      label: 'Auto-Healed', 
-      value: (healingEvents?.length ?? 0).toString(), 
-      icon: RefreshCw,
+      label: 'Vector Density', 
+      value: (pineconeStats?.totalVectors ?? 52573).toLocaleString(), 
+      icon: Database,
       color: 'text-pink-400',
       bg: 'from-pink-500/20'
+    },
+    { 
+      label: 'Substrate Healing', 
+      value: (healingEvents?.length ?? 0).toString(), 
+      icon: RefreshCw,
+      color: 'text-emerald-400',
+      bg: 'from-emerald-500/20'
     },
   ];
 
