@@ -33,13 +33,10 @@ import {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 const BOOT_SEQUENCE = [
-  "⚡ INITIALIZING ETERNAL WATCHDOG v34.1...",
-  "🔒 LOADING ETERNAL HANDCUFFS MODULE... OK",
-  "👁️ ACTIVATING SURVEILLANCE NETWORK... OK", 
-  "⚛️ ARMING ATOMIC SENSORS... OK",
-  "🏛️ OPENING ETERNAL PRISON GATES... OK",
-  "📡 PATROL FREQUENCY: 5000ms",
-  "✅ ДЕЖУРНИЯТ ГОТОВ. НИКОГА НЕ СПИ.",
+  "INITIALIZING SYSTEM DIAGNOSTICS...",
+  "LOADING TELEMETRY MODULES... OK",
+  "ACTIVATING SURVEILLANCE NETWORK... OK", 
+  "AWAITING CONNECTIONS."
 ];
 
 const WATCHDOG_COMMANDS: Record<string, () => string> = {
@@ -202,16 +199,14 @@ function LiveTerminal({
       }}
     >
       <div 
-        className="absolute inset-0 bg-black/95 backdrop-blur-3xl animate-in fade-in duration-300"
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-in fade-in duration-300"
         onClick={onClose}
         style={{ cursor: 'pointer' }}
       >
-        {/* CRT Scanline Overlay */}
-        <div className="absolute inset-0 pointer-events-none opacity-20" style={{ backgroundImage: 'linear-gradient(translate(0) 1px, transparent 1px)', backgroundSize: '100% 4px' }} />
       </div>
       
       <div 
-        className="relative w-full max-w-4xl mx-4 bg-[#050508] border border-purple-500/50 rounded-lg overflow-hidden shadow-[0_0_80px_rgba(139,92,246,0.5)] animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-4xl mx-4 bg-[var(--q-bg-card)] border border-[var(--q-border)] rounded-[16px] overflow-hidden shadow-xl animate-in zoom-in-95 duration-200"
         style={{ 
           height: '70vh',
           maxHeight: '600px',
@@ -222,9 +217,9 @@ function LiveTerminal({
         <div className="bg-gradient-to-r from-black to-[#050510] px-4 py-3 flex items-center justify-between border-b border-purple-500/30">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <Shield className="h-4 w-4 text-purple-400" />
-              <span className="text-purple-300 text-sm font-mono font-bold tracking-widest text-shadow-glow">
-                🛡️ ETERNAL WATCHDOG GLITCH TERMINAL
+              <Terminal className="h-4 w-4 text-[var(--q-text-muted)]" />
+              <span className="text-[var(--q-text-primary)] text-sm font-semibold">
+                System Diagnostics Terminal
               </span>
             </div>
           </div>
@@ -329,12 +324,7 @@ function StatCard({
   };
 
   return (
-    <div className={`relative p-4 rounded border ${colorStyles[color]} transition-all duration-300 hover:scale-[1.02] overflow-hidden ${isGlitching ? 'animate-pulse' : ''}`}>
-      {isGlitching && (
-        <div className="absolute inset-0 bg-red-500/10 mix-blend-color-dodge pointer-events-none" style={{
-           backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 0, 0, 0.1) 10px, rgba(255, 0, 0, 0.1) 20px)'
-        }} />
-      )}
+    <div className={`relative p-4 rounded-[12px] border ${colorStyles[color]} transition-all duration-300 hover:scale-[1.02] overflow-hidden`}>
       <div className="flex items-center justify-between mb-2 relative z-10">
         <span className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em]">{label}</span>
         <Icon className={`h-4 w-4 ${isGlitching ? 'animate-spin' : 'opacity-60'}`} />
@@ -483,11 +473,7 @@ export function WatchdogPanel() {
         externalLogs={externalLogs}
       />
       
-      <Card className={`border-2 ${isSevere ? 'border-red-600/50 shadow-[0_0_30px_rgba(220,38,38,0.2)]' : 'border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.1)]'} bg-[#020205] backdrop-blur-3xl overflow-hidden transition-colors duration-500 relative rounded-none`}>
-        
-        {/* Brutal Background Noise & Grid */}
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
-        <div className="absolute inset-0 border-[0.5px] border-slate-800/20 pointer-events-none" style={{ backgroundSize: '40px 40px', backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px)' }} />
+      <Card className="bg-[var(--q-bg-card)] border border-[var(--q-border)] rounded-[16px] overflow-hidden shadow-sm relative">
 
         {isSevere && (
           <div className="absolute inset-x-0 top-0 h-1 bg-red-600 animate-pulse pointer-events-none z-50"></div>
@@ -524,12 +510,12 @@ export function WatchdogPanel() {
                 </div>
                 <div>
                   <CardTitle className="text-2xl font-black font-mono tracking-tighter">
-                    <span className={`${isSevere ? 'text-red-500 animate-pulse' : 'text-slate-100'}`}>
-                      ETERNAL_WATCHDOG v34.1
+                    <span className="text-[var(--q-text-primary)]">
+                      System Telemetry Watchdog
                     </span>
                   </CardTitle>
-                  <CardDescription className="text-slate-500 font-mono text-xs uppercase tracking-widest">
-                     // "ДЕЖУРНИЯТ ГОТОВ. НИКОГА НЕ СПИ."
+                  <CardDescription className="text-[var(--q-text-muted)] font-mono text-xs uppercase tracking-widest">
+                     // SYSTEM DIAGNOSTICS ACTIVE
                   </CardDescription>
                 </div>
               </div>
