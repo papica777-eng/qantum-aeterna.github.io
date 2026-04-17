@@ -1,20 +1,22 @@
 {
-  "name": "fix-docker-actions-5011349744198194576",
+  "name": "qantum-nexus-monorepo",
   "version": "1.0.0",
   "description": "> \"We do not predict the future. We compute it.\"",
-  "main": "index.js",
-  "directories": {
-    "test": "tests"
-  },
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "Mind-Engine-Core"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:worker": "npm run dev --workspace=apps/worker",
+    "build:worker": "npm run build --workspace=apps/worker",
+    "install:worker": "npm install --workspace=apps/worker",
+    "prisma:generate": "npx prisma generate --schema=apps/api/prisma/schema.prisma",
+    "prisma:migrate": "npx prisma migrate dev --schema=apps/api/prisma/schema.prisma"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "devDependencies": {
-    "@playwright/test": "^1.58.2"
+    "@playwright/test": "^1.58.2",
+    "typescript": "^5.3.2"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1"

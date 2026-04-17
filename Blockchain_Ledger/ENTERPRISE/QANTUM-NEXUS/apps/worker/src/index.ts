@@ -65,16 +65,6 @@ async function createHealingWorker(bridge: NexusBridge): Promise<Worker> {
     {
       connection:  REDIS_CONFIG,
       concurrency: CONCURRENCY,
-      // Retry failed jobs with exponential backoff
-      defaultJobOptions: {
-        attempts: 3,
-        backoff: {
-          type:  'exponential',
-          delay: 2000,
-        },
-        removeOnComplete: { count: 100 },
-        removeOnFail:     { count: 50 },
-      },
     }
   );
 
@@ -104,7 +94,15 @@ async function createHealingWorker(bridge: NexusBridge): Promise<Worker> {
 // ═══════════════════════════════════════════════════════════════════════════
 
 async function startHealthCheck(): Promise<void> {
-  const healingQueue = new Queue('qantum:healing', { connection: REDIS_CONFIG });
+  const healingQueue = new Queue('qantum:healing', {
+    connection: REDIS_CONFIG,
+    defaultJobOptions: {
+      attempts: 3,
+      backoff: { type: 'exponential', delay: 2000 },
+      removeOnComplete: { count: 100 },
+      removeOnFail:     { count: 50 },
+    }
+  });
 
   // Report queue health every 30s
   setInterval(async () => {
