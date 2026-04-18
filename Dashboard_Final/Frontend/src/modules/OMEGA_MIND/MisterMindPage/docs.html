@@ -3,261 +3,554 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentation | QAntum Prime v27.1.0</title>
-    <meta name="description" content="Complete documentation for QAntum Prime. Learn how to use Ghost Protocol, Self-Healing, Swarm Execution and more.">
-    
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚛️</text></svg>">
+    <title>Documentation | QAntum Prime v27.1.0 — Autonomous QA Engine</title>
+    <meta name="description" content="Complete API reference and guides for QAntum Prime. Ghost Protocol, Self-Healing, Swarm Execution, CI/CD integration, and advanced enterprise patterns.">
+    <meta name="keywords" content="QAntum documentation, autonomous QA, self-healing tests, API reference, Ghost Protocol, Swarm Execution, CI/CD testing, enterprise QA framework">
+    <meta name="robots" content="index, follow">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='%236366f1'/><path d='M10 16 L22 16 M16 10 L16 22' stroke='white' stroke-width='2.5' stroke-linecap='round'/></svg>">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/animations.css">
+
     <style>
-        .docs-page {
-            min-height: 100vh;
-            padding-top: 80px;
+        :root {
+            --docs-sidebar-width: 280px;
+            --docs-toc-width: 220px;
         }
-        
+
+        /* ── Layout ── */
+        .docs-page { min-height: 100vh; padding-top: 72px; }
+
         .docs-layout {
             display: grid;
-            grid-template-columns: 280px 1fr;
-            max-width: 1400px;
+            grid-template-columns: var(--docs-sidebar-width) 1fr var(--docs-toc-width);
+            max-width: 1440px;
             margin: 0 auto;
+            gap: 0;
         }
-        
-        /* Sidebar */
+
+        /* ── Left Sidebar ── */
         .docs-sidebar {
             position: sticky;
-            top: 80px;
-            height: calc(100vh - 80px);
+            top: 72px;
+            height: calc(100vh - 72px);
             overflow-y: auto;
-            padding: 2rem 1.5rem;
+            padding: 2rem 1.25rem;
             border-right: 1px solid var(--border-color);
             background: var(--bg-dark);
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) transparent;
         }
-        
-        .docs-sidebar::-webkit-scrollbar {
-            width: 4px;
+        .docs-sidebar::-webkit-scrollbar { width: 3px; }
+        .docs-sidebar::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 2px; }
+
+        /* Search */
+        .docs-search {
+            position: relative;
+            margin-bottom: 1.75rem;
         }
-        
-        .docs-sidebar::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 2px;
+        .docs-search input {
+            width: 100%;
+            background: rgba(99,102,241,0.08);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.6rem 0.75rem 0.6rem 2.25rem;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            font-family: var(--font-sans);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
-        
-        .sidebar-section {
-            margin-bottom: 2rem;
+        .docs-search input::placeholder { color: var(--text-muted); }
+        .docs-search input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
         }
-        
-        .sidebar-section h3 {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
+        .docs-search-icon {
+            position: absolute;
+            left: 0.65rem;
+            top: 50%;
+            transform: translateY(-50%);
             color: var(--text-muted);
-            margin-bottom: 0.75rem;
+        }
+
+        /* Sidebar Sections */
+        .sidebar-section { margin-bottom: 1.75rem; }
+        .sidebar-section h3 {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-muted);
+            margin-bottom: 0.6rem;
             padding-left: 0.5rem;
         }
-        
-        .sidebar-links {
-            list-style: none;
-        }
-        
-        .sidebar-links a {
-            display: block;
-            padding: 0.5rem 0.75rem;
+        .sidebar-links { list-style: none; }
+        .sidebar-links li a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.42rem 0.6rem;
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             border-radius: 6px;
-            transition: all 0.2s;
+            transition: all 0.15s;
+            text-decoration: none;
         }
-        
-        .sidebar-links a:hover,
-        .sidebar-links a.active {
-            color: var(--text-primary);
-            background: rgba(99, 102, 241, 0.1);
-        }
-        
-        .sidebar-links a.active {
+        .sidebar-links li a:hover { color: var(--text-primary); background: rgba(99,102,241,0.08); }
+        .sidebar-links li a.active {
+            color: var(--primary-light);
+            background: rgba(99,102,241,0.12);
             border-left: 2px solid var(--primary);
+            padding-left: calc(0.6rem - 2px);
+            font-weight: 600;
         }
-        
-        /* Main Content */
+        .sidebar-links li a svg { flex-shrink: 0; opacity: 0.6; }
+        .sidebar-links li a.active svg { opacity: 1; }
+
+        /* Badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.1rem 0.45rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-left: auto;
+        }
+        .badge-new { background: rgba(16,185,129,0.15); color: #10b981; }
+        .badge-pro { background: rgba(99,102,241,0.15); color: var(--primary-light); }
+
+        /* ── Main Content ── */
         .docs-content {
-            padding: 2rem 4rem;
-            max-width: 900px;
+            padding: 2.5rem 3rem;
+            min-width: 0;
         }
-        
+
+        /* Section anchors offset */
+        .docs-content h1[id], .docs-content h2[id], .docs-content h3[id] {
+            scroll-margin-top: 90px;
+        }
+
         .docs-content h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
             padding-bottom: 1rem;
             border-bottom: 1px solid var(--border-color);
+            line-height: 1.2;
         }
-        
         .docs-content h2 {
-            font-size: 1.75rem;
-            margin-top: 3rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 3.5rem;
             margin-bottom: 1rem;
             color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
         }
-        
+        .docs-content h2 .h-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(99,102,241,0.15);
+            flex-shrink: 0;
+        }
         .docs-content h3 {
-            font-size: 1.25rem;
+            font-size: 1.1rem;
+            font-weight: 600;
             margin-top: 2rem;
             margin-bottom: 0.75rem;
             color: var(--text-primary);
         }
-        
+
+        .lead {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.75;
+            margin-bottom: 2rem;
+        }
+
         .docs-content p {
             color: var(--text-secondary);
             line-height: 1.8;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
         }
-        
-        .docs-content ul,
-        .docs-content ol {
+        .docs-content ul, .docs-content ol {
             color: var(--text-secondary);
             margin-bottom: 1.5rem;
             padding-left: 1.5rem;
         }
-        
-        .docs-content li {
-            margin-bottom: 0.5rem;
-            line-height: 1.7;
-        }
-        
+        .docs-content li { margin-bottom: 0.45rem; line-height: 1.7; }
+        .docs-content li strong { color: var(--text-primary); }
+
+        /* Inline code */
         .docs-content code {
-            background: var(--bg-card);
-            padding: 0.2rem 0.5rem;
+            background: rgba(99,102,241,0.1);
+            border: 1px solid rgba(99,102,241,0.2);
+            padding: 0.15rem 0.45rem;
             border-radius: 4px;
             font-family: var(--font-mono);
-            font-size: 0.9em;
-            color: var(--primary-light);
+            font-size: 0.87em;
+            color: #a5b4fc;
         }
-        
-        .docs-content pre {
-            background: #0d1117;
-            border-radius: 12px;
-            padding: 1.5rem;
-            overflow-x: auto;
-            margin-bottom: 1.5rem;
-            border: 1px solid var(--border-color);
-        }
-        
-        .docs-content pre code {
-            background: none;
-            padding: 0;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-        
-        .callout {
-            padding: 1.25rem;
-            border-radius: 12px;
+
+        /* Code blocks */
+        .code-block {
+            position: relative;
             margin-bottom: 1.5rem;
         }
-        
-        .callout-info {
-            background: rgba(6, 182, 212, 0.1);
-            border-left: 4px solid var(--accent);
-        }
-        
-        .callout-warning {
-            background: rgba(245, 158, 11, 0.1);
-            border-left: 4px solid var(--warning);
-        }
-        
-        .callout-success {
-            background: rgba(16, 185, 129, 0.1);
-            border-left: 4px solid var(--success);
-        }
-        
-        .callout-title {
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+        .code-block-header {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: space-between;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+            padding: 0.6rem 1rem;
         }
-        
+        .code-lang {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #7d8590;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-family: var(--font-mono);
+        }
+        .copy-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: none;
+            border: 1px solid #30363d;
+            border-radius: 5px;
+            color: #7d8590;
+            font-size: 0.75rem;
+            font-family: var(--font-sans);
+            padding: 0.25rem 0.6rem;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .copy-btn:hover { color: #e6edf3; border-color: #6e7681; }
+        .copy-btn.copied { color: #3fb950; border-color: #3fb950; }
+
+        .docs-content pre {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 0 0 10px 10px;
+            padding: 1.25rem 1.5rem;
+            overflow-x: auto;
+            margin-bottom: 0;
+            line-height: 1.6;
+        }
+        .docs-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: 0.875rem;
+            color: #e6edf3;
+        }
+
+        /* Syntax token colors */
+        .tok-keyword { color: #ff7b72; }
+        .tok-string { color: #a5d6ff; }
+        .tok-comment { color: #8b949e; font-style: italic; }
+        .tok-function { color: #d2a8ff; }
+        .tok-variable { color: #ffa657; }
+        .tok-number { color: #79c0ff; }
+        .tok-type { color: #ffa657; }
+        .tok-operator { color: #ff7b72; }
+        .tok-property { color: #79c0ff; }
+
+        /* Callouts */
+        .callout {
+            display: flex;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            border: 1px solid transparent;
+        }
+        .callout-icon { flex-shrink: 0; width: 20px; height: 20px; margin-top: 1px; }
+        .callout-body p { margin-bottom: 0; font-size: 0.925rem; }
+        .callout-body p:not(:last-child) { margin-bottom: 0.5rem; }
+        .callout-body strong { display: block; margin-bottom: 0.25rem; font-size: 0.925rem; }
+        .callout-info { background: rgba(6,182,212,0.08); border-color: rgba(6,182,212,0.25); }
+        .callout-info .callout-icon { color: #06b6d4; }
+        .callout-warning { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.25); }
+        .callout-warning .callout-icon { color: #f59e0b; }
+        .callout-success { background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.25); }
+        .callout-success .callout-icon { color: #10b981; }
+        .callout-danger { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.25); }
+        .callout-danger .callout-icon { color: #ef4444; }
+
+        /* Tables */
         .api-table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 1.5rem;
+            font-size: 0.9rem;
         }
-        
-        .api-table th,
-        .api-table td {
-            padding: 0.75rem 1rem;
-            text-align: left;
+        .api-table thead tr {
+            background: rgba(99,102,241,0.07);
             border-bottom: 1px solid var(--border-color);
         }
-        
         .api-table th {
-            background: var(--bg-card);
+            padding: 0.7rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+        }
+        .api-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-secondary);
+            vertical-align: top;
+        }
+        .api-table tr:last-child td { border-bottom: none; }
+        .api-table td:first-child code { color: #ffa657; }
+        .api-table td .type-badge {
+            display: inline-block;
+            background: rgba(121,192,255,0.1);
+            color: #79c0ff;
+            border-radius: 4px;
+            padding: 0.1rem 0.4rem;
+            font-size: 0.78rem;
+            font-family: var(--font-mono);
+        }
+        .api-table td .required {
+            color: #f47067;
+            font-size: 0.75rem;
             font-weight: 600;
         }
-        
-        .api-table td code {
-            font-size: 0.85rem;
+        .api-table td .optional {
+            color: #7d8590;
+            font-size: 0.75rem;
         }
-        
+
+        /* Step list */
+        .step-list { list-style: none; padding: 0; counter-reset: step-counter; }
+        .step-list li {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            counter-increment: step-counter;
+        }
+        .step-list li::before {
+            content: counter(step-counter);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            min-width: 28px;
+            background: rgba(99,102,241,0.15);
+            border: 1px solid rgba(99,102,241,0.3);
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary-light);
+            margin-top: 2px;
+        }
+
+        /* Feature cards grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.25rem;
+            transition: border-color 0.2s;
+        }
+        .feature-card:hover { border-color: rgba(99,102,241,0.4); }
+        .feature-card-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.75rem;
+            background: rgba(99,102,241,0.12);
+        }
+        .feature-card h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: var(--text-primary);
+        }
+        .feature-card p {
+            font-size: 0.85rem;
+            margin-bottom: 0;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Divider */
+        .docs-divider {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 3rem 0;
+        }
+
+        /* Method signature */
+        .method-sig {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+        }
+        .method-sig .fn-name { color: #d2a8ff; }
+        .method-sig .fn-param { color: #ffa657; }
+        .method-sig .fn-return { color: #79c0ff; }
+        .method-sig .fn-punct { color: #7d8590; }
+
+        /* Right TOC */
+        .docs-toc {
+            position: sticky;
+            top: 72px;
+            height: calc(100vh - 72px);
+            overflow-y: auto;
+            padding: 2rem 1rem 2rem 1.5rem;
+            border-left: 1px solid var(--border-color);
+            scrollbar-width: thin;
+            scrollbar-color: transparent transparent;
+        }
+        .docs-toc h4 {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+        .toc-links { list-style: none; }
+        .toc-links a {
+            display: block;
+            padding: 0.3rem 0;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-left: 2px solid transparent;
+            padding-left: 0.75rem;
+            transition: all 0.15s;
+            line-height: 1.4;
+        }
+        .toc-links a:hover { color: var(--text-secondary); }
+        .toc-links a.active { color: var(--primary-light); border-left-color: var(--primary); }
+        .toc-links .toc-sub a { font-size: 0.75rem; padding-left: 1.5rem; }
+
+        /* Footer */
+        .docs-footer {
+            margin-top: 5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .docs-footer-nav { display: flex; gap: 1rem; }
+        .nav-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1.25rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            flex: 1;
+        }
+        .nav-card:hover { border-color: var(--primary); }
+        .nav-card-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.2rem; }
+        .nav-card-title { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
+        .nav-card.prev .nav-card-label::before { content: '← '; }
+        .nav-card.next { text-align: right; }
+        .nav-card.next .nav-card-label::after { content: ' →'; }
+
         /* Mobile */
         .mobile-docs-toggle {
             display: none;
             position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 100;
-            width: 50px;
-            height: 50px;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 200;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             background: var(--primary);
             border: none;
             color: white;
-            font-size: 1.5rem;
             cursor: pointer;
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 4px 24px rgba(99,102,241,0.5);
+            align-items: center;
+            justify-content: center;
         }
-        
-        @media (max-width: 1024px) {
-            .docs-layout {
-                grid-template-columns: 1fr;
-            }
-            
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 99;
+        }
+        @media (max-width: 1280px) {
+            .docs-toc { display: none; }
+            .docs-layout { grid-template-columns: var(--docs-sidebar-width) 1fr; }
+        }
+        @media (max-width: 900px) {
+            .docs-layout { grid-template-columns: 1fr; }
             .docs-sidebar {
                 display: none;
                 position: fixed;
-                top: 0;
-                left: 0;
-                width: 280px;
+                top: 0; left: 0;
+                width: 300px;
                 height: 100vh;
-                z-index: 1000;
+                z-index: 100;
+                padding-top: 4rem;
             }
-            
-            .docs-sidebar.open {
-                display: block;
-            }
-            
-            .docs-content {
-                padding: 2rem;
-            }
-            
-            .mobile-docs-toggle {
-                display: block;
-            }
+            .docs-sidebar.open { display: block; }
+            .sidebar-overlay.open { display: block; }
+            .docs-content { padding: 2rem 1.25rem; }
+            .mobile-docs-toggle { display: flex; }
+            .feature-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <div class="bg-grid"></div>
-    
+
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
             <a href="index.html" class="logo">
-                <span class="logo-icon">⚛️</span>
+                <span class="logo-icon">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="11" cy="11" r="10" stroke="#6366f1" stroke-width="1.5"/>
+                        <path d="M7 11 C7 8.8 8.8 7 11 7 C13.2 7 15 8.8 15 11 C15 13.2 13.2 15 11 15 C8.8 15 7 13.2 7 11Z" stroke="#a5b4fc" stroke-width="1.2"/>
+                        <circle cx="11" cy="11" r="2" fill="#6366f1"/>
+                    </svg>
+                </span>
                 <span class="logo-text">QAntum<span class="version">v27.1.0</span></span>
             </a>
             <ul class="nav-links">
@@ -269,408 +562,1007 @@
             <div class="nav-cta">
                 <a href="pricing.html" class="btn btn-primary">Get Started →</a>
             </div>
-            <button class="mobile-menu">☰</button>
+            <button class="mobile-menu">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+                </svg>
+            </button>
         </div>
     </nav>
 
-    <!-- Documentation Page -->
+    <!-- Mobile overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
     <main class="docs-page">
         <div class="docs-layout">
-            <!-- Sidebar -->
+
+            <!-- ── Left Sidebar ── -->
             <aside class="docs-sidebar" id="docsSidebar">
+                <div class="docs-search">
+                    <svg class="docs-search-icon" width="14" height="14" viewBox="0 0 20 20" fill="none">
+                        <circle cx="9" cy="9" r="7" stroke="#7d8590" stroke-width="1.75"/>
+                        <path d="M15 15L19 19" stroke="#7d8590" stroke-width="1.75" stroke-linecap="round"/>
+                    </svg>
+                    <input type="text" id="docsSearch" placeholder="Search docs..." autocomplete="off">
+                </div>
+
                 <div class="sidebar-section">
                     <h3>Getting Started</h3>
                     <ul class="sidebar-links">
-                        <li><a href="#introduction" class="active">Introduction</a></li>
-                        <li><a href="#installation">Installation</a></li>
-                        <li><a href="#quickstart">Quick Start</a></li>
-                        <li><a href="#configuration">Configuration</a></li>
+                        <li><a href="#introduction" class="active">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h8M2 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                            Introduction
+                        </a></li>
+                        <li><a href="#installation">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3M3 13h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Installation
+                        </a></li>
+                        <li><a href="#quickstart">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l6 5-6 5V3z" fill="currentColor" opacity=".7"/></svg>
+                            Quick Start
+                        </a></li>
+                        <li><a href="#configuration">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2a6 6 0 100 12A6 6 0 008 2zM8 6v4M8 10h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                            Configuration
+                        </a></li>
+                        <li><a href="#ci-cd">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M11.5 9v6M9 11.5h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                            CI/CD Integration <span class="badge badge-new">New</span>
+                        </a></li>
                     </ul>
                 </div>
-                
+
                 <div class="sidebar-section">
-                    <h3>Core Features</h3>
+                    <h3>Core Modules</h3>
                     <ul class="sidebar-links">
-                        <li><a href="#ghost-protocol">Ghost Protocol</a></li>
-                        <li><a href="#self-healing">Self-Healing</a></li>
-                        <li><a href="#swarm">Swarm Execution</a></li>
-                        <li><a href="#oracle">The Oracle</a></li>
-                        <li><a href="#chronos">Chronos Engine</a></li>
-                        <li><a href="#fortress">Fortress Security</a></li>
+                        <li><a href="#ghost-protocol">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1C4.7 1 2 3.7 2 7v6l2-1.5L6 13l2-1.5L10 13l2 1.5L14 13V7c0-3.3-2.7-6-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                            Ghost Protocol
+                        </a></li>
+                        <li><a href="#self-healing">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2l1.5 4H14l-3.5 2.5 1.3 4L8 10.5 4.2 12.5 5.5 8.5 2 6h4.5L8 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                            Self-Healing Engine
+                        </a></li>
+                        <li><a href="#swarm">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="3" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="3" r="2" stroke="currentColor" stroke-width="1.5"/><circle cx="13" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="13" r="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 8h6M8 5v6" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity=".5"/></svg>
+                            Swarm Execution
+                        </a></li>
+                        <li><a href="#oracle">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1C4.7 1 2 3.9 2 7.5c0 2.8 1.7 5.2 4.1 6.2L8 15l1.9-1.3C12.3 12.7 14 10.3 14 7.5 14 3.9 11.3 1 8 1z" stroke="currentColor" stroke-width="1.5"/><path d="M6 7h4M8 5v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                            The Oracle
+                        </a></li>
+                        <li><a href="#chronos">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 4v4l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Chronos Engine
+                        </a></li>
+                        <li><a href="#fortress">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1L2 4v4c0 3.3 2.5 6 6 7 3.5-1 6-3.7 6-7V4L8 1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                            Fortress Security
+                        </a></li>
                     </ul>
                 </div>
-                
+
+                <div class="sidebar-section">
+                    <h3>Guides</h3>
+                    <ul class="sidebar-links">
+                        <li><a href="#guide-login">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M12 8H4M9 5l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Testing Login Flows
+                        </a></li>
+                        <li><a href="#guide-api">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M1 4h14M4 12h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                            API Interception
+                        </a></li>
+                        <li><a href="#guide-visual">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 9l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Visual Regression
+                        </a></li>
+                        <li><a href="#guide-auth">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="5" y="8" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M8 8V5a3 3 0 016 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                            Auth State Management
+                        </a></li>
+                    </ul>
+                </div>
+
                 <div class="sidebar-section">
                     <h3>API Reference</h3>
                     <ul class="sidebar-links">
-                        <li><a href="#api">API Overview</a></li>
-                        <li><a href="#methods">Methods</a></li>
-                        <li><a href="#options">Options</a></li>
+                        <li><a href="#api-core">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h6M3 12h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                            Core API <span class="badge badge-pro">Pro</span>
+                        </a></li>
+                        <li><a href="#api-page">Page Object</a></li>
+                        <li><a href="#api-assertions">Assertions</a></li>
+                        <li><a href="#api-config">Config Reference</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="sidebar-section">
                     <h3>Resources</h3>
                     <ul class="sidebar-links">
-                        <li><a href="#changelog">Changelog</a></li>
-                        <li><a href="https://github.com/papica777-eng" target="_blank">GitHub</a></li>
-                        <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="#changelog">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/></svg>
+                            Changelog
+                        </a></li>
+                        <li><a href="https://github.com/papica777-eng" target="_blank" rel="noopener">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" opacity=".7"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                            GitHub
+                        </a></li>
+                        <li><a href="pricing.html">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 9l5-7 2 4 2-2 3 5H2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                            Pricing
+                        </a></li>
                     </ul>
                 </div>
             </aside>
-            
-            <!-- Main Content -->
-            <div class="docs-content">
-                <h1 id="introduction">Introduction</h1>
-                
-                <p>Welcome to QAntum Prime – the AI-powered testing framework that refuses to die. With 715,861 lines of battle-tested code, QAntum brings enterprise-grade QA automation to teams of all sizes.</p>
-                
-                <div class="callout callout-info">
-                    <div class="callout-title">💡 What makes QAntum different?</div>
-                    <p style="margin-bottom: 0;">Unlike traditional testing frameworks, QAntum uses AI to heal broken tests, bypass bot detection, and predict failures before they happen.</p>
+
+            <!-- ── Main Content ── -->
+            <article class="docs-content">
+
+                <!-- ══════════════════════════════════════════ -->
+                <!-- INTRODUCTION -->
+                <!-- ══════════════════════════════════════════ -->
+                <h1 id="introduction">QAntum Prime Docs</h1>
+                <p class="lead">
+                    The complete reference for the Autonomous QA Engine — from first install to enterprise-scale
+                    deployment. No fluff. Just production-ready patterns.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2C5.58 2 2 5.58 2 10s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 3a5 5 0 110 10A5 5 0 0110 5z" fill="#6366f1" opacity=".4"/><circle cx="10" cy="10" r="3" fill="#6366f1"/></svg>
+                        </div>
+                        <h4>Zero-Config Start</h4>
+                        <p>One command. Runs your first test in under 60 seconds.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2l2.4 6.4H19l-5.4 3.9 2 6.3L10 14.8l-5.6 3.8 2-6.3L1 8.4h6.6L10 2z" fill="#6366f1" opacity=".7"/></svg>
+                        </div>
+                        <h4>Self-Healing</h4>
+                        <p>ML-powered selector repair. 97% accuracy across 15 strategies.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="5" cy="10" r="3" stroke="#6366f1" stroke-width="1.75"/><circle cx="15" cy="10" r="3" stroke="#6366f1" stroke-width="1.75"/><circle cx="10" cy="4" r="3" stroke="#6366f1" stroke-width="1.75"/><path d="M7.6 8.7 C8 7.5 9 6.5 10 5.8" stroke="#6366f1" stroke-width="1" opacity=".5"/></svg>
+                        </div>
+                        <h4>Swarm Execution</h4>
+                        <p>1,247 concurrent workers. 5 global regions. Infinite scale.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 2C5.58 2 2 5.58 2 10s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8z" stroke="#6366f1" stroke-width="1.5"/><path d="M10 7v3l2 1.5" stroke="#6366f1" stroke-width="1.75" stroke-linecap="round"/></svg>
+                        </div>
+                        <h4>Predictive Intelligence</h4>
+                        <p>Chronos forecasts failures 48h before they occur.</p>
+                    </div>
                 </div>
-                
-                <h2 id="installation">Installation</h2>
-                
-                <p>Install QAntum Prime via npm:</p>
-                
-                <pre><code>npm install qantum-prime</code></pre>
-                
-                <p>Or use the CLI to scaffold a new project:</p>
-                
-                <pre><code>npx qantum init my-project
+
+                <hr class="docs-divider">
+
+                <!-- ══════════════════════════════════════════ -->
+                <!-- INSTALLATION -->
+                <!-- ══════════════════════════════════════════ -->
+                <h2 id="installation">
+                    <span class="h-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v9M5 7l3 3 3-3M3 13h10" stroke="#a5b4fc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    Installation
+                </h2>
+
+                <p>Install via npm, yarn, or pnpm. Requires Node.js ≥ 18.0.</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-lang">bash</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="6" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.5"/></svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre><code><span class="tok-comment"># npm</span>
+npm install qantum-prime
+
+<span class="tok-comment"># yarn</span>
+yarn add qantum-prime
+
+<span class="tok-comment"># pnpm</span>
+pnpm add qantum-prime</code></pre>
+                </div>
+
+                <h3>Scaffold a new project</h3>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-lang">bash</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="6" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.5"/></svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre><code>npx qantum init my-project
 cd my-project
 npm test</code></pre>
-                
-                <h2 id="quickstart">Quick Start</h2>
-                
-                <p>Here's a simple example to get you started:</p>
-                
-                <pre><code>import { QAntum } from 'qantum-prime';
+                </div>
 
-// Initialize QAntum with default settings
-const qa = await QAntum.create({
-  ghost: true,      // Enable Ghost Protocol
-  selfHeal: true,   // Enable self-healing
-  parallel: 10      // Run 10 tests in parallel
+                <div class="callout callout-info">
+                    <svg class="callout-icon" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.75"/><path d="M10 9v5M10 7h.01" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+                    <div class="callout-body">
+                        <strong>Browser engines auto-installed</strong>
+                        <p>QAntum automatically downloads Chromium, Firefox, and WebKit during first run via its built-in browser provisioner. No manual Playwright/Selenium setup needed.</p>
+                    </div>
+                </div>
+
+                <hr class="docs-divider">
+
+                <!-- ══════════════════════════════════════════ -->
+                <!-- QUICK START -->
+                <!-- ══════════════════════════════════════════ -->
+                <h2 id="quickstart">
+                    <span class="h-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M5 3l7 5-7 5V3z" fill="#a5b4fc" opacity=".8"/></svg></span>
+                    Quick Start
+                </h2>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-lang">typescript</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="6" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.5"/></svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre><code><span class="tok-keyword">import</span> { <span class="tok-type">QAntum</span> } <span class="tok-keyword">from</span> <span class="tok-string">'qantum-prime'</span>;
+
+<span class="tok-comment">// Initialize the engine — all options are optional</span>
+<span class="tok-keyword">const</span> <span class="tok-variable">qa</span> = <span class="tok-keyword">await</span> <span class="tok-type">QAntum</span>.<span class="tok-function">create</span>({
+  ghost:    <span class="tok-keyword">true</span>,   <span class="tok-comment">// Invisible bot-proof execution</span>
+  selfHeal: <span class="tok-keyword">true</span>,   <span class="tok-comment">// Auto-repair broken selectors</span>
+  parallel: <span class="tok-number">10</span>,    <span class="tok-comment">// Concurrent test workers</span>
 });
 
-// Write your first test
-await qa.test('Homepage loads', async ({ page }) => {
-  await page.goto('https://example.com');
-  await qa.expect(page).toHaveTitle(/Example/);
+<span class="tok-comment">// Define your test</span>
+<span class="tok-keyword">await</span> <span class="tok-variable">qa</span>.<span class="tok-function">test</span>(<span class="tok-string">'Homepage loads correctly'</span>, <span class="tok-keyword">async</span> ({ <span class="tok-variable">page</span> }) <span class="tok-operator">=></span> {
+  <span class="tok-keyword">await</span> <span class="tok-variable">page</span>.<span class="tok-function">goto</span>(<span class="tok-string">'https://your-app.com'</span>);
+  <span class="tok-keyword">await</span> <span class="tok-variable">qa</span>.<span class="tok-function">expect</span>(<span class="tok-variable">page</span>).<span class="tok-function">toHaveTitle</span>(/Your App/);
+  <span class="tok-keyword">await</span> <span class="tok-variable">qa</span>.<span class="tok-function">expect</span>(<span class="tok-variable">page</span>.<span class="tok-function">locator</span>(<span class="tok-string">'[data-testid="hero"]'</span>)).<span class="tok-function">toBeVisible</span>();
 });
 
-// Run all tests
-await qa.run();</code></pre>
-                
+<span class="tok-comment">// Execute</span>
+<span class="tok-keyword">await</span> <span class="tok-variable">qa</span>.<span class="tok-function">run</span>();</code></pre>
+                </div>
+
                 <div class="callout callout-success">
-                    <div class="callout-title">✅ That's it!</div>
-                    <p style="margin-bottom: 0;">You've just written your first QAntum test. The framework handles browser automation, self-healing, and reporting automatically.</p>
+                    <svg class="callout-icon" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.75"/><path d="M6 10l3 3 5-5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <div class="callout-body">
+                        <strong>That's your first test.</strong>
+                        <p>QAntum handles browser provisioning, self-healing, parallel scheduling, and HTML reporting automatically. No extra config needed for day one.</p>
+                    </div>
                 </div>
-                
-                <h2 id="configuration">Configuration</h2>
-                
-                <p>Create a <code>qantum.config.ts</code> file in your project root:</p>
-                
-                <pre><code>import { defineConfig } from 'qantum-prime';
 
-export default defineConfig({
-  // Ghost Protocol settings
+                <hr class="docs-divider">
+
+                <!-- ══════════════════════════════════════════ -->
+                <!-- CONFIGURATION -->
+                <!-- ══════════════════════════════════════════ -->
+                <h2 id="configuration">
+                    <span class="h-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" stroke="#a5b4fc" stroke-width="1.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.2 3.2l1.4 1.4M11.4 11.4l1.4 1.4M3.2 12.8l1.4-1.4M11.4 4.6l1.4-1.4" stroke="#a5b4fc" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                    Configuration
+                </h2>
+
+                <p>Create <code>qantum.config.ts</code> in your project root for project-wide settings:</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-lang">typescript — qantum.config.ts</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="6" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.5"/></svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre><code><span class="tok-keyword">import</span> { <span class="tok-function">defineConfig</span> } <span class="tok-keyword">from</span> <span class="tok-string">'qantum-prime'</span>;
+
+<span class="tok-keyword">export default</span> <span class="tok-function">defineConfig</span>({
+
+  <span class="tok-comment">// ── Ghost Protocol ──────────────────────────────</span>
   ghost: {
-    enabled: true,
-    biometric: true,
-    fingerprint: 'random'
+    enabled:     <span class="tok-keyword">true</span>,
+    biometric:   <span class="tok-keyword">true</span>,       <span class="tok-comment">// Human mouse curves + typing variance</span>
+    fingerprint: <span class="tok-string">'unique'</span>,  <span class="tok-comment">// Fresh browser identity per session</span>
+    stealth:     <span class="tok-string">'maximum'</span>, <span class="tok-comment">// Bypass Cloudflare, Akamai, DataDome</span>
   },
-  
-  // Self-healing settings
+
+  <span class="tok-comment">// ── Self-Healing ─────────────────────────────────</span>
   selfHeal: {
-    enabled: true,
-    strategies: ['data-testid', 'aria-label', 'text', 'visual'],
-    confidenceThreshold: 0.85
+    enabled:             <span class="tok-keyword">true</span>,
+    strategies:          [<span class="tok-string">'data-testid'</span>, <span class="tok-string">'aria-label'</span>, <span class="tok-string">'text'</span>, <span class="tok-string">'visual'</span>],
+    confidenceThreshold: <span class="tok-number">0.85</span>,  <span class="tok-comment">// Min ML confidence to auto-apply</span>
+    logHealing:          <span class="tok-keyword">true</span>,  <span class="tok-comment">// Export healing events to report</span>
   },
-  
-  // Execution settings
-  parallel: {
-    workers: 50,
-    retries: 2
-  },
-  
-  // Reporting
-  reporters: ['html', 'json', 'console']
-});</code></pre>
-                
-                <h2 id="ghost-protocol">Ghost Protocol v2</h2>
-                
-                <p>Ghost Protocol makes your automation completely invisible to bot detection systems. It simulates human behavior with uncanny accuracy.</p>
-                
-                <h3>Features</h3>
-                <ul>
-                    <li><strong>Biometric Simulation</strong> – Realistic mouse movements, typing patterns, and scroll behavior</li>
-                    <li><strong>Fingerprint Masking</strong> – Unique browser fingerprints for each session</li>
-                    <li><strong>Anti-Detection</strong> – Bypasses Cloudflare, Akamai, PerimeterX, and DataDome</li>
-                </ul>
-                
-                <pre><code>// Enable Ghost Protocol
-const qa = await QAntum.create({
-  ghost: {
-    enabled: true,
-    biometric: true,        // Human-like mouse movements
-    fingerprint: 'unique',  // New fingerprint per session
-    stealth: 'maximum'      // Full anti-detection suite
-  }
-});</code></pre>
-                
-                <div class="callout callout-warning">
-                    <div class="callout-title">⚠️ Important</div>
-                    <p style="margin-bottom: 0;">Use Ghost Protocol responsibly. It's designed for testing your own applications, not for bypassing security on sites you don't own.</p>
-                </div>
-                
-                <h2 id="self-healing">Self-Healing Tests</h2>
-                
-                <p>QAntum's self-healing engine automatically repairs broken selectors using machine learning. When UI changes, your tests adapt.</p>
-                
-                <h3>How it Works</h3>
-                <ol>
-                    <li>QAntum detects a broken selector</li>
-                    <li>ML engine analyzes 15+ alternative strategies</li>
-                    <li>Best match is selected (97%+ accuracy)</li>
-                    <li>Test continues without human intervention</li>
-                    <li>Healing is logged for review</li>
-                </ol>
-                
-                <h3>Healing Strategies</h3>
-                <table class="api-table">
-                    <thead>
-                        <tr>
-                            <th>Strategy</th>
-                            <th>Priority</th>
-                            <th>Accuracy</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><code>data-testid</code></td>
-                            <td>1</td>
-                            <td>99.2%</td>
-                        </tr>
-                        <tr>
-                            <td><code>aria-label</code></td>
-                            <td>2</td>
-                            <td>94.7%</td>
-                        </tr>
-                        <tr>
-                            <td><code>text-content</code></td>
-                            <td>3</td>
-                            <td>91.3%</td>
-                        </tr>
-                        <tr>
-                            <td><code>visual-position</code></td>
-                            <td>4</td>
-                            <td>87.8%</td>
-                        </tr>
-                        <tr>
-                            <td><code>dom-structure</code></td>
-                            <td>5</td>
-                            <td>82.4%</td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <h2 id="swarm">Swarm Execution</h2>
-                
-                <p>Run thousands of tests in parallel across multiple regions. Swarm Intelligence distributes your test suite for maximum speed.</p>
-                
-                <pre><code>// Enable Swarm mode
-const qa = await QAntum.create({
-  swarm: {
-    enabled: true,
-    workers: 1000,
-    regions: ['us-east', 'eu-west', 'ap-south'],
-    loadBalancing: 'intelligent'
-  }
-});</code></pre>
-                
-                <h2 id="oracle">The Oracle</h2>
-                
-                <p>The Oracle is QAntum's AI-powered test discovery engine. Point it at a URL and it automatically generates comprehensive test cases.</p>
-                
-                <pre><code>// Auto-discover and generate tests
-await qa.oracle.discover({
-  url: 'https://your-app.com',
-  depth: 3,                    // Crawl depth
-  generateTests: true,         // Auto-generate test files
-  coverage: ['forms', 'navigation', 'api', 'auth']
-});</code></pre>
-                
-                <h2 id="chronos">Chronos Engine</h2>
-                
-                <p>Chronos predicts test failures before they happen using historical data analysis and pattern recognition.</p>
-                
-                <pre><code>// Get failure predictions
-const predictions = await qa.chronos.predict();
 
-predictions.forEach(p => {
-  console.log(`${p.test}: ${p.failureProbability}% chance of failure`);
-  console.log(`Recommendation: ${p.recommendation}`);
-});</code></pre>
-                
-                <h2 id="fortress">Fortress Security</h2>
-                
-                <p>Fortress integrates security scanning into your test suite. Find vulnerabilities while testing functionality.</p>
-                
-                <pre><code>// Enable security scanning
-const qa = await QAntum.create({
-  fortress: {
-    enabled: true,
-    scanTypes: ['xss', 'sqli', 'csrf', 'ssrf'],
-    reportVulnerabilities: true
-  }
-});</code></pre>
-                
-                <h2 id="api">API Reference</h2>
-                
-                <h3 id="methods">Core Methods</h3>
-                
-                <table class="api-table">
-                    <thead>
-                        <tr>
-                            <th>Method</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><code>QAntum.create(options)</code></td>
-                            <td>Initialize a new QAntum instance</td>
-                        </tr>
-                        <tr>
-                            <td><code>qa.test(name, fn)</code></td>
-                            <td>Define a test case</td>
-                        </tr>
-                        <tr>
-                            <td><code>qa.run()</code></td>
-                            <td>Execute all tests</td>
-                        </tr>
-                        <tr>
-                            <td><code>qa.expect(value)</code></td>
-                            <td>Create an assertion</td>
-                        </tr>
-                        <tr>
-                            <td><code>qa.oracle.discover()</code></td>
-                            <td>Auto-discover tests</td>
-                        </tr>
-                        <tr>
-                            <td><code>qa.chronos.predict()</code></td>
-                            <td>Get failure predictions</td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <h3 id="options">Configuration Options</h3>
-                
-                <table class="api-table">
-                    <thead>
-                        <tr>
-                            <th>Option</th>
-                            <th>Type</th>
-                            <th>Default</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><code>ghost</code></td>
-                            <td>boolean | object</td>
-                            <td>false</td>
-                            <td>Enable Ghost Protocol</td>
-                        </tr>
-                        <tr>
-                            <td><code>selfHeal</code></td>
-                            <td>boolean | object</td>
-                            <td>true</td>
-                            <td>Enable self-healing</td>
-                        </tr>
-                        <tr>
-                            <td><code>parallel</code></td>
-                            <td>number</td>
-                            <td>4</td>
-                            <td>Parallel workers</td>
-                        </tr>
-                        <tr>
-                            <td><code>timeout</code></td>
-                            <td>number</td>
-                            <td>30000</td>
-                            <td>Test timeout (ms)</td>
-                        </tr>
-                        <tr>
-                            <td><code>retries</code></td>
-                            <td>number</td>
-                            <td>2</td>
-                            <td>Retry count</td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <h2 id="changelog">Changelog</h2>
-                
-                <h3>v27.1.0-IMMORTAL (Current)</h3>
+  <span class="tok-comment">// ── Parallel Execution ───────────────────────────</span>
+  parallel: {
+    workers: <span class="tok-number">50</span>,
+    retries: <span class="tok-number">2</span>,
+    timeout: <span class="tok-number">30000</span>,  <span class="tok-comment">// ms — per test</span>
+  },
+
+  <span class="tok-comment">// ── Browsers ─────────────────────────────────────</span>
+  browsers: [<span class="tok-string">'chromium'</span>, <span class="tok-string">'firefox'</span>, <span class="tok-string">'webkit'</span>],
+
+  <span class="tok-comment">// ── Reporting ─────────────────────────────────────</span>
+  reporters: [<span class="tok-string">'html'</span>, <span class="tok-string">'json'</span>, <span class="tok-string">'console'</span>],
+  outputDir: <span class="tok-string">'./test-results'</span>,
+
+  <span class="tok-comment">// ── Swarm (Enterprise) ───────────────────────────</span>
+  swarm: {
+    enabled:  <span class="tok-keyword">false</span>,
+    workers:  <span class="tok-number">1000</span>,
+    regions:  [<span class="tok-string">'us-east'</span>, <span class="tok-string">'eu-west'</span>, <span class="tok-string">'ap-south'</span>],
+  },
+
+});
+</code></pre>
+                </div>
+
+                <hr class="docs-divider">
+
+                <!-- ══════════════════════════════════════════ -->
+                <!-- CI/CD -->
+                <!-- ══════════════════════════════════════════ -->
+                <h2 id="ci-cd">
+                    <span class="h-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" stroke="#a5b4fc" stroke-width="1.5"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="#a5b4fc" stroke-width="1.5"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="#a5b4fc" stroke-width="1.5"/><path d="M11.5 9v6M9 11.5h5" stroke="#a5b4fc" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                    CI/CD Integration
+                </h2>
+
+                <h3>GitHub Actions</h3>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-lang">yaml — .github/workflows/qantum.yml</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="6" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.5"/></svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre><code><span class="tok-property">name</span>: QAntum E2E
+
+<span class="tok-property">on</span>:
+  <span class="tok-property">push</span>:
+    <span class="tok-property">branches</span>: [main, develop]
+  <span class="tok-property">pull_request</span>:
+    <span class="tok-property">branches</span>: [main]
+
+<span class="tok-property">jobs</span>:
+  <span class="tok-property">test</span>:
+    <span class="tok-property">runs-on</span>: ubuntu-latest
+    <span class="tok-property">steps</span>:
+      - <span class="tok-property">uses</span>: actions/checkout@v4
+
+      - <span class="tok-property">name</span>: Setup Node.js
+        <span class="tok-property">uses</span>: actions/setup-node@v4
+        <span class="tok-property">with</span>:
+          <span class="tok-property">node-version</span>: <span class="tok-string">'20'</span>
+          <span class="tok-property">cache</span>: <span class="tok-string">'npm'</span>
+
+      - <span class="tok-property">name</span>: Install dependencies
+        <span class="tok-property">run</span>: npm ci
+
+      - <span class="tok-property">name</span>: Run QAntum tests
+        <span class="tok-property">run</span>: npx qantum run --reporter=github
+        <span class="tok-property">env</span>:
+          <span class="tok-property">QANTUM_LICENSE</span>: ${{ secrets.QANTUM_LICENSE }}
+
+      - <span class="tok-property">name</span>: Upload HTML Report
+        <span class="tok-property">uses</span>: actions/upload-artifact@v4
+        <span class="tok-property">if</span>: always()
+        <span class="tok-property">with</span>:
+          <span class="tok-property">name</span>: qantum-report
+          <span class="tok-property">path</span>: test-results/</code></pre>
+                </div>
+
+                <h3>GitLab CI</h3>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-lang">yaml — .gitlab-ci.yml</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="6" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.5"/></svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre><code><span class="tok-property">qantum-e2e</span>:
+  <span class="tok-property">image</span>: node:20-bookworm
+  <span class="tok-property">stage</span>: test
+  <span class="tok-property">script</span>:
+    - npm ci
+    - npx qantum run
+  <span class="tok-property">artifacts</span>:
+    <span class="tok-property">when</span>: always
+    <span class="tok-property">paths</span>: [test-results/]
+    <span class="tok-property">expire_in</span>: 7 days</code></pre>
+                </div>
+
+                <hr class="docs-divider">
+
+                <!-- ══════════════════════════════════════════ -->
+                <!-- GHOST PROTOCOL -->
+                <!-- ══════════════════════════════════════════ -->
+                <h2 id="ghost-protocol">
+                    <span class="h-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1C4.7 1 2 3.7 2 7v6l2-1.5L6 13l2-1.5L10 13l2 1.5L14 13V7c0-3.3-2.7-6-6-6z" stroke="#a5b4fc" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
+                    Ghost Protocol v2
+                </h2>
+
+                <p>Ghost Protocol makes QAntum completely invisible to bot-detection layers — Cloudflare, Akamai, PerimeterX, DataDome — by simulating statistically human behavior at the hardware and browser-API level.</p>
+
+                <h3>Capabilities</h3>
                 <ul>
-                    <li>🚀 752,312 lines of code</li>
-                    <li>👻 Ghost Protocol v2 with biometric simulation</li>
-                    <li>🔮 Self-Healing with 15 strategies (97% accuracy)</li>
-                    <li>🐝 Swarm execution across 5 global regions</li>
-                    <li>🔍 The Oracle auto-discovery engine</li>
-                    <li>⏱️ Chronos predictive engine</li>
-                    <li>🛡️ Fortress security scanning</li>
+                    <li><strong>Biometric Simulation</strong> — Realistic Bézier-curve mouse paths, typing velocity variance (±40ms), and randomized scroll momentum.</li>
+                    <li><strong>Fingerprint Masking</strong> — Unique <code>navigator</code> object, Canvas fingerprint, WebGL renderer, and audio context per session.</li>
+                    <li><strong>Anti-Detection Suite</strong> — Patches <code>navigator.webdriver</code>, <code>window.chrome</code>, and all headless browser tells.</li>
+                    <li><strong>TLS Fingerprint Rotation</strong> — JA3/JA4 fingerprint matching real Chrome/Firefox builds.</li>
                 </ul>
-                
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-lang">typescript</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="6" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.5"/></svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre><code><span class="tok-keyword">const</span> <span class="tok-variable">qa</span> = <span class="tok-keyword">await</span> <span class="tok-type">QAntum</span>.<span class="tok-function">create</span>({
+  ghost: {
+    enabled:     <span class="tok-keyword">true</span>,
+    biometric:   <span class="tok-keyword">true</span>,
+    fingerprint: <span class="tok-string">'unique'</span>,  <span class="tok-comment">// 'unique' | 'consistent' | 'rotating'</span>
+    stealth:     <span class="tok-string">'maximum'</span>, <span class="tok-comment">// 'standard' | 'maximum'</span>
+    proxy: {
+      enabled:  <span class="tok-keyword">true</span>,
+      type:     <span class="tok-string">'residential'</span>,
+      rotation: <span class="tok-string">'per-session'</span>,
+    },
+  },
+});</code></pre>
+                </div>
+
+                <div class="callout callout-warning">
+                    <svg class="callout-icon" viewBox="0 0 20 20" fill="none"><path d="M10 2L2 17h16L10 2z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M10 9v4M10 15h.01" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+                    <div class="callout-body">
+                        <strong>Responsible Use Policy</strong>
+                        <p>Ghost Protocol is licensed exclusively for testing applications you own or have written authorization to test. Unauthorized scraping or security circumvention violates the QAntum EULA and applicable law.</p>
+                    </div>
+                </div>
+
+                <hr class="docs-divider">
+
+                <!-- ══════════════════════════════════════════ -->
+                <!-- SELF-HEALING -->
+                <!-- ══════════════════════════════════════════ -->
+                <h2 id="self-healing">
+                    <span class="h-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2l1.5 4H14l-3.5 2.5 1.3 4L8 10.5 4.2 12.5 5.5 8.5 2 6h4.5L8 2z" stroke="#a5b4fc" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
+                    Self-Healing Engine
+                </h2>
+
+                <p>When a selector breaks because UI changed, QAntum's ML engine silently finds the correct element and continues the test — then logs exactly what it healed so you can update your source.</p>
+
+                <h3>Healing Pipeline</h3>
+                <ol class="step-list">
+                    <li>Broken selector detected — test pauses without crashing.</li>
+                    <li>DOM snapshot taken and encoded into the ML feature vector.</li>
+                    <li>15 alternative strategies scored in parallel (avg &lt;12ms).</li>
+                    <li>Highest-confidence match applied if score ≥ <code>confidenceThreshold</code>.</li>
+                    <li>Test continues. Healing event logged to <code>test-results/healing.json</code>.</li>
+                </ol>
+
+                <h3>Selector Strategy Priority</h3>
+                <table class="api-table">
+                    <thead><tr><th>Priority</th><th>Strategy</th><th>Accuracy</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td>1</td><td><code>data-testid</code></td><td>99.2%</td><td>Explicit test attribute — highest signal, lowest noise</td></tr>
+                        <tr><td>2</td><td><code>aria-label</code></td><td>94.7%</td><td>Semantic accessibility label — stable across style refactors</td></tr>
+                        <tr><td>3</td><td><code>role + name</code></td><td>93.1%</td><td>ARIA role combined with accessible name</td></tr>
+                        <tr><td>4</td><td><code>text-content</code></td><td>91.3%</td><td>Visible text as locator — good for CTAs and navigation</td></tr>
+                        <tr><td>5</td><td><code>placeholder</code></td><td>89.4%</td><td>Input placeholder text for form elements</td></tr>
+                        <tr><td>6</td><td><code>visual-position</code></td><td>87.8%</td><td>Spatial relationship (above/below/next-to) other stable elements</td></tr>
+                        <tr><td>7</td><td><code>dom-structure</code></td><td>82.4%</td><td>CSS selector regenerated from DOM path heuristics</td></tr>
+                        <tr><td>8+</td><td><em>8 more…</em></td><td>≥73%</td><td>Visual embedding, XPath fallbacks, shadow DOM traversal</td></tr>
+                    </tbody>
+                </table>
+
+                <hr class="docs-divider">
+
+                <!-- ══════════════════════════════════════════ -->
+                <!-- SWARM -->
+                <!-- ══════════════════════════════════════════ -->
+                <h2 id="swarm">
+                    <span class="h-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="3" cy="8" r="2" stroke="#a5b4fc" stroke-width="1.5"/><circle cx="8" cy="3" r="2" stroke="#a5b4fc" stroke-width="1.5"/><circle cx="13" cy="8" r="2" stroke="#a5b4fc" stroke-width="1.5"/><circle cx="8" cy="13" r="2" stroke="#a5b4fc" stroke-width="1.5"/></svg></span>
+                    Swarm Execution
+                </h2>
+
+                <p>Swarm distributes your entire test suite across 1,247 concurrent cloud workers in 5 global regions, reducing a 4-hour regression suite to under 4 minutes.</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-lang">typescript</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="6" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.5"/></svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre><code><span class="tok-keyword">const</span> <span class="tok-variable">qa</span> = <span class="tok-keyword">await</span> <span class="tok-type">QAntum</span>.<span class="tok-function">create</span>({
+  swarm: {
+    enabled:        <span class="tok-keyword">true</span>,
+    workers:        <span class="tok-number">1000</span>,
+    regions:        [<span class="tok-string">'us-east-1'</span>, <span class="tok-string">'eu-west-1'</span>, <span class="tok-string">'ap-south-1'</span>],
+    loadBalancing:  <span class="tok-string">'intelligent'</span>, <span class="tok-comment">// Latency-aware routing</span>
+    failover:       <span class="tok-string">'hot-standby'</span>, <span class="tok-comment">// &lt;50ms worker replacement</span>
+  },
+});
+
+<span class="tok-comment">// Watch real-time swarm telemetry</span>
+<span class="tok-variable">qa</span>.swarm.<span class="tok-function">on</span>(<span class="tok-string">'worker:failover'</span>, ({ <span class="tok-variable">workerId</span>, <span class="tok-variable">latencyMs</span> }) <span class="tok-operator">=></span> {
+  <span class="tok-variable">console</span>.<span class="tok-function">log</span>(<span class="tok-string">`Hot-standby activated: ${latencyMs}ms`</span>);
+});</code></pre>
+                </div>
+
+                <hr class="docs-divider">
+
+                <!-- ══════════════════════════════════════════ -->
+                <!-- ORACLE -->
+                <!-- ══════════════════════════════════════════ -->
+                <h2 id="oracle">
+                    <span class="h-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1C4.7 1 2 3.9 2 7.5c0 2.8 1.7 5.2 4.1 6.2L8 15l1.9-1.3C12.3 12.7 14 10.3 14 7.5 14 3.9 11.3 1 8 1z" stroke="#a5b4fc" stroke-width="1.5"/></svg></span>
+                    The Oracle — Auto-Discovery
+                </h2>
+
+                <p>Point The Oracle at any URL. It crawls the app, maps every user flow, and generates a complete, ready-to-run test suite. One command replaces weeks of manual test writing.</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-lang">typescript</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="6" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.5"/></svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre><code><span class="tok-keyword">await</span> <span class="tok-variable">qa</span>.oracle.<span class="tok-function">discover</span>({
+  url:           <span class="tok-string">'https://your-app.com'</span>,
+  depth:         <span class="tok-number">3</span>,         <span class="tok-comment">// Crawl depth (pages)</span>
+  generateTests: <span class="tok-keyword">true</span>,     <span class="tok-comment">// Write .spec.ts files to ./tests/</span>
+  coverage:      [<span class="tok-string">'forms'</span>, <span class="tok-string">'navigation'</span>, <span class="tok-string">'api'</span>, <span class="tok-string">'auth'</span>],
+  auth: {
+    type:     <span class="tok-string">'credentials'</span>,
+    username: <span class="tok-variable">process</span>.env.TEST_USER,
+    password: <span class="tok-variable">process</span>.env.TEST_PASS,
+  },
+});
+<span class="tok-comment">// Output: ./tests/ populated with spec files per route</span></code></pre>
+                </div>
+
+                <hr class="docs-divider">
+
+                <!-- ══════════════════════════════════════════ -->
+                <!-- CHRONOS -->
+                <!-- ══════════════════════════════════════════ -->
+                <h2 id="chronos">
+                    <span class="h-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#a5b4fc" stroke-width="1.5"/><path d="M8 4v4l2.5 2.5" stroke="#a5b4fc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    Chronos Engine — Predictive QA
+                </h2>
+
+                <p>Chronos analyzes historical run data, code commit diffs, and deployment frequency to predict which tests will fail in the next 48 hours — before they do.</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-lang">typescript</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="6" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.5"/></svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre><code><span class="tok-keyword">const</span> <span class="tok-variable">predictions</span> = <span class="tok-keyword">await</span> <span class="tok-variable">qa</span>.chronos.<span class="tok-function">predict</span>({ horizon: <span class="tok-string">'48h'</span> });
+
+<span class="tok-variable">predictions</span>.<span class="tok-function">forEach</span>((<span class="tok-variable">p</span>) <span class="tok-operator">=></span> {
+  <span class="tok-variable">console</span>.<span class="tok-function">log</span>(<span class="tok-variable">p</span>.test, <span class="tok-variable">p</span>.failureProbability + <span class="tok-string">'%'</span>, <span class="tok-variable">p</span>.recommendation);
+});
+
+<span class="tok-comment">// Example output:</span>
+<span class="tok-comment">// "checkout.spec.ts"  87%  "Payment selector stale — recent DOM change detected"</span>
+<span class="tok-comment">// "auth.spec.ts"      12%  "Low risk — stable"</span></code></pre>
+                </div>
+
+                <hr class="docs-divider">
+
+                <!-- ══════════════════════════════════════════ -->
+                <!-- FORTRESS -->
+                <!-- ══════════════════════════════════════════ -->
+                <h2 id="fortress">
+                    <span class="h-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L2 4v4c0 3.3 2.5 6 6 7 3.5-1 6-3.7 6-7V4L8 1z" stroke="#a5b4fc" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
+                    Fortress — Security Scanning
+                </h2>
+
+                <p>Run OWASP-class security scans as part of every test run. Fortress discovers XSS, SQLi, CSRF, SSRF, and auth-bypass vulnerabilities in the same pipeline as your functional tests.</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-lang">typescript</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="6" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.5"/></svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre><code><span class="tok-keyword">const</span> <span class="tok-variable">qa</span> = <span class="tok-keyword">await</span> <span class="tok-type">QAntum</span>.<span class="tok-function">create</span>({
+  fortress: {
+    enabled:              <span class="tok-keyword">true</span>,
+    scanTypes:            [<span class="tok-string">'xss'</span>, <span class="tok-string">'sqli'</span>, <span class="tok-string">'csrf'</span>, <span class="tok-string">'ssrf'</span>, <span class="tok-string">'auth-bypass'</span>],
+    reportVulnerabilities: <span class="tok-keyword">true</span>,
+    failOnSeverity:        <span class="tok-string">'high'</span>, <span class="tok-comment">// 'low' | 'medium' | 'high' | 'critical'</span>
+  },
+});</code></pre>
+                </div>
+
+                <hr class="docs-divider">
+
+                <!-- ══════════════════════════════════════════ -->
+                <!-- GUIDES -->
+                <!-- ══════════════════════════════════════════ -->
+                <h2 id="guide-login">
+                    <span class="h-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M11 8H4M8 5l3 3-3 3" stroke="#a5b4fc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    Guide: Testing Login Flows
+                </h2>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-lang">typescript — tests/auth.spec.ts</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="6" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.5"/></svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre><code><span class="tok-keyword">import</span> { <span class="tok-type">QAntum</span>, <span class="tok-function">test</span>, <span class="tok-function">expect</span> } <span class="tok-keyword">from</span> <span class="tok-string">'qantum-prime'</span>;
+
+<span class="tok-comment">// ── Shared auth state — reuse across suite ──────────────</span>
+<span class="tok-keyword">let</span> <span class="tok-variable">authState</span>: <span class="tok-type">AuthState</span>;
+
+<span class="tok-function">test</span>.<span class="tok-function">beforeAll</span>(<span class="tok-keyword">async</span> ({ <span class="tok-variable">page</span> }) <span class="tok-operator">=></span> {
+  <span class="tok-variable">authState</span> = <span class="tok-keyword">await</span> <span class="tok-type">QAntum</span>.auth.<span class="tok-function">login</span>({
+    url:      <span class="tok-string">'https://your-app.com/login'</span>,
+    username: <span class="tok-variable">process</span>.env.TEST_USER!,
+    password: <span class="tok-variable">process</span>.env.TEST_PASS!,
+    saveAs:   <span class="tok-string">'admin'</span>,  <span class="tok-comment">// Reuse in subsequent tests</span>
+  });
+});
+
+<span class="tok-function">test</span>(<span class="tok-string">'Login — valid credentials'</span>, <span class="tok-keyword">async</span> ({ <span class="tok-variable">page</span> }) <span class="tok-operator">=></span> {
+  <span class="tok-keyword">await</span> <span class="tok-variable">page</span>.<span class="tok-function">goto</span>(<span class="tok-string">'https://your-app.com/login'</span>);
+  <span class="tok-keyword">await</span> <span class="tok-variable">page</span>.<span class="tok-function">fill</span>(<span class="tok-string">'[data-testid="email"]'</span>,    <span class="tok-string">'user@example.com'</span>);
+  <span class="tok-keyword">await</span> <span class="tok-variable">page</span>.<span class="tok-function">fill</span>(<span class="tok-string">'[data-testid="password"]'</span>, <span class="tok-string">'correct-password'</span>);
+  <span class="tok-keyword">await</span> <span class="tok-variable">page</span>.<span class="tok-function">click</span>(<span class="tok-string">'[data-testid="login-btn"]'</span>);
+  <span class="tok-keyword">await</span> <span class="tok-function">expect</span>(<span class="tok-variable">page</span>).<span class="tok-function">toHaveURL</span>(/\/dashboard/);
+});
+
+<span class="tok-function">test</span>(<span class="tok-string">'Login — invalid credentials shows error'</span>, <span class="tok-keyword">async</span> ({ <span class="tok-variable">page</span> }) <span class="tok-operator">=></span> {
+  <span class="tok-keyword">await</span> <span class="tok-variable">page</span>.<span class="tok-function">goto</span>(<span class="tok-string">'https://your-app.com/login'</span>);
+  <span class="tok-keyword">await</span> <span class="tok-variable">page</span>.<span class="tok-function">fill</span>(<span class="tok-string">'[data-testid="email"]'</span>,    <span class="tok-string">'user@example.com'</span>);
+  <span class="tok-keyword">await</span> <span class="tok-variable">page</span>.<span class="tok-function">fill</span>(<span class="tok-string">'[data-testid="password"]'</span>, <span class="tok-string">'wrong-password'</span>);
+  <span class="tok-keyword">await</span> <span class="tok-variable">page</span>.<span class="tok-function">click</span>(<span class="tok-string">'[data-testid="login-btn"]'</span>);
+  <span class="tok-keyword">await</span> <span class="tok-function">expect</span>(<span class="tok-variable">page</span>.<span class="tok-function">locator</span>(<span class="tok-string">'[data-testid="error-msg"]'</span>)).<span class="tok-function">toBeVisible</span>();
+});</code></pre>
+                </div>
+
+                <h2 id="guide-api">
+                    <span class="h-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M1 4h14M4 12h8" stroke="#a5b4fc" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                    Guide: API Interception & Mocking
+                </h2>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-lang">typescript</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="6" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.5"/></svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre><code><span class="tok-function">test</span>(<span class="tok-string">'Shows error toast on API 500'</span>, <span class="tok-keyword">async</span> ({ <span class="tok-variable">page</span> }) <span class="tok-operator">=></span> {
+  <span class="tok-comment">// Intercept and mock before navigation</span>
+  <span class="tok-keyword">await</span> <span class="tok-variable">page</span>.<span class="tok-function">route</span>(<span class="tok-string">'**/api/users'</span>, (<span class="tok-variable">route</span>) <span class="tok-operator">=></span>
+    <span class="tok-variable">route</span>.<span class="tok-function">fulfill</span>({
+      status:      <span class="tok-number">500</span>,
+      contentType: <span class="tok-string">'application/json'</span>,
+      body:        <span class="tok-type">JSON</span>.<span class="tok-function">stringify</span>({ error: <span class="tok-string">'Internal Server Error'</span> }),
+    })
+  );
+
+  <span class="tok-keyword">await</span> <span class="tok-variable">page</span>.<span class="tok-function">goto</span>(<span class="tok-string">'https://your-app.com/users'</span>);
+  <span class="tok-keyword">await</span> <span class="tok-function">expect</span>(<span class="tok-variable">page</span>.<span class="tok-function">locator</span>(<span class="tok-string">'[data-testid="error-toast"]'</span>)).<span class="tok-function">toBeVisible</span>();
+});
+
+<span class="tok-comment">// Spy on requests without blocking them</span>
+<span class="tok-keyword">const</span> <span class="tok-variable">requests</span>: <span class="tok-type">string</span>[] = [];
+<span class="tok-variable">page</span>.<span class="tok-function">on</span>(<span class="tok-string">'request'</span>, (<span class="tok-variable">req</span>) <span class="tok-operator">=></span> {
+  <span class="tok-keyword">if</span> (<span class="tok-variable">req</span>.<span class="tok-function">url</span>().<span class="tok-function">includes</span>(<span class="tok-string">'/api/'</span>)) <span class="tok-variable">requests</span>.<span class="tok-function">push</span>(<span class="tok-variable">req</span>.<span class="tok-function">url</span>());
+});
+</code></pre>
+                </div>
+
+                <h2 id="guide-visual">
+                    <span class="h-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="#a5b4fc" stroke-width="1.5"/><path d="M5 9l2 2 4-4" stroke="#a5b4fc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    Guide: Visual Regression Testing
+                </h2>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-lang">typescript</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="6" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.5"/></svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre><code><span class="tok-function">test</span>(<span class="tok-string">'Hero section matches baseline'</span>, <span class="tok-keyword">async</span> ({ <span class="tok-variable">page</span> }) <span class="tok-operator">=></span> {
+  <span class="tok-keyword">await</span> <span class="tok-variable">page</span>.<span class="tok-function">goto</span>(<span class="tok-string">'https://your-app.com'</span>);
+  <span class="tok-keyword">await</span> <span class="tok-variable">page</span>.<span class="tok-function">waitForLoadState</span>(<span class="tok-string">'networkidle'</span>);
+
+  <span class="tok-comment">// Full-page snapshot comparison  (diff threshold: 0.1%)</span>
+  <span class="tok-keyword">await</span> <span class="tok-function">expect</span>(<span class="tok-variable">page</span>).<span class="tok-function">toMatchSnapshot</span>(<span class="tok-string">'homepage.png'</span>, {
+    maxDiffPixelRatio: <span class="tok-number">0.001</span>,  <span class="tok-comment">// 0.1% tolerance</span>
+  });
+
+  <span class="tok-comment">// Element-level snapshot</span>
+  <span class="tok-keyword">await</span> <span class="tok-function">expect</span>(<span class="tok-variable">page</span>.<span class="tok-function">locator</span>(<span class="tok-string">'[data-testid="hero"]'</span>))
+    .<span class="tok-function">toMatchSnapshot</span>(<span class="tok-string">'hero-component.png'</span>);
+});
+<span class="tok-comment">// Update baselines: npx qantum run --update-snapshots</span></code></pre>
+                </div>
+
+                <h2 id="guide-auth">
+                    <span class="h-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="5" y="8" width="6" height="6" rx="1" stroke="#a5b4fc" stroke-width="1.5"/><path d="M8 8V5a3 3 0 016 0" stroke="#a5b4fc" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                    Guide: Auth State Management
+                </h2>
+
+                <p>Use <code>storageState</code> to reuse authenticated sessions across your entire suite — eliminating repeated login steps and saving significant execution time.</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-lang">typescript — global-setup.ts</span>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="6" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.5"/></svg>
+                            Copy
+                        </button>
+                    </div>
+                    <pre><code><span class="tok-keyword">import</span> { <span class="tok-type">QAntum</span> } <span class="tok-keyword">from</span> <span class="tok-string">'qantum-prime'</span>;
+<span class="tok-keyword">import</span> <span class="tok-variable">path</span> <span class="tok-keyword">from</span> <span class="tok-string">'path'</span>;
+
+<span class="tok-keyword">async function</span> <span class="tok-function">globalSetup</span>() {
+  <span class="tok-keyword">const</span> <span class="tok-variable">browser</span> = <span class="tok-keyword">await</span> <span class="tok-type">QAntum</span>.<span class="tok-function">launch</span>();
+  <span class="tok-keyword">const</span> <span class="tok-variable">page</span> = <span class="tok-keyword">await</span> <span class="tok-variable">browser</span>.<span class="tok-function">newPage</span>();
+
+  <span class="tok-keyword">await</span> <span class="tok-variable">page</span>.<span class="tok-function">goto</span>(<span class="tok-string">'https://your-app.com/login'</span>);
+  <span class="tok-keyword">await</span> <span class="tok-variable">page</span>.<span class="tok-function">fill</span>(<span class="tok-string">'[data-testid="email"]'</span>, <span class="tok-variable">process</span>.env.TEST_USER!);
+  <span class="tok-keyword">await</span> <span class="tok-variable">page</span>.<span class="tok-function">fill</span>(<span class="tok-string">'[data-testid="password"]'</span>, <span class="tok-variable">process</span>.env.TEST_PASS!);
+  <span class="tok-keyword">await</span> <span class="tok-variable">page</span>.<span class="tok-function">click</span>(<span class="tok-string">'[data-testid="login-btn"]'</span>);
+  <span class="tok-keyword">await</span> <span class="tok-variable">page</span>.<span class="tok-function">waitForURL</span>(<span class="tok-string">'**/dashboard'</span>);
+
+  <span class="tok-comment">// Persist cookies + localStorage to disk</span>
+  <span class="tok-keyword">await</span> <span class="tok-variable">page</span>.context().<span class="tok-function">storageState</span>({
+    path: <span class="tok-variable">path</span>.<span class="tok-function">join</span>(__dirname, <span class="tok-string">'auth.json'</span>),
+  });
+
+  <span class="tok-keyword">await</span> <span class="tok-variable">browser</span>.<span class="tok-function">close</span>();
+}
+
+<span class="tok-keyword">export default</span> <span class="tok-variable">globalSetup</span>;</code></pre>
+                </div>
+
+                <hr class="docs-divider">
+
+                <!-- ══════════════════════════════════════════ -->
+                <!-- API REFERENCE -->
+                <!-- ══════════════════════════════════════════ -->
+                <h2 id="api-core">
+                    <span class="h-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h6M3 12h8" stroke="#a5b4fc" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                    Core API
+                </h2>
+
+                <h3>QAntum.create(options)</h3>
+                <div class="method-sig">
+                    <span class="tok-keyword">static</span> <span class="fn-name">create</span><span class="fn-punct">(</span><span class="fn-param">options</span>: <span class="fn-return">QAntumOptions</span><span class="fn-punct">)</span>: <span class="fn-return">Promise&lt;QAntumInstance&gt;</span>
+                </div>
+                <p>Creates and initializes a new QAntum engine instance. Always <code>await</code> this call.</p>
+
+                <h3 id="api-page">Page Object API</h3>
+                <table class="api-table">
+                    <thead><tr><th>Method</th><th>Signature</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>page.goto()</code></td><td><span class="type-badge">url, opts?</span></td><td>Navigate to URL. Waits for <code>load</code> event by default.</td></tr>
+                        <tr><td><code>page.click()</code></td><td><span class="type-badge">selector, opts?</span></td><td>Click element. Auto-waits for visibility + stability.</td></tr>
+                        <tr><td><code>page.fill()</code></td><td><span class="type-badge">selector, value</span></td><td>Clear and type into an input. Triggers <code>input</code> + <code>change</code> events.</td></tr>
+                        <tr><td><code>page.type()</code></td><td><span class="type-badge">selector, text, opts?</span></td><td>Type character-by-character with realistic timing.</td></tr>
+                        <tr><td><code>page.locator()</code></td><td><span class="type-badge">selector</span></td><td>Returns a lazy locator — query is deferred until action.</td></tr>
+                        <tr><td><code>page.waitForSelector()</code></td><td><span class="type-badge">selector, opts?</span></td><td>Explicit wait for element to match state. Never use fixed sleeps.</td></tr>
+                        <tr><td><code>page.waitForURL()</code></td><td><span class="type-badge">url | regexp</span></td><td>Wait for navigation to match URL pattern.</td></tr>
+                        <tr><td><code>page.route()</code></td><td><span class="type-badge">pattern, handler</span></td><td>Intercept and mock network requests.</td></tr>
+                        <tr><td><code>page.screenshot()</code></td><td><span class="type-badge">opts?</span></td><td>Capture full page or element screenshot.</td></tr>
+                        <tr><td><code>page.evaluate()</code></td><td><span class="type-badge">fn, ...args</span></td><td>Execute JavaScript in browser context.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3 id="api-assertions">Assertion Reference</h3>
+                <table class="api-table">
+                    <thead><tr><th>Assertion</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>expect(locator).toBeVisible()</code></td><td>Element is in DOM and not hidden</td></tr>
+                        <tr><td><code>expect(locator).toBeHidden()</code></td><td>Element is absent or <code>display:none</code></td></tr>
+                        <tr><td><code>expect(locator).toBeEnabled()</code></td><td>Form element is not disabled</td></tr>
+                        <tr><td><code>expect(locator).toHaveText(re)</code></td><td>Element text matches string or regex</td></tr>
+                        <tr><td><code>expect(locator).toHaveValue(val)</code></td><td>Input value matches</td></tr>
+                        <tr><td><code>expect(locator).toHaveCount(n)</code></td><td>Locator matches exactly N elements</td></tr>
+                        <tr><td><code>expect(locator).toHaveAttribute(attr, val)</code></td><td>HTML attribute equals value</td></tr>
+                        <tr><td><code>expect(locator).toHaveCSS(prop, val)</code></td><td>Computed CSS property matches</td></tr>
+                        <tr><td><code>expect(page).toHaveTitle(re)</code></td><td>Page <code>&lt;title&gt;</code> matches</td></tr>
+                        <tr><td><code>expect(page).toHaveURL(re)</code></td><td>Current URL matches pattern</td></tr>
+                        <tr><td><code>expect(page).toMatchSnapshot(file)</code></td><td>Visual regression baseline comparison</td></tr>
+                    </tbody>
+                </table>
+
+                <h3 id="api-config">Full Config Reference</h3>
+                <table class="api-table">
+                    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>ghost</code></td><td><span class="type-badge">boolean | GhostConfig</span></td><td><code>false</code></td><td>Enable Ghost Protocol stealth layer</td></tr>
+                        <tr><td><code>selfHeal</code></td><td><span class="type-badge">boolean | HealConfig</span></td><td><code>true</code></td><td>AI-powered selector repair</td></tr>
+                        <tr><td><code>parallel.workers</code></td><td><span class="type-badge">number</span></td><td><code>4</code></td><td>Concurrent test worker count</td></tr>
+                        <tr><td><code>parallel.retries</code></td><td><span class="type-badge">number</span></td><td><code>2</code></td><td>Retry flaky tests N times before failure</td></tr>
+                        <tr><td><code>parallel.timeout</code></td><td><span class="type-badge">number</span></td><td><code>30000</code></td><td>Per-test timeout in ms</td></tr>
+                        <tr><td><code>browsers</code></td><td><span class="type-badge">Browser[]</span></td><td><code>['chromium']</code></td><td>Target browser engines</td></tr>
+                        <tr><td><code>reporters</code></td><td><span class="type-badge">Reporter[]</span></td><td><code>['console']</code></td><td>Output formats: html, json, console, github</td></tr>
+                        <tr><td><code>outputDir</code></td><td><span class="type-badge">string</span></td><td><code>'./test-results'</code></td><td>Report and artifact output path</td></tr>
+                        <tr><td><code>swarm</code></td><td><span class="type-badge">SwarmConfig</span></td><td><code>disabled</code></td><td>Cloud swarm configuration (Enterprise) <span class="required">Enterprise</span></td></tr>
+                        <tr><td><code>fortress</code></td><td><span class="type-badge">FortressConfig</span></td><td><code>disabled</code></td><td>OWASP security scanning <span class="required">Enterprise</span></td></tr>
+                        <tr><td><code>globalSetup</code></td><td><span class="type-badge">string</span></td><td><em>none</em></td><td>Path to global setup module (runs once before all tests)</td></tr>
+                        <tr><td><code>globalTeardown</code></td><td><span class="type-badge">string</span></td><td><em>none</em></td><td>Path to teardown module (runs after all tests)</td></tr>
+                    </tbody>
+                </table>
+
+                <hr class="docs-divider">
+
+                <!-- ══════════════════════════════════════════ -->
+                <!-- CHANGELOG -->
+                <!-- ══════════════════════════════════════════ -->
+                <h2 id="changelog">
+                    <span class="h-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#a5b4fc" stroke-width="1.5"/><path d="M8 4v4l2 2" stroke="#a5b4fc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    Changelog
+                </h2>
+
+                <h3>v27.1.0-IMMORTAL <span style="font-weight:400;font-size:0.85rem;color:var(--success);background:rgba(16,185,129,0.1);padding:0.15rem 0.5rem;border-radius:4px;margin-left:0.5rem;">Current</span></h3>
+                <ul>
+                    <li><strong>Ghost Protocol v2</strong> — Biometric simulation, TLS fingerprint rotation, residential proxy support</li>
+                    <li><strong>Self-Healing v3</strong> — 15 strategies, 97%+ accuracy, shadow DOM traversal added</li>
+                    <li><strong>Swarm 1.2</strong> — Hot-standby failover &lt;50ms, 5 global regions, intelligent load balancing</li>
+                    <li><strong>Oracle v2</strong> — Authenticated crawling, form detection, OpenAPI schema import</li>
+                    <li><strong>Chronos Engine</strong> — 48h predictive failure window, commit-diff analysis</li>
+                    <li><strong>Fortress OWASP</strong> — XSS, SQLi, CSRF, SSRF, auth-bypass scanner integrated</li>
+                    <li><strong>CI/CD</strong> — Native GitHub Actions reporter, JUnit XML, Allure support</li>
+                </ul>
+
                 <h3>v26.0.0</h3>
                 <ul>
-                    <li>PANTHEON architecture complete</li>
-                    <li>Fatality Engine v3</li>
-                    <li>Multi-region support</li>
+                    <li>PANTHEON distributed architecture</li>
+                    <li>Multi-region swarm support</li>
+                    <li>Initial Chronos predictive model</li>
                 </ul>
-                
-                <div style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); text-align: center;">
-                    <p style="color: var(--text-muted);">
-                        Built with ❤️ in Sofia, Bulgaria<br>
-                        © 2025 Dimitar Prodromov | QAntum Labs
+
+                <div class="docs-footer">
+                    <div class="docs-footer-nav">
+                        <a href="demo.html" class="nav-card prev">
+                            <div class="nav-card-label">Previous</div>
+                            <div class="nav-card-title">Live Demo</div>
+                        </a>
+                        <a href="pricing.html" class="nav-card next">
+                            <div class="nav-card-label">Next</div>
+                            <div class="nav-card-title">Pricing & Plans</div>
+                        </a>
+                    </div>
+                </div>
+
+                <div style="margin-top:2rem; text-align:center;">
+                    <p style="color:var(--text-muted);font-size:0.85rem;">
+                        Built in Sofia, Bulgaria &mdash; &copy; 2025&ndash;2026 Dimitar Prodromov | QAntum Labs
                     </p>
                 </div>
-            </div>
-        </div>
-    </main>
-    
-    <!-- Mobile Toggle -->
-    <button class="mobile-docs-toggle" onclick="toggleSidebar()">📖</button>
+            </article>
 
-    <script src="js/main.js"></script>
+            <!-- ── Right TOC ── -->
+            <nav class="docs-toc">
+                <h4>On this page</h4>
+                <ul class="toc-links" id="tocLinks">
+                    <li><a href="#introduction">Introduction</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#quickstart">Quick Start</a></li>
+                    <li><a href="#configuration">Configuration</a></li>
+                    <li><a href="#ci-cd">CI/CD Integration</a></li>
+                    <li style="margin-top:0.75rem;font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;padding-left:0.75rem;">Core Modules</li>
+                    <li><a href="#ghost-protocol">Ghost Protocol</a></li>
+                    <li><a href="#self-healing">Self-Healing</a></li>
+                    <li><a href="#swarm">Swarm Execution</a></li>
+                    <li><a href="#oracle">The Oracle</a></li>
+                    <li><a href="#chronos">Chronos Engine</a></li>
+                    <li><a href="#fortress">Fortress Security</a></li>
+                    <li style="margin-top:0.75rem;font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;padding-left:0.75rem;">Guides</li>
+                    <li><a href="#guide-login">Login Flows</a></li>
+                    <li><a href="#guide-api">API Interception</a></li>
+                    <li><a href="#guide-visual">Visual Regression</a></li>
+                    <li><a href="#guide-auth">Auth State</a></li>
+                    <li style="margin-top:0.75rem;font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;padding-left:0.75rem;">API Reference</li>
+                    <li><a href="#api-core">Core API</a></li>
+                    <li><a href="#api-page">Page Object</a></li>
+                    <li><a href="#api-assertions">Assertions</a></li>
+                    <li><a href="#api-config">Config Reference</a></li>
+                    <li><a href="#changelog">Changelog</a></li>
+                </ul>
+            </nav>
+
+        </div><!-- /docs-layout -->
+    </main>
+
+    <!-- Mobile Toggle -->
+    <button class="mobile-docs-toggle" id="mobileSidebarToggle" aria-label="Toggle sidebar" onclick="toggleSidebar()">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 5h14M3 10h14M3 15h14" stroke="white" stroke-width="1.75" stroke-linecap="round"/></svg>
+    </button>
+
     <script>
+        // ── Sidebar Toggle ──────────────────────────────────────
         function toggleSidebar() {
             document.getElementById('docsSidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('open');
         }
-        
-        // Active link tracking
-        const links = document.querySelectorAll('.sidebar-links a[href^="#"]');
-        const sections = document.querySelectorAll('.docs-content h1[id], .docs-content h2[id]');
-        
-        window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (scrollY >= sectionTop - 100) {
-                    current = section.getAttribute('id');
+        function closeSidebar() {
+            document.getElementById('docsSidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('open');
+        }
+
+        // ── Active Link Tracking (IntersectionObserver) ─────────
+        const allLinks = document.querySelectorAll('.sidebar-links a[href^="#"], .toc-links a[href^="#"]');
+        const sections = document.querySelectorAll('.docs-content h1[id], .docs-content h2[id], .docs-content h3[id]');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    allLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === '#' + id) {
+                            link.classList.add('active');
+                        }
+                    });
                 }
             });
-            
-            links.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + current) {
-                    link.classList.add('active');
-                }
+        }, { rootMargin: '-72px 0px -70% 0px' });
+
+        sections.forEach(s => observer.observe(s));
+
+        // ── Docs Search ──────────────────────────────────────────
+        const searchInput = document.getElementById('docsSearch');
+        const sidebarLinks = document.querySelectorAll('.sidebar-links li');
+
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.toLowerCase().trim();
+            sidebarLinks.forEach(li => {
+                const text = li.textContent.toLowerCase();
+                li.style.display = (!query || text.includes(query)) ? '' : 'none';
             });
+            // Show all section headers
+            document.querySelectorAll('.sidebar-section h3').forEach(h => h.style.display = '');
         });
+
+        // ── Copy Code Blocks ─────────────────────────────────────
+        function copyCode(btn) {
+            const pre = btn.closest('.code-block').querySelector('pre');
+            const text = pre.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                btn.classList.add('copied');
+                btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Copied`;
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="6" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.5"/></svg> Copy`;
+                }, 2000);
+            });
+        }
     </script>
 </body>
 </html>
